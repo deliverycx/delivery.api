@@ -1,0 +1,24 @@
+{
+  "name": "iiko",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start_windows": "ts-node src/pulling.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@typegoose/typegoose": "^9.2.0",
+    "axios": "^0.24.0",
+    "dotenv": "^10.0.0",
+    "jimp": "^0.16.1",
+    "longjohn": "^0.2.12",
+    "uuid": "^8.3.2",
+    "xmldom": "^0.6.0"
+  },
+  "devDependencies": {
+    "@types/xmldom": "^0.1.31"
+  }
+}

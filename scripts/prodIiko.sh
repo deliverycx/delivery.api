@@ -1,0 +1,1 @@
+cd ../ && docker-compose -f ./docker-compose.prod.iiko.yml up --build
