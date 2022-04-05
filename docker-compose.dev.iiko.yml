@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+    iiko:
+      container_name: development_iiko
+      build:
+         context: ./iiko
+         dockerfile: Dockerfile.dev
+      env_file:
+        - ./iiko/.production.env
+      volumes:
+        - ./static:/data/iiko
+      command: bash -c "cp ./favorite.png /data/iiko && ts-node ./src/pulling.ts"
+      networks:
+        - mongodb
+networks:
+  mongodb:
+    external:
+      name: delivglobalnetwork
