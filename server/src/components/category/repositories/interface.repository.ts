@@ -4,4 +4,5 @@ export abstract class ICategoryRepository {
     abstract getAll: (
         organizationId: UniqueId
     ) => Promise<Array<CategoryEntity>>;
+    abstract getAllById: (idorg:string)  => Promise<Array<CategoryEntity>>;
 }

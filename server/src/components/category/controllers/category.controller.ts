@@ -6,7 +6,7 @@ import {
     UsePipes,
     ValidationPipe
 } from "@nestjs/common";
-import { GetAllDTO } from "../interfaces/getAll.dto";
+import { GetAllByIdDTO, GetAllDTO } from "../interfaces/getAll.dto";
 import { CategoryUsecase } from "../usecases/category.usecase";
 import { ApiTags, ApiResponse } from "@nestjs/swagger";
 import { CategoryEntity } from "../entities/category.entity";
@@ -33,4 +33,15 @@ export class CategoryController {
 
         return result;
     }
+    @ApiResponse({
+      status: 200,
+      type: [CategoryEntity]
+    })
+    @Get("allByid")
+    async getAllById(@Query() query: GetAllByIdDTO) {
+        const result = await this.categoryUsecase.getAllById(query.organizationId);
+        console.log(result);
+        return result;
+    }
+    
 }

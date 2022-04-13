@@ -8,3 +8,11 @@ export class GetAllDTO {
     @IsMongoIdObject()
     organizationId: UniqueId;
 }
+
+export class GetAllByIdDTO {
+  @ApiProperty({
+      type: String
+  })
+  
+  organizationId: string;
+}

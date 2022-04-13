@@ -10,4 +10,9 @@ export class CategoryUsecase {
 
         return result;
     }
+    async getAllById(organizationId: string) {
+      const result = this.categoryRepository.getAllById(organizationId);
+
+      return result;
+    }
 }
