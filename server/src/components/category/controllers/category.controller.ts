@@ -39,6 +39,7 @@ export class CategoryController {
     })
     @Get("allByid")
     async getAllById(@Query() query: GetAllByIdDTO) {
+        
         const result = await this.categoryUsecase.getAllById(query.organizationId);
         console.log(result);
         return result;

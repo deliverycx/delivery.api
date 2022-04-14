@@ -20,10 +20,11 @@ export class CategoryRepository
     ) {
         super(CategoryModel, categoryMapper, "organization");
     }
-    async getAllById(idorg:string) {
+    async getAllById(idorg: string) {
+        
         const org = await this.OrganizationModel.findOne({ id: idorg })
         const result = await this.CategoryModel.find({organization: org._id })
-        console.log(result);
+        
         return categoryMapper(result)
     }
 }
