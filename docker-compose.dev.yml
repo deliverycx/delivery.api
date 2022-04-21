@@ -40,8 +40,6 @@ services:
             - 27017:27017
         volumes:
             - ./mongo/data:/data/db
-            - ./mongo/mongod.conf:/etc/mongod.conf
-        entrypoint: ["mongod","--config","/etc/mongod.conf"]
         networks:
             - mynetwork
 networks:
