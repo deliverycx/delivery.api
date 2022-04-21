@@ -35,8 +35,6 @@ services:
         restart: always
         environment:
           - AUTH=yes
-          - MONGODB_ADMIN_USER=admin
-          - MONGODB_ADMIN_PASS=admin123
           - MONGODB_APPLICATION_DATABASE=sample
           - MONGODB_APPLICATION_USER=aashrey
           - MONGODB_APPLICATION_PASS=admin123
