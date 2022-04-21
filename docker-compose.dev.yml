@@ -34,8 +34,8 @@ services:
         image: mongo
         restart: always
         environment:
-          MONGO_INITDB_ROOT_USERNAME: test
-          MONGO_INITDB_ROOT_PASSWORD: test
+          MONGODB_INITDB_ROOT_USERNAME = example-user
+          MONGODB_INITDB_ROOT_PASSWORD = example-pass
         ports:
             - 27017:27017
         volumes:
