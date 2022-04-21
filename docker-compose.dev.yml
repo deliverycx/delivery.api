@@ -32,10 +32,16 @@ services:
     mongodb:
         container_name: development_mongodb
         image: mongo
+        restart: always
+        environment:
+          MONGO_INITDB_ROOT_USERNAME: test
+          MONGO_INITDB_ROOT_PASSWORD: test
         ports:
             - 27017:27017
         volumes:
             - ./mongo/data:/data/db
+            - ./mongo/mongod.conf:/etc/mongod.conf
+        entrypoint: ["mongod","--config","/etc/mongod.conf"]
         networks:
             - mynetwork
 networks:
