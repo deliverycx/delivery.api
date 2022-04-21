@@ -33,11 +33,6 @@ services:
         container_name: development_mongodb
         image: mongo
         restart: always
-        environment:
-          - AUTH=yes
-          - MONGODB_APPLICATION_DATABASE=sample
-          - MONGODB_APPLICATION_USER=aashrey
-          - MONGODB_APPLICATION_PASS=admin123
         ports:
             - 27017:27017
         volumes:
