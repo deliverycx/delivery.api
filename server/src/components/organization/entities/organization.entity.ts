@@ -33,6 +33,9 @@ export class OrganizationEntity {
 
     @ApiProperty()
     private readonly cardPay?: boolean;
+    
+    @ApiProperty()
+    private readonly delivMetod?: string | null;
 
     constructor(
         id: Types.ObjectId,
@@ -41,7 +44,7 @@ export class OrganizationEntity {
         cords?: [number, number],
         phone?: string,
         workTime?: string,
-        guid?: UniqueId
+        delivMetod?:string | null
     ) {
         this.id = id;
         this.address = address;
@@ -49,7 +52,7 @@ export class OrganizationEntity {
         this.cords = cords;
         this.phone = phone;
         this.workTime = workTime;
-        this.guid = guid;
+        this.delivMetod = delivMetod
     }
 
     public get getGuid() {

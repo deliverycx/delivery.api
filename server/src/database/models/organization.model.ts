@@ -38,6 +38,10 @@ export class OrganizationClass {
 
     @prop()
     public workTime!: string;
+    
+    @prop({ default: null })
+    public delivMetod:string | null
+
 }
 
 export const OrganizationSchema = buildSchema(OrganizationClass);

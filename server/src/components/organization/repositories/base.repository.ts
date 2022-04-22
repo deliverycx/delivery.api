@@ -39,7 +39,8 @@ export class OrganizationRepository
                 organizationDoc.address.longitude
             ],
             organizationDoc.phone,
-            organizationDoc.workTime
+            organizationDoc.workTime,
+            organizationDoc.delivMetod
         );
 
         return organizationEntity;
@@ -73,7 +74,8 @@ export class OrganizationRepository
             ],
             organizationDoc.phone,
             organizationDoc.workTime,
-            organizationDoc.id
+            organizationDoc.id,
+            
         );
     }
 
