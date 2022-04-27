@@ -9,9 +9,10 @@ import { OrganizationRepository } from "./repository/organization.repository";
 import { connection } from "./db/connection";
 const app = express();
 
-//AAEuosP07NVoy67XQBSBeRUyQ56_niJsq08
-//AAEYdcVa3DEScKZd63BGrEa08nj4_hRjtdc
-const bot = new TelegramBot("1858418208:AAEuosP07NVoy67XQBSBeRUyQ56_niJsq08", { polling: true });
+//1858418208:AAEYdcVa3DEScKZd63BGrEa08nj4_hRjtdc
+//5298758359:AAEuosP07NVoy67XQBSBeRUyQ56_niJsq08
+
+const bot = new TelegramBot("5298758359:AAEuosP07NVoy67XQBSBeRUyQ56_niJsq08", { polling: true });
 
 app.use(bodyParser());
 
