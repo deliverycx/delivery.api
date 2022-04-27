@@ -8,7 +8,7 @@ services:
         depends_on:
             - mongodb
         networks:
-            - development_net
+            - mynetwork
     deliverycx_backend:
         container_name: development_backend
         env_file:
