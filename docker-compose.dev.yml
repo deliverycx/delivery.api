@@ -1,6 +1,14 @@
 version: "3.9"
 
 services:
+    deliverycx_bot:
+        container_name: deliverycx_bot
+        build:
+            context: ./bot
+        depends_on:
+            - mongodb
+        networks:
+            - development_net
     deliverycx_backend:
         container_name: development_backend
         env_file:
