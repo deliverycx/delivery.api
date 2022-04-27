@@ -41,7 +41,8 @@ app.post("/sendDuplicate/:organizationId", async (req, res) => {
 bot.onText(/\/reg (.+)/i, async (msg, match) => {
     const chatId = msg.chat.id;
 
-    const organizationDoc = await OrganizationRepository.getOne(match[1]);
+  const organizationDoc = await OrganizationRepository.getOne(match[1]);
+  console.log(organizationDoc,chatId)
 
     if (organizationDoc) {
         return bot.sendMessage(
