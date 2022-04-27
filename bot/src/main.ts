@@ -12,7 +12,9 @@ const app = express();
 //1858418208:AAEYdcVa3DEScKZd63BGrEa08nj4_hRjtdc
 //5298758359:AAEuosP07NVoy67XQBSBeRUyQ56_niJsq08
 
-const bot = new TelegramBot("1858418208:AAEYdcVa3DEScKZd63BGrEa08nj4_hRjtdc", { polling: true });
+// new 5298758359:AAHwrFD23e_RBUSXmimi72p5wI8MZtLYGTg
+
+const bot = new TelegramBot("5298758359:AAHwrFD23e_RBUSXmimi72p5wI8MZtLYGTg", { polling: true });
 
 app.use(bodyParser());
 
