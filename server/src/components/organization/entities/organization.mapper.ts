@@ -17,6 +17,7 @@ export const organizationMapper: Mapper<
             [organization.address.latitude, organization.address.longitude],
             organization.phone,
             organization.workTime,
+            organization.id,
             organization.delivMetod
         );
     });
