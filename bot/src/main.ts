@@ -26,7 +26,7 @@ app.post("/sendDuplicate/:organizationId", async (req, res) => {
     const body = req.body;
     const organizationDoc = await OrganizationRepository.getOne(organization);
 
-    console.log(body,organizationDoc)
+    console.log(body,organization,organizationDoc)
     if (!organizationDoc) {
         return res.status(200).json({
             haveProblem: true,
