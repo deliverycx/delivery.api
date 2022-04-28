@@ -134,12 +134,19 @@ export class OrderCreateBuilder {
 
         const { getGuid } = await this.OrganizationRepository.getOne(
             organization
-        );
+      );
+      
+      
 
         const { name: orderTypeName } = await this.orderService.getOrderTypesId(
             organization,
             orderType
-        );
+      );
+
+      console.log('orderinfo', this._state.orderInfo);
+      console.log('org', organization);
+      console.log('getID',getGuid);
+      
 
         this.botService.sendDuplicate(
             address,
