@@ -40,6 +40,7 @@ export class OrganizationRepository
             ],
             organizationDoc.phone,
             organizationDoc.workTime,
+            organizationDoc.id,
             organizationDoc.delivMetod
         );
 
@@ -75,7 +76,7 @@ export class OrganizationRepository
             organizationDoc.phone,
             organizationDoc.workTime,
             organizationDoc.id,
-            
+            organizationDoc.delivMetod
         );
     }
 
