@@ -161,7 +161,6 @@ export class IikoService implements IIiko {
         );
 
       const orderResponseInfo = await this.axios.orderCreate(orderBody);
-      console.log(orderResponseInfo);
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );
