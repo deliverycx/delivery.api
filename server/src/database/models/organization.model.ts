@@ -41,6 +41,9 @@ export class OrganizationClass {
     
     @prop({ default: null })
     public delivMetod:string | null
+    
+    @prop({ default: false })
+    public isHidden:boolean
 
 }
 

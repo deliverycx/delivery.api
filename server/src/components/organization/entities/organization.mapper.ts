@@ -18,7 +18,8 @@ export const organizationMapper: Mapper<
             organization.phone,
             organization.workTime,
             organization.id,
-            organization.delivMetod
+            organization.delivMetod,
+            organization.isHidden
         );
     });
 };
