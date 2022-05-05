@@ -16,9 +16,12 @@ import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { IikoWebhookGuard } from "src/guards/iikoWebhook.guard";
 import { IIiko } from "src/services/iiko/iiko.abstract";
 import { IikoWebsocketGateway } from "src/services/iiko/iiko.gateway";
-import { ApiResponse } from "@nestjs/swagger";
+import { ApiBody, ApiProperty, ApiResponse } from "@nestjs/swagger";
 import { StopListEntity } from "src/components/stopList/entities/stopList.entity";
 import { PaymasterResponse } from "src/services/payment/sdk/types/response.type";
+import { MailService } from "src/services/mail/mail.service";
+import { string } from "joi";
+import { subscriptionDTO, subscriptionResponse } from "src/services/mail/mail.gateway";
 
 @Controller("webhook")
 export class WebhookController {
@@ -27,7 +30,8 @@ export class WebhookController {
         private readonly IikoService: IIiko,
 
         private readonly PaymentService: PaymentService,
-        private readonly IikoStopListGateway: IikoWebsocketGateway
+        private readonly IikoStopListGateway: IikoWebsocketGateway,
+        private readonly MailService: MailService
     ) {}
 
     @Post("paymentCallback")
@@ -61,6 +65,27 @@ export class WebhookController {
             this.IikoStopListGateway.sendStopListToClient(stopListEntity);
 
             response.status(200).json({});
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    
+    @ApiResponse({
+      description:
+          "Подписка",
+      type: subscriptionResponse
+    })
+    @ApiBody({
+      type: subscriptionDTO
+    })
+    @Post("subscription")
+    async subscriptionMail(
+        @Body() body: subscriptionDTO,
+        @Res() response: Response
+    ) {
+        try {
+            await this.MailService.sendMail(body.to)
+            response.status(200).json({status:'ok'});
         } catch (e) {
             console.log(e);
         }

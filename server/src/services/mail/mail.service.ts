@@ -17,12 +17,13 @@ export class MailService {
     }
 
     async sendMail(to: Email) {
-        this.transporter.sendMail({
+       const mail = await this.transporter.sendMail({
             from: process.env.MAIL_USER,
             to,
-            subject: "Чек с сайта доставка.хинкалыч.рф",
-            text: "hello world",
-            html: "<b>hello world</b>"
-        });
+            subject: "Подписка на рассылку с хинкалыч.рф",
+            text: "Подписка",
+            html: `mail - <b>${to}</b>`
+       });
+      return mail
     }
 }
