@@ -1,4 +1,5 @@
 import { CartEntity } from "src/components/cart/entities/cart.entity";
+import { BotReverveTableDTO } from "./bot.DTO";
 
 export interface ICustomer {
     name: string;
@@ -13,5 +14,7 @@ export abstract class IBotService {
         organization: UniqueId,
         cart: Array<CartEntity>,
         orderType: string
-    ): void;
+  ): void;
+  
+  abstract sendReserveTable(data:BotReverveTableDTO)
 }

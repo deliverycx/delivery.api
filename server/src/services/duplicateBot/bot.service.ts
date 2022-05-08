@@ -2,6 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { IBotService, ICustomer } from "./bot.abstract";
 import { BotAxios } from "./bot.axios";
+import { BotReverveTableDTO } from "./bot.DTO";
 
 @Injectable()
 export class BotService extends IBotService {
@@ -33,5 +34,8 @@ export class BotService extends IBotService {
             }),
             orderType
         });
+    }
+    public sendReserveTable(data:BotReverveTableDTO) {
+      const requestBot = this.botRequest.reserveTable(data.organizationId,data)
     }
 }

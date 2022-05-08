@@ -22,6 +22,9 @@ import { PaymasterResponse } from "src/services/payment/sdk/types/response.type"
 import { MailService } from "src/services/mail/mail.service";
 import { string } from "joi";
 import { subscriptionDTO, subscriptionResponse } from "src/services/mail/mail.gateway";
+import { Bot } from "src/services/duplicateBot/interfaces";
+import { BotReverveTableDTO } from "src/services/duplicateBot/bot.DTO";
+import { IBotService } from "src/services/duplicateBot/bot.abstract";
 
 @Controller("webhook")
 export class WebhookController {
@@ -31,7 +34,8 @@ export class WebhookController {
 
         private readonly PaymentService: PaymentService,
         private readonly IikoStopListGateway: IikoWebsocketGateway,
-        private readonly MailService: MailService
+        private readonly MailService: MailService,
+        private readonly BotService: IBotService
     ) {}
 
     @Post("paymentCallback")
@@ -89,5 +93,15 @@ export class WebhookController {
         } catch (e) {
             console.log(e);
         }
+    }
+    
+
+  @Post("revervetable")
+    async reverveTable(
+        @Body() body: BotReverveTableDTO,
+        @Res() response: Response
+    ) {
+      this.BotService.sendReserveTable(body)
+      response.status(200).json({});
     }
 }

@@ -32,6 +32,12 @@ export class BotAxios {
             this.axios.post(`/sendDuplicate/${organization}`, data);
         }
     }
+    async reserveTable(
+        organization: UniqueId,
+        data: Bot.IRequestBodyReserve
+    ) {
+        this.axios.post(`/reserveTable/${organization}`, data);
+    }
 }
 
 export const BotAxiosProvider = {

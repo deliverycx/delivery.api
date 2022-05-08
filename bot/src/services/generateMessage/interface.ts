@@ -9,5 +9,12 @@ export namespace CreateMessage {
         orderType: string;
         phone: string;
         address: string;
-    }
+  }
+  export interface ImessageReserveTable {
+    fullname: string
+    date: string
+    preson: string
+    time: string
+    phone:string
+}
 }

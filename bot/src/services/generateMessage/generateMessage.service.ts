@@ -18,3 +18,17 @@ export function generateMessage(body: CreateMessage.IRecivedBody): string {
 
     return result;
 }
+
+export function messageReserveTable(body: CreateMessage.ImessageReserveTable): string {
+  let result = ``;
+
+  result += `\n\n`;
+  result += `Заказ столика: \n`;
+  result += `Имя: ${body.fullname} \n`;
+  result += `Телефон: ${body.phone}\n`;
+  result += `Дата: ${body.date}\n`;
+  result += `Время: ${body.time}\n`;
+  result += `Кол персон: ${body.preson}`;
+
+  return result;
+}

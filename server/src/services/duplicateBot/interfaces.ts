@@ -10,4 +10,11 @@ export namespace Bot {
         address: string;
         orderType: string;
     }
+    export interface IRequestBodyReserve{
+        organizationId: UniqueId
+        fullname: string
+        date: string
+        preson: number
+        time: string
+    }
 }
