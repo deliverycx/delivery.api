@@ -101,7 +101,11 @@ export class WebhookController {
         @Body() body: BotReverveTableDTO,
         @Res() response: Response
     ) {
-      this.BotService.sendReserveTable(body)
-      response.status(200).json({});
+      try {
+				await this.BotService.sendReserveTable(body)
+      	response.status(200).json({status:'ok'});
+			} catch (error) {
+				response.status(400).json({status:'no'});
+			}
     }
 }

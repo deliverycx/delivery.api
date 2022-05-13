@@ -1,9 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { IsMongoIdObject } from "src/common/decorators/mongoIdValidate.decorator";
 
 export class BotReverveTableDTO{
   @ApiProperty()
+	@IsMongoIdObject()
   public readonly organizationId: UniqueId
   
+	
   public readonly fullname: string
 
   public readonly date: string
