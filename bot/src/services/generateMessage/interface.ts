@@ -13,7 +13,7 @@ export namespace CreateMessage {
   export interface ImessageReserveTable {
     fullname: string
     date: string
-    preson: string
+    person: string
     time: string
     phone:string
 }

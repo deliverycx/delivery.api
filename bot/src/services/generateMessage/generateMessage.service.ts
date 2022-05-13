@@ -28,7 +28,7 @@ export function messageReserveTable(body: CreateMessage.ImessageReserveTable): s
   result += `Телефон: ${body.phone}\n`;
   result += `Дата: ${body.date}\n`;
   result += `Время: ${body.time}\n`;
-  result += `Кол персон: ${body.preson}`;
+  result += `Кол персон: ${body.person}`;
 
   return result;
 }
