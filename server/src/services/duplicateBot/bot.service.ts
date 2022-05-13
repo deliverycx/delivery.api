@@ -40,13 +40,7 @@ export class BotService extends IBotService {
             orderType
         });
     }
-    async sendReserveTable(data:BotReverveTableDTO) {
-			try {
-				const guID = await this.OrganizationModel.findById(data.organizationId).lean()
-      	await this.botRequest.reserveTable(guID.id,data)
-			} catch (error) {
-				console.log(error);
-			}
-			
+    public sendReserveTable(data:BotReverveTableDTO) {
+			this.botRequest.reserveTable(data.organizationId,data)
     }
 }

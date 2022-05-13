@@ -3,7 +3,6 @@ import { IsMongoIdObject } from "src/common/decorators/mongoIdValidate.decorator
 
 export class BotReverveTableDTO{
   @ApiProperty()
-	@IsMongoIdObject()
   public readonly organizationId: UniqueId
   
 	
