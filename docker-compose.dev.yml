@@ -40,14 +40,10 @@ services:
     mongodb:
         container_name: development_mongodb
         image: mongo
-        environment:
-            - MONGO_INITDB_ROOT_USERNAME=admin
-            - MONGO_INITDB_ROOT_PASSWORD=540193
         ports:
             - "27017:27017"
         volumes:
             - ./mongo/data:/data/db  
-            - ./mongo/mongo-entrypoint/:/docker-entrypoint-initdb.d/
         command: mongod    
         networks:
             - mynetwork
