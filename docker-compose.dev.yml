@@ -40,11 +40,11 @@ services:
     mongodb:
         container_name: development_mongodb
         image: mongo
+        command: [--auth]
         ports:
             - "27017:27017"
         volumes:
-            - ./mongo/data:/data/db  
-        command: mongod    
+            - ./mongo/data:/data/db   
         networks:
             - mynetwork
 networks:
