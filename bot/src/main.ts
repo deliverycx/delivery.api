@@ -14,7 +14,7 @@ const app = express();
 
 // new 5298758359:AAHwrFD23e_RBUSXmimi72p5wI8MZtLYGTg
 
-const bot = new TelegramBot("1858418208:AAHbGAeh6mG-XYsASrs7f_CRgxt4OMnmduw", { polling: true });
+const bot = new TelegramBot("5298758359:AAEwUrxQnV4M1vpKXAHzK8_uqVXO8nWaFbo", { polling: true });
 
 app.use(bodyParser());
 
