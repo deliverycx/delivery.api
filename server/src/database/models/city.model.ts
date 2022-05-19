@@ -21,6 +21,9 @@ export class CityClass {
 
     @prop({ ref: "Organization" })
     public organizations!: Ref<OrganizationClass>[];
+
+		@prop({ default: false })
+    public isHidden:boolean
 }
 
 export const CitySchema = buildSchema(CityClass);
