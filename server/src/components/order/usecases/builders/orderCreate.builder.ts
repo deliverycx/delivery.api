@@ -144,8 +144,6 @@ export class OrderCreateBuilder {
       );
 
       console.log('orderinfo', this._state.orderInfo);
-      console.log('org', organization);
-      console.log('getID',getGuid);
       
 
         this.botService.sendDuplicate(
