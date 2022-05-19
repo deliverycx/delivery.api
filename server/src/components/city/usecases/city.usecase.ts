@@ -7,7 +7,7 @@ export class CityUsecase {
 
     async getAll(searchString: string) {
         const result = await this.cityRepository.getAll(searchString);
-
+			
         return result;
     }
 }

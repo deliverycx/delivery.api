@@ -7,7 +7,7 @@ export const cityMapper: Mapper<Array<CityClass>, Array<CityEntity>> = (p) => {
         p
             // .filter((city) => city.organizations.length)
             .map((city) => {
-                return new CityEntity(city._id, city.name);
+								return city.organizations.length !== 0 && new CityEntity(city._id, city.name);
             })
     );
 };

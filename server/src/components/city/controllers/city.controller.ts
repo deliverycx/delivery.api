@@ -21,6 +21,7 @@ export class CityController {
         const result = this.cityUsecase.getAll(
             query.search ? query.search : ""
         );
+				
         //throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         return result;
     }
