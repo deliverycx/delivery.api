@@ -23,7 +23,6 @@ export class OrganizationController {
         @Req() request: Request
     ) {
         const result = await this.organizationUsecase.getAll(query.cityId);
-				console.log('orgйййййййй',result);
         response.status(HttpStatus.OK).json(result);
     }
 
