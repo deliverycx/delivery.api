@@ -62,4 +62,12 @@ export class OrganizationController {
 
         response.status(HttpStatus.OK).json(result);
     }
+		@Get("buguid")
+    async getOneORg(@Query() query: RecvisitesDTO, @Res() response: Response) {
+        const result = await this.organizationUsecase.getBuID(
+            query.organizationId
+        );
+
+        response.status(HttpStatus.OK).json(result);
+    }
 }

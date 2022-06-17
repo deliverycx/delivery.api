@@ -40,6 +40,9 @@ export class OrganizationEntity {
     @ApiProperty()
     private readonly isHidden:boolean
 
+		@ApiProperty()
+		public readonly cityid:string
+
     constructor(
         id: Types.ObjectId,
         address?: string,
@@ -49,7 +52,8 @@ export class OrganizationEntity {
         workTime?: string,
         guid?: UniqueId,
         delivMetod?:string | null,
-        isHidden?:boolean
+        isHidden?:boolean,
+				cityid?:string
     ) {
         this.id = id;
         this.address = address;
@@ -59,7 +63,8 @@ export class OrganizationEntity {
         this.workTime = workTime;
         this.guid = guid;
         this.delivMetod = delivMetod,
-        this.isHidden = isHidden
+        this.isHidden = isHidden,
+				this.cityid = cityid
     }
 
     public get getGuid() {

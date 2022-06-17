@@ -10,4 +10,9 @@ export class CityUsecase {
 			
         return result;
     }
+		async getBuId(id: string) {
+			const result = await this.cityRepository.getBuId(id);
+		
+			return result;
+	}
 }
