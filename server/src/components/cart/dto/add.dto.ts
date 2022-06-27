@@ -4,6 +4,9 @@ import { Types } from "mongoose";
 import { OrderTypesEnum } from "src/services/iiko/iiko.abstract";
 
 export class AddCartDTO {
+		@ApiProperty()
+		organization: UniqueId;
+
     @ApiProperty({
         description: "Mongo id object"
     })

@@ -10,6 +10,7 @@ export interface IDeliveryPrices {
 export abstract class IDeliveryService {
     abstract calculatingPrices(
         userId: UniqueId,
-        orderType: OrderTypesEnum
+        orderType: OrderTypesEnum,
+				organization?:string
     ): Promise<IDeliveryPrices>;
 }
