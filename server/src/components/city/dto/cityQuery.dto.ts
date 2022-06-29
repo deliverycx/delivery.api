@@ -6,4 +6,5 @@ export class CityQueryDTO {
         required: false
     })
     public readonly search?: string;
+		public readonly id?: string;
 }

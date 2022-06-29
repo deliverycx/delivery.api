@@ -3,6 +3,8 @@ import { ApiProperty } from "@nestjs/swagger";
 import { OrderTypesEnum } from "src/services/iiko/iiko.abstract";
 
 export class RemoveOneDTO {
+		@ApiProperty()
+		organization: UniqueId;
     @ApiProperty()
     @IsMongoIdObject()
     public cartId: UniqueId;

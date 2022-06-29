@@ -25,4 +25,17 @@ export class CityController {
         //throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         return result;
     }
+
+		@Get("buid")
+    async getBuId(
+        @Query()
+        query: CityQueryDTO
+    ) {
+        const result = this.cityUsecase.getBuId(
+            query.id
+        );
+				
+        //throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+        return result;
+    }
 }

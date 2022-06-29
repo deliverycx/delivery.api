@@ -19,8 +19,10 @@ export class CartUsecase {
 
         const prices = await this.DeliveryService.calculatingPrices(
             userId,
-            data.orderType
+            data.orderType,
+						data.organization
         );
+				console.log(data);
         return {
             cart: result,
             ...prices

@@ -26,4 +26,13 @@ export class CityRepository implements ICityRepository {
 
         return cityMapper(result);
     }
+
+		async getBuId(id: string) {
+			const result = await this.cityModel
+					.findById(id)
+					.populate("organizations")
+					.lean();
+
+			return new CityEntity(result._id, result.name,result.isHidden);
+	}
 }

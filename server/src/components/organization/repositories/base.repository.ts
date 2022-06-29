@@ -29,7 +29,7 @@ export class OrganizationRepository
     }
 
     public async getOneByGUID(id: UniqueId): Promise<OrganizationEntity> {
-        const organizationDoc = await this.OrganizationModel.findOne({ id });
+        const organizationDoc = await this.OrganizationModel.findOne({ id }).populate("city");
         const organizationEntity = new OrganizationEntity(
             organizationDoc._id,
             organizationDoc.address.street,
@@ -41,9 +41,10 @@ export class OrganizationRepository
             organizationDoc.phone,
             organizationDoc.workTime,
             organizationDoc.id,
-            organizationDoc.delivMetod
+            organizationDoc.delivMetod,
+						organizationDoc.isHidden,
+						organizationDoc.city as string
         );
-
         return organizationEntity;
     }
 

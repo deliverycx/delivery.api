@@ -17,17 +17,23 @@ export class DeliveryService implements IDeliveryService {
 
         return price < 700 ? 150 : 0;
     }
-    private async cartPriceCalculating(userId: UniqueId): Promise<number> {
-        const totalPrice = await this.cartRepository.calc(userId);
+    private async cartPriceCalculating(userId: UniqueId,organization?:string): Promise<number> {
+        let totalPrice = await this.cartRepository.calc(userId);
+				const carts = await this.cartRepository.getAll(userId)
+				console.log(carts);
+				if(organization){
+
+				}
 
         return totalPrice;
     }
 
     public async calculatingPrices(
         userId: UniqueId,
-        orderType: OrderTypesEnum
+        orderType: OrderTypesEnum,
+				organization?:string
     ): Promise<IDeliveryPrices> {
-        const totalPrice = await this.cartPriceCalculating(userId);
+        const totalPrice = await this.cartPriceCalculating(userId,organization);
         const deliveryPrice = await this.deliveryPriceCalculating(
             totalPrice,
             orderType

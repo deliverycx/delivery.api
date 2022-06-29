@@ -227,4 +227,8 @@ export class IikoService implements IIiko {
 
         return stopListEntity;
     }
+		async getDiscount(){
+
+		}
+	
 }

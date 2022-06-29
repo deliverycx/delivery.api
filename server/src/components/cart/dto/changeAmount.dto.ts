@@ -4,6 +4,9 @@ import { ApiProperty } from "@nestjs/swagger";
 import { OrderTypesEnum } from "src/services/iiko/iiko.abstract";
 
 export class ChangeAmountDTO {
+		@ApiProperty()
+		organization: UniqueId;
+
     @ApiProperty()
     @IsNumber()
     public amount: number;
