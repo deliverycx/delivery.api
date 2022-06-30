@@ -41,9 +41,7 @@ services:
         container_name: development_mongodb
         image: mongo
         volumes:
-            - ./mongo/data:/data/db
-        ports:
-             - "27017:27017"       
+            - ./mongo/data:/data/db     
         networks:
             - mynetwork
 networks:
