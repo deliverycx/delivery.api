@@ -18,4 +18,6 @@ export abstract class ICartRepository {
     abstract calc(userId: UniqueId): Promise<number>;
 
     abstract removeSome(removeItems: Array<UniqueId>);
+
+		abstract getAllDisc(userId: UniqueId): any;
 }

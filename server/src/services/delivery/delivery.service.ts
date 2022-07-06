@@ -1,11 +1,17 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
-import { OrderTypesEnum } from "../iiko/iiko.abstract";
+import { IIiko, OrderTypesEnum } from "../iiko/iiko.abstract";
+import { IIkoAxios } from "../iiko/iiko.axios";
 import { IDeliveryPrices, IDeliveryService } from "./delivery.abstract";
 
 @Injectable()
 export class DeliveryService implements IDeliveryService {
-    constructor(private readonly cartRepository: ICartRepository) {}
+	protected iiko:IIkoAxios
+    constructor(
+			private readonly cartRepository: ICartRepository,
+			) {
+				this.iiko = new IIkoAxios()
+			}
 
     private async deliveryPriceCalculating(
         price: number,
@@ -19,11 +25,18 @@ export class DeliveryService implements IDeliveryService {
     }
     private async cartPriceCalculating(userId: UniqueId,organization?:string): Promise<number> {
         let totalPrice = await this.cartRepository.calc(userId);
-				const carts = await this.cartRepository.getAll(userId)
-				console.log(carts);
+				const carts = await this.cartRepository.getAllDisc(userId)
 				if(organization){
-
+					const data = await this.iiko.discontList(
+						{
+							organization,
+							order:{
+								items:carts
+							}
+						})
+						console.log(data);
 				}
+				
 
         return totalPrice;
     }
@@ -50,4 +63,5 @@ export class DeliveryService implements IDeliveryService {
             deltaPrice
         };
     }
+		
 }

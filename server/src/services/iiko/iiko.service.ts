@@ -227,8 +227,16 @@ export class IikoService implements IIiko {
 
         return stopListEntity;
     }
-		async getDiscount(){
-
+		async getDiscount(
+			organizationId: UniqueId,
+			cart: Array<CartEntity>,
+		){
+			const data = await this.axios.discontList({
+				organization:organizationId,
+				order:{
+					items:cart
+				}
+			});
 		}
 	
 }

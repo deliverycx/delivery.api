@@ -85,6 +85,19 @@ export class IIkoAxios extends Axios {
 
         return data;
     }
+
+		public async discontList(body:any) {
+			const token = await this.token();
+			
+			/**/
+			const { data } = await this._axios.post<any>(
+				`/api/0/orders/calculate_checkin_result?access_token=${token}`,
+				body
+			);
+			
+
+			return data.loyatyResult.programResults.filter((val:any)=> val.name.indexOf('12-е хинкали в подарок') >= 0 && val);
+	}
 }
 
 export const iikoAxiosProviders = [

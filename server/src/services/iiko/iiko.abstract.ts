@@ -40,4 +40,11 @@ export abstract class IIiko {
     abstract getStopList: (
         body: iiko.IWebhookEvent
     ) => Promise<ReturnTypeAsync<FilterNoZeroBalanceType>>;
+
+		abstract getDiscount: (
+			organizationId: UniqueId,
+			cart: Array<CartEntity>,
+		) => any;
+
+		
 }

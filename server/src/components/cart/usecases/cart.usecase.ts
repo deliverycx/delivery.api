@@ -33,7 +33,8 @@ export class CartUsecase {
         const result = await this.CartRepository.add(userId, data.productId);
         const prices = await this.DeliveryService.calculatingPrices(
             userId,
-            data.orderType
+            data.orderType,
+						data.organization
         );
 
         return {
@@ -52,7 +53,8 @@ export class CartUsecase {
         const result = await this.CartRepository.removeOne(userId, data.cartId);
         const prices = await this.DeliveryService.calculatingPrices(
             userId,
-            data.orderType
+            data.orderType,
+						data.organization
         );
 
         return {
@@ -65,12 +67,13 @@ export class CartUsecase {
         const result = await this.CartRepository.changeAmount(
             userId,
             data.cartId,
-            data.amount
+            data.amount,
         );
 
         const prices = await this.DeliveryService.calculatingPrices(
             userId,
-            data.orderType
+            data.orderType,
+						data.organization
         );
 
         return {
