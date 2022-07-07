@@ -25,6 +25,7 @@ export class DeliveryService implements IDeliveryService {
     }
     private async cartPriceCalculating(userId: UniqueId,organization?:string): Promise<number> {
         let totalPrice = await this.cartRepository.calc(userId);
+				/*
 				const carts = await this.cartRepository.getAllDisc(userId)
 				if(organization){
 					const data = await this.iiko.discontList(
@@ -34,8 +35,10 @@ export class DeliveryService implements IDeliveryService {
 								items:carts
 							}
 						})
+						console.log(carts);
 						console.log(data);
 				}
+				*/
 				
 
         return totalPrice;

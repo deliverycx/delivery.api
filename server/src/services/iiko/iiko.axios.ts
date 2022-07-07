@@ -95,8 +95,7 @@ export class IIkoAxios extends Axios {
 				body
 			);
 			
-
-			return data.loyatyResult.programResults.filter((val:any)=> val.name.indexOf('12-е хинкали в подарок') >= 0 && val);
+			return data.loyatyResult.programResults.filter((val:any)=> val.name.indexOf('12-е хинкали в подарок') >= 0 && val)[0];
 	}
 }
 

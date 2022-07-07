@@ -28,8 +28,8 @@ export const cartMapperCust= (p:any[]) => {
 						id:product?.id,
             name:product?.name,
             amount:cart?.amount,
-            sum: product?.price,
-            code:product?.tags[0],
+            sum:  cart?.amount * product?.price,
+            code:product?.code,
 					}
 			})
 			
