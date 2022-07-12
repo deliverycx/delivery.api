@@ -24,9 +24,20 @@ export const validationHIdiscount = (cart:any) =>{
 		sum:[]
 	})
 
+		let c = 0
+	
+		for (let i = 1; i <= count; i++) {
+			
+			if (i % 12 === 0) {
+				c += 1
+				
+			}
+		}
+	
+
 	return {
 		count,
-		min:Math.min(...sum)
+		min:Math.min(...sum) * c
 	}
 
 }

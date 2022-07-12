@@ -35,13 +35,15 @@ export class DeliveryService implements IDeliveryService {
 				organization?:string,
 				discount?:number
     ): Promise<IDeliveryPrices> {
+				const carts = await this.cartRepository.getAllDisc(userId)
+				const {count,min} = validationHIdiscount(carts)
+
         const totalPrice = await this.cartPriceCalculating(userId,discount);
         const deliveryPrice = await this.deliveryPriceCalculating(
             totalPrice,
             orderType
         );
-				const carts = await this.cartRepository.getAllDisc(userId)
-				const {count,min} = validationHIdiscount(carts)
+				
 				
 				
         let deltaPrice = 0;
@@ -54,7 +56,7 @@ export class DeliveryService implements IDeliveryService {
 					return {
             deliveryPrice,
             totalPrice: totalPrice + deliveryPrice - min,
-            deltaPrice:deltaPrice !== 0 ? deltaPrice - min : 0
+            deltaPrice:deltaPrice !== 0 ? deltaPrice : 0
         	};
 				}
 
