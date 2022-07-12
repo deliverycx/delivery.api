@@ -29,6 +29,8 @@ export const cartMapperCust= (p:any[]) => {
             name:product?.name,
             amount:cart?.amount,
             sum:  cart?.amount * product?.price,
+						tags:product?.tags,
+						price:product?.price,
             code:product?.code,
 					}
 			})
