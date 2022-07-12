@@ -11,6 +11,12 @@ export abstract class IDeliveryService {
     abstract calculatingPrices(
         userId: UniqueId,
         orderType: OrderTypesEnum,
-				organization?:string
+				organization?:string,
+				discount?:number
     ): Promise<IDeliveryPrices>;
+
+		abstract discountDozenServise(
+			userId: UniqueId,
+			organization?:string
+		) : Promise<{discountDozen:number}>;
 }

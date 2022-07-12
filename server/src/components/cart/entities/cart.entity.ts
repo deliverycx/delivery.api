@@ -24,6 +24,9 @@ export class CartEntity {
     @ApiProperty()
     private readonly price: number;
 
+		@ApiProperty()
+    private readonly oneprice: number;
+
     constructor(
         id: UniqueId,
         productName: string,
@@ -31,7 +34,7 @@ export class CartEntity {
         productTags,
         productId: UniqueId,
         amount: number,
-        price: number
+        price: number,
     ) {
         this.id = id;
         this.productName = productName;
@@ -39,6 +42,7 @@ export class CartEntity {
         this.productId = productId;
         this.amount = amount;
         this.price = price * amount;
+				this.oneprice = price;
         this.productTags = productTags;
     }
 

@@ -23,6 +23,7 @@ import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { ValidationException } from "src/filters/validation.filter";
 import { Response } from "express";
 import { GetAllCartDTO } from "../dto/getAll.dto";
+import { DiscountDTO } from "../dto/discount.dto";
 
 @ApiTags("Cart endpoints")
 @ApiResponse({
@@ -194,4 +195,17 @@ export class CartController {
 
         response.status(200).json(result);
     }
+
+		@Post("getDiscount")
+		async getDiscount(
+					@Body()
+					body: DiscountDTO,
+					@Session()
+					session: Record<string, string>,
+					@Res() response: Response
+		) {
+				const result = await this.cartUsecase.getDiscount(session.user,body);
+
+				response.status(200).json(result);
+		}
 }

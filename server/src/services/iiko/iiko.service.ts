@@ -231,12 +231,16 @@ export class IikoService implements IIiko {
 			organizationId: UniqueId,
 			cart: Array<CartEntity>,
 		){
+			console.log(organizationId);
+			console.log(cart);
+			/*
 			const data = await this.axios.discontList({
 				organization:organizationId,
 				order:{
 					items:cart
 				}
 			});
+			*/
 		}
 	
 }

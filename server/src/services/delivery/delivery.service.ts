@@ -1,4 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
+import { validationHIdiscount } from "src/common/helpers/validationHIdiscount";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
 import { IIiko, OrderTypesEnum } from "../iiko/iiko.abstract";
 import { IIkoAxios } from "../iiko/iiko.axios";
@@ -21,12 +22,54 @@ export class DeliveryService implements IDeliveryService {
             return 0;
         }
 
-        return price < 600 ? 150 : 0;
+        return price < 700 ? 150 : 0;
     }
-    private async cartPriceCalculating(userId: UniqueId,organization?:string): Promise<number> {
+    private async cartPriceCalculating(userId: UniqueId,discount?:number): Promise<number> {
         let totalPrice = await this.cartRepository.calc(userId);
-				/*
+        return totalPrice;
+    }
+
+    public async calculatingPrices(
+        userId: UniqueId,
+        orderType: OrderTypesEnum,
+				organization?:string,
+				discount?:number
+    ): Promise<IDeliveryPrices> {
+        const totalPrice = await this.cartPriceCalculating(userId,discount);
+        const deliveryPrice = await this.deliveryPriceCalculating(
+            totalPrice,
+            orderType
+        );
 				const carts = await this.cartRepository.getAllDisc(userId)
+				const {count,min} = validationHIdiscount(carts)
+				
+				
+        let deltaPrice = 0;
+
+        if (orderType === OrderTypesEnum.COURIER) {
+            deltaPrice = 700 - totalPrice < 0 ? 0 : 700 - totalPrice;
+        }
+
+				if(count !== 0){
+					return {
+            deliveryPrice,
+            totalPrice: totalPrice + deliveryPrice - min,
+            deltaPrice:deltaPrice !== 0 ? deltaPrice - min : 0
+        	};
+				}
+
+        return {
+            deliveryPrice,
+            totalPrice: totalPrice + deliveryPrice,
+            deltaPrice
+        };
+    }
+
+		async discountDozenServise(userId: UniqueId,organization:string){
+				const carts = await this.cartRepository.getAllDisc(userId)
+				const cartValid = validationHIdiscount(carts)
+				console.log(cartValid);
+				/*
 				if(organization){
 					const data = await this.iiko.discontList(
 						{
@@ -35,36 +78,22 @@ export class DeliveryService implements IDeliveryService {
 								items:carts
 							}
 						})
-						console.log(carts);
-						console.log(data);
+						
+						const dozen = data.loyatyResult.programResults.filter((val:any)=> val.name.indexOf('12-е хинкали в подарок') >= 0 && val)[0];
+						
+						if(dozen.discounts.length){
+							const {discountSum} = dozen.discounts[0]
+							return{
+								discountDozen:discountSum
+							}
+						}
+						
 				}
 				*/
 				
-
-        return totalPrice;
-    }
-
-    public async calculatingPrices(
-        userId: UniqueId,
-        orderType: OrderTypesEnum,
-				organization?:string
-    ): Promise<IDeliveryPrices> {
-        const totalPrice = await this.cartPriceCalculating(userId,organization);
-        const deliveryPrice = await this.deliveryPriceCalculating(
-            totalPrice,
-            orderType
-        );
-        let deltaPrice = 0;
-
-        if (orderType === OrderTypesEnum.COURIER) {
-            deltaPrice = 600 - totalPrice < 0 ? 0 : 600 - totalPrice;
-        }
-
-        return {
-            deliveryPrice,
-            totalPrice: totalPrice + deliveryPrice,
-            deltaPrice
-        };
-    }
+				return {
+					discountDozen:0
+				}
+		}
 		
 }
