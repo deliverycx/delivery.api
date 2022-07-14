@@ -45,6 +45,9 @@ export class ProductClass {
     @prop()
     public tags: string[];
 
+		@prop()
+    public code: string;
+
     @prop()
     public weight!: number;
 

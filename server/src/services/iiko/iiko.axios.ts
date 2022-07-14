@@ -85,6 +85,18 @@ export class IIkoAxios extends Axios {
 
         return data;
     }
+
+		public async discontList(body:any) {
+			const token = await this.token();
+			
+			/**/
+			const { data } = await this._axios.post<any>(
+				`/api/0/orders/calculate_checkin_result?access_token=${token}`,
+				body
+			);
+			
+			return data
+	}
 }
 
 export const iikoAxiosProviders = [

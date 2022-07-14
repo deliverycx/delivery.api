@@ -1,11 +1,18 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
+import { validationHIdiscount } from "src/common/helpers/validationHIdiscount";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
-import { OrderTypesEnum } from "../iiko/iiko.abstract";
+import { IIiko, OrderTypesEnum } from "../iiko/iiko.abstract";
+import { IIkoAxios } from "../iiko/iiko.axios";
 import { IDeliveryPrices, IDeliveryService } from "./delivery.abstract";
 
 @Injectable()
 export class DeliveryService implements IDeliveryService {
-    constructor(private readonly cartRepository: ICartRepository) {}
+	protected iiko:IIkoAxios
+    constructor(
+			private readonly cartRepository: ICartRepository,
+			) {
+				this.iiko = new IIkoAxios()
+			}
 
     private async deliveryPriceCalculating(
         price: number,
@@ -17,32 +24,41 @@ export class DeliveryService implements IDeliveryService {
 
         return price < 700 ? 150 : 0;
     }
-    private async cartPriceCalculating(userId: UniqueId,organization?:string): Promise<number> {
+    private async cartPriceCalculating(userId: UniqueId,discount?:number): Promise<number> {
         let totalPrice = await this.cartRepository.calc(userId);
-				const carts = await this.cartRepository.getAll(userId)
-				console.log(carts);
-				if(organization){
-
-				}
-
         return totalPrice;
     }
 
     public async calculatingPrices(
         userId: UniqueId,
         orderType: OrderTypesEnum,
-				organization?:string
+				organization?:string,
+				discount?:number
     ): Promise<IDeliveryPrices> {
-        const totalPrice = await this.cartPriceCalculating(userId,organization);
+				const carts = await this.cartRepository.getAllDisc(userId)
+				const {count,min} = validationHIdiscount(carts)
+
+        const totalPrice = await this.cartPriceCalculating(userId,discount);
         const deliveryPrice = await this.deliveryPriceCalculating(
             totalPrice,
             orderType
         );
+				
+				
+				
         let deltaPrice = 0;
 
         if (orderType === OrderTypesEnum.COURIER) {
             deltaPrice = 700 - totalPrice < 0 ? 0 : 700 - totalPrice;
         }
+
+				if(count !== 0){
+					return {
+            deliveryPrice,
+            totalPrice: totalPrice + deliveryPrice - min,
+            deltaPrice:deltaPrice !== 0 ? deltaPrice : 0
+        	};
+				}
 
         return {
             deliveryPrice,
@@ -50,4 +66,36 @@ export class DeliveryService implements IDeliveryService {
             deltaPrice
         };
     }
+
+		async discountDozenServise(userId: UniqueId,organization:string){
+				const carts = await this.cartRepository.getAllDisc(userId)
+				const cartValid = validationHIdiscount(carts)
+				console.log(cartValid);
+				/*
+				if(organization){
+					const data = await this.iiko.discontList(
+						{
+							organization,
+							order:{
+								items:carts
+							}
+						})
+						
+						const dozen = data.loyatyResult.programResults.filter((val:any)=> val.name.indexOf('12-е хинкали в подарок') >= 0 && val)[0];
+						
+						if(dozen.discounts.length){
+							const {discountSum} = dozen.discounts[0]
+							return{
+								discountDozen:discountSum
+							}
+						}
+						
+				}
+				*/
+				
+				return {
+					discountDozen:0
+				}
+		}
+		
 }

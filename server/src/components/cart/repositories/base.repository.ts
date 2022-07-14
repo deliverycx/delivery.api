@@ -2,7 +2,7 @@ import { BaseRepository } from "../../../common/abstracts/base.repository";
 import { CartClass } from "../../../database/models/cart.model";
 import { ProductClass } from "../../../database/models/product.model";
 import { CartEntity } from "../entities/cart.entity";
-import { cartMapper } from "../entities/cart.mapper";
+import { cartMapper,cartMapperCust } from "../entities/cart.mapper";
 import { ICartRepository } from "./interface.repository";
 import { Model, Types } from "mongoose";
 import { Inject } from "@nestjs/common";
@@ -134,4 +134,13 @@ export class CartRepository
             product: { $in: removeItems }
         });
     }
+		async getAllDisc(userid:string){
+			const result = await (this.CartModel
+				.find({
+					user: userid
+				})
+				.sort({ order: 1 })
+				.populate("product"));
+			return cartMapperCust(result);
+		}
 }

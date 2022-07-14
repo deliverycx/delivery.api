@@ -20,3 +20,19 @@ export const cartMapper: Mapper<Array<CartClass>, Array<CartEntity>> = (p) => {
         })
         .filter((entity) => entity.getId !== undefined);
 };
+export const cartMapperCust= (p:any[]) => {
+	return p
+			.map((cart) => {
+					const product = cart.product as ProductClass;
+					return {
+						id:product?.id,
+            name:product?.name,
+            amount:cart?.amount,
+            sum:  cart?.amount * product?.price,
+						tags:product?.tags,
+						price:product?.price,
+            code:product?.code,
+					}
+			})
+			
+};
