@@ -136,10 +136,17 @@ export class IikoService implements IIiko {
         );
 
         const data = await this.axios.orderTypes(organizationGUID.id);
-
+					
         const result = data.items.find((orderTypeEl) => {
-            return orderTypeEl.orderServiceType.includes(orderType);
+console.log(orderTypeEl);
+            const type = orderTypeEl.orderServiceType.includes(orderType);
+						
+						return type
         });
+
+				if(result.name === 'Яндекс Еда Курьеры Я.Еды'){
+					result.name = 'Самовывоз'		
+				}
 
         return { name: result?.name, id: result?.id };
     }
@@ -153,13 +160,14 @@ export class IikoService implements IIiko {
         cart: Array<CartEntity>,
         orderInfo: OrderDTO,
         prices: IDeliveryPrices
-    ): Promise<IReturnCreateOrder> {
+    ): Promise<any> {
         const orderBody = await this.createOrderBody(
             orderInfo,
             cart,
             prices.deliveryPrice
         );
 
+				/*
       const orderResponseInfo = await this.axios.orderCreate(orderBody);
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
@@ -170,7 +178,9 @@ export class IikoService implements IIiko {
             problem:
                 orderResponseInfo.problem?.hasProblem &&
                 orderResponseInfo?.problem?.problem
-        };
+        };*/
+				return {}
+				
     }
 
     /*-----------------|       check      |-----------------------*/
