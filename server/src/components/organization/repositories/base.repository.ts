@@ -43,6 +43,7 @@ export class OrganizationRepository
             organizationDoc.id,
             organizationDoc.delivMetod,
 						organizationDoc.isHidden,
+						organizationDoc.reservetable,
 						organizationDoc.city as string
         );
         return organizationEntity;
@@ -77,7 +78,10 @@ export class OrganizationRepository
             organizationDoc.phone,
             organizationDoc.workTime,
             organizationDoc.id,
-            organizationDoc.delivMetod
+            organizationDoc.delivMetod,
+						organizationDoc.isHidden,
+						organizationDoc.reservetable,
+
         );
     }
 

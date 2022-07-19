@@ -41,6 +41,9 @@ export class OrganizationEntity {
     private readonly isHidden:boolean
 
 		@ApiProperty()
+		private readonly reservetable:boolean
+
+		@ApiProperty()
 		public readonly cityid:string
 
     constructor(
@@ -53,6 +56,7 @@ export class OrganizationEntity {
         guid?: UniqueId,
         delivMetod?:string | null,
         isHidden?:boolean,
+				reservetable?:boolean,
 				cityid?:string
     ) {
         this.id = id;
@@ -64,6 +68,7 @@ export class OrganizationEntity {
         this.guid = guid;
         this.delivMetod = delivMetod,
         this.isHidden = isHidden,
+				this.reservetable = reservetable,
 				this.cityid = cityid
     }
 
