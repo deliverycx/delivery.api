@@ -19,7 +19,8 @@ export const organizationMapper: Mapper<
             organization.workTime,
             organization.id,
             organization.delivMetod,
-            organization.isHidden
+            organization.isHidden,
+						organization.reservetable
         );
     });
 };
