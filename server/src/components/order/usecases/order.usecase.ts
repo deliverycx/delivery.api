@@ -18,7 +18,7 @@ export class OrderUsecase {
 
         await this.orderCreateBuilder.createOrder();
 
-        await this.orderCreateBuilder.duplicateOrder();
+        //await this.orderCreateBuilder.duplicateOrder();
 
         return this.orderCreateBuilder.getOrderEntity();
     }
@@ -32,7 +32,7 @@ export class OrderUsecase {
 
         await this.orderCheckBuilder.validateCount();
 
-        await this.orderCheckBuilder.serviceValidate();
+        //await this.orderCheckBuilder.serviceValidate();
 
         await this.orderCheckBuilder.getResult();
     }

@@ -10,7 +10,7 @@ export class IIkoAxios extends Axios {
 
     constructor() {
         super(
-            process.env.SERVICE_URL,
+            process.env.TRANSFER_URL,
             (error) =>
                 new IikoError(
                     error.response?.data?.description ||
@@ -39,34 +39,53 @@ export class IIkoAxios extends Axios {
     // }
 
     private async token() {
-        const { data } = await this._axios.get<string>(
-            `/api/0/auth/access_token?user_id=${process.env.SERVICE_LOGIN}&user_secret=${process.env.SERVICE_PASSWORD}`
+        const { data } = await this._axios.post<{token:string}>(
+            `/access_token`,
+						{
+							apiLogin: "8991a0c8-0af"
+						}
         );
+				
 
-        return data;
+        return data.token;
     }
 
     public async orderTypes(organization) {
         const token = await this.token();
-        const { data } = await this._axios.get<OrderTypesIiko>(
-            `/api/0/rmsSettings/getOrderTypes?access_token=${token}&organization=${organization}`
+        const { data } = await this._axios.post<OrderTypesIiko>(
+            `/deliveries/order_types`,
+						{
+							organizationIds: [
+								organization
+							]
+						},
+						{
+							headers: { Authorization: `Bearer ${token}` }
+						}
         );
+
+
 
         return data;
     }
 
-    public async orderCreate(orderData: iiko.IOrderBody) {
+    public async orderCreate(orderData: any) {
         const token = await this.token();
 
         const { data } = await this._axios.post<OrderInfoIiko>(
-            `/api/0/orders/add?access_token=${token}`,
-            orderData
+            `/deliveries/create`,
+            orderData,
+						{
+							headers: { Authorization: `Bearer ${token}` }
+						}
         );
+
+				console.log('order',data);
 
         return data;
     }
 
-    public async checkOrder(orderData: iiko.IOrderBody) {
+    public async checkOrder(orderData: any) {
         const token = await this.token();
 
         const { data } = await this._axios.post<OrderCheckCreationResult>(

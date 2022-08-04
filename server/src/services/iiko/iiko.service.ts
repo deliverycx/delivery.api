@@ -47,6 +47,8 @@ export class IikoService implements IIiko {
         /*
             Получение айдишнка типа заказа
         */
+
+						
         const { id: orderTypeId } = await this.getOrderTypesId(
             orderInfo.organization,
             orderInfo.orderType
@@ -84,8 +86,9 @@ export class IikoService implements IIiko {
         const requestOrderItems = [
             ...cart.map((cartEl) => {
                 return {
-                    id: cartEl.getProductId,
-                    name: cartEl.getProductName,
+										type: "Product",
+                    productId: cartEl.getProductId,
+                    modifiers: [],
                     amount: cartEl.getAmount
                 };
             }),
@@ -94,37 +97,53 @@ export class IikoService implements IIiko {
         
 
         const result = {
-            organization: organization.id,
-            customer: {
-                name: orderInfo.name,
-                phone: orderInfo.phone
-            },
+						organizationId: organization.id,
+						createOrderSettings: {
+							mode: "Async"
+						},
             order: {
                 phone: orderInfo.phone,
-                date: orderInfo.date,
-                
-                address: {
+                //completeBefore: orderInfo.date,
+                customer: {
+									name: orderInfo.name,
+									comment: orderInfo.phone
+								},
+								
+								deliveryPoint: {
+									address: {
                     city: orderInfo.address.city,
-                    street: orderInfo.address.street,
-                    home: orderInfo.address.home,
+                    street: {
+											name:orderInfo.address.street,
+											city:orderInfo.address.street
+										},
+
+                    house: orderInfo.address.home,
                     apartment: orderInfo.address.flat,
                     entrance: orderInfo.address.entrance,
                     floor: orderInfo.address.floor,
                     doorphone: orderInfo.address.intercom
-                },
+                	}
+								},
+								guests: {
+									count: 1,
+									splitBetweenPersons: false
+								},
                 items: requestOrderItems,
                 comment: orderInfo.comment,
                 orderTypeId: orderTypeId,
-                isSelfService:
+								/*
+                orderServiceType:
                     orderInfo.orderType === OrderTypesEnum.PICKUP
-                        ? "true"
-                        : "false"
+                        ? "DeliveryPickUp"
+                        : "DeliveryByCourier"
+								*/					
             }
         };
 
-        return result;
-    }
+				
 
+        return result
+		}
     /*-----------------| getOrderTypesId |-----------------------*/
     public async getOrderTypesId(
         organizationId: UniqueId,
@@ -136,17 +155,24 @@ export class IikoService implements IIiko {
         );
 
         const data = await this.axios.orderTypes(organizationGUID.id);
-					
-        const result = data.items.find((orderTypeEl) => {
-console.log(orderTypeEl);
+				
+
+        const result = data.orderTypes[0].items.find((orderTypeEl) => {
+
+					switch(orderType){
+						case OrderTypesEnum.PICKUP :
+							return orderTypeEl.orderServiceType === 'DeliveryPickUp' && orderTypeEl
+						case OrderTypesEnum.COURIER :
+							return orderTypeEl.orderServiceType === 'DeliveryByCourier' && orderTypeEl
+							
+					}
+					/*
             const type = orderTypeEl.orderServiceType.includes(orderType);
 						
 						return type
+						*/
         });
 
-				if(result.name === 'Яндекс Еда Курьеры Я.Еды'){
-					result.name = 'Самовывоз'		
-				}
 
         return { name: result?.name, id: result?.id };
     }
@@ -167,12 +193,12 @@ console.log(orderTypeEl);
             prices.deliveryPrice
         );
 
-				/*
+				
       const orderResponseInfo = await this.axios.orderCreate(orderBody);
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );
-
+/*
         return {
             result: orderResponseInfo.number,
             problem:
