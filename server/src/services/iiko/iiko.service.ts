@@ -138,7 +138,6 @@ export class IikoService implements IIiko {
         const data = await this.axios.orderTypes(organizationGUID.id);
 					
         const result = data.items.find((orderTypeEl) => {
-console.log(orderTypeEl);
             const type = orderTypeEl.orderServiceType.includes(orderType);
 						
 						return type
@@ -167,7 +166,7 @@ console.log(orderTypeEl);
             prices.deliveryPrice
         );
 
-				/*
+				
       const orderResponseInfo = await this.axios.orderCreate(orderBody);
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
@@ -178,8 +177,8 @@ console.log(orderTypeEl);
             problem:
                 orderResponseInfo.problem?.hasProblem &&
                 orderResponseInfo?.problem?.problem
-        };*/
-				return {}
+        };
+
 				
     }
 
