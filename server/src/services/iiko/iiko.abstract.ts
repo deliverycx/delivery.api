@@ -24,7 +24,11 @@ export abstract class IIiko {
         cart: Array<CartEntity>,
         customerInfo: OrderDTO,
         prices: IDeliveryPrices
-    ) => Promise<IReturnCreateOrder>;
+    ) => Promise<any>;
+
+		abstract statusOrder: (
+			organizationId:string,orderIds:string
+	) => Promise<any>;
 
     abstract getOrderTypesId: (
         organizationId: UniqueId,

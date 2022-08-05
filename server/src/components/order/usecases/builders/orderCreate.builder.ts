@@ -44,23 +44,25 @@ export class OrderCreateBuilder {
         this._state.cart = await this.CartRepository.getAll(userId);
     }
 
-    private repeatOrderUntilSuccess(cart, orderInfo, deliveryPrices) {
-        let counter = 0;
-        return new Promise<string>(async (resolve, reject) => {
+    private repeatOrderUntilSuccess(organizationId:string, orderId:string,counter?:number) {
+        counter = counter || 0;
+				console.log('count',counter);
+        return new Promise(async (resolve, reject) => {
             try {
-                counter++;
-                const { result, problem } = await this.orderService.create(
-                    cart,
-                    orderInfo,
-                    deliveryPrices
-                );
+                
+                const result = await this.orderService.statusOrder(organizationId,orderId)
 
-                if (problem) {
-                    reject(new CannotDeliveryError(problem));
-                }
+                if (result.creationStatus === 'InProgress') {
+                    //reject(new CannotDeliveryError(result.errorInfo));
+                }else if(!result.errorInfo && result.creationStatus === 'Success'){
+										//resolve(result);
+								}
+								
 
-                resolve(result);
+                
             } catch (e) {
+							console.log('catch');
+							
                 if (counter >= 3) {
                     reject(
                         new CannotDeliveryError(
@@ -70,11 +72,7 @@ export class OrderCreateBuilder {
                 } else {
                     setTimeout(async () => {
                         resolve(
-                            await this.repeatOrderUntilSuccess(
-                                cart,
-                                orderInfo,
-                                deliveryPrices
-                            )
+                            await this.repeatOrderUntilSuccess(organizationId,orderId,counter + 1)
                         );
                     }, 5000);
                 }
@@ -95,23 +93,32 @@ export class OrderCreateBuilder {
             orderInfo.orderType
         );
 
-        const { result: orderNumber, problem } = await this.orderService.create(
+        const orderInfoPross = await this.orderService.create(
             cart,
             orderInfo,
             deliveryPrices
         );
 
+				console.log('start');
+				const q = await this.repeatOrderUntilSuccess(orderInfoPross.organizationId,orderInfoPross.id)
+				console.log('status',q);
+
+				
+
+				/*
         if (problem) {
             throw new CannotDeliveryError(problem);
         }
+				*/
+
 
         await this.orderRepository.create(
             user,
             deliveryPrices.totalPrice,
-            orderNumber
+            '123'
         );
 
-        this._state.orderNumber = orderNumber;
+        this._state.orderNumber = '123';
 
         await this.CartRepository.removeAll(user);
     }

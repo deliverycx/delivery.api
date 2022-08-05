@@ -14,6 +14,7 @@ import { ProductClass } from "src/database/models/product.model";
 import { IIkoAxios } from "./iiko.axios";
 import { StopListUsecase } from "src/components/stopList/usecases/stopList.usecase";
 import { OrganizationClass } from "src/database/models/organization.model";
+import { string } from 'joi';
 
 
 export class IikoService implements IIiko {
@@ -109,21 +110,7 @@ export class IikoService implements IIiko {
 									comment: orderInfo.phone
 								},
 								
-								deliveryPoint: {
-									address: {
-                    city: orderInfo.address.city,
-                    street: {
-											name:orderInfo.address.street,
-											city:orderInfo.address.street
-										},
-
-                    house: orderInfo.address.home,
-                    apartment: orderInfo.address.flat,
-                    entrance: orderInfo.address.entrance,
-                    floor: orderInfo.address.floor,
-                    doorphone: orderInfo.address.intercom
-                	}
-								},
+								
 								guests: {
 									count: 1,
 									splitBetweenPersons: false
@@ -198,16 +185,30 @@ export class IikoService implements IIiko {
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );
-/*
+
+				
+			/*
         return {
-            result: orderResponseInfo.number,
-            problem:
-                orderResponseInfo.problem?.hasProblem &&
-                orderResponseInfo?.problem?.problem
-        };*/
-				return {}
+            result: orderResponseInfo.id,
+            problem:orderResponseInfo.errorInfo
+        };
+				*/
+				return orderResponseInfo
+
 				
     }
+
+		async statusOrder(organizationId:string,orderIds:string){
+			console.log('order start',organizationId,orderIds);
+			const statusOrder = await this.axios.orderCheckStatusOrder({
+				organizationId:organizationId,
+				orderIds:[orderIds]
+			})
+			console.log('order',statusOrder);
+			
+			
+			return statusOrder
+		}
 
     /*-----------------|       check      |-----------------------*/
     /*

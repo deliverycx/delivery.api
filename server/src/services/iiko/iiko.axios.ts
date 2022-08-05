@@ -72,7 +72,7 @@ export class IIkoAxios extends Axios {
     public async orderCreate(orderData: any) {
         const token = await this.token();
 
-        const { data } = await this._axios.post<OrderInfoIiko>(
+        const { data } = await this._axios.post(
             `/deliveries/create`,
             orderData,
 						{
@@ -80,10 +80,24 @@ export class IIkoAxios extends Axios {
 						}
         );
 
-				console.log('order',data);
 
-        return data;
+        return data.orderInfo;
     }
+
+		public async orderCheckStatusOrder(orderData: any) {
+			const token = await this.token();
+
+			const { data } = await this._axios.post(
+					`/deliveries/by_id`,
+					orderData,
+					{
+						headers: { Authorization: `Bearer ${token}` }
+					}
+			);
+
+
+			return data.orders[0];
+	}
 
     public async checkOrder(orderData: any) {
         const token = await this.token();
