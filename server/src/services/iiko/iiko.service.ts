@@ -95,10 +95,13 @@ export class IikoService implements IIiko {
             }),
             deliveryProductObject
         ].filter(Boolean);
-        
 
-        const result = {
+				const terminal = await this.axios.termiralGroops(organization.id)
+
+				if(orderInfo.orderType === OrderTypesEnum.PICKUP){
+					return {
 						organizationId: organization.id,
+						terminalGroupId:terminal,
 						createOrderSettings: {
 							mode: "Async"
 						},
@@ -109,7 +112,49 @@ export class IikoService implements IIiko {
 									name: orderInfo.name,
 									comment: orderInfo.phone
 								},
-								
+								guests: {
+									count: 1,
+									splitBetweenPersons: false
+								},
+                items: requestOrderItems,
+                comment: orderInfo.comment,
+                orderTypeId: orderTypeId,
+								/*
+                orderServiceType:
+                    orderInfo.orderType === OrderTypesEnum.PICKUP
+                        ? "DeliveryPickUp"
+                        : "DeliveryByCourier"
+								*/					
+            }
+        	};
+				}else{
+					return {
+						organizationId: organization.id,
+						terminalGroupId:terminal,
+						createOrderSettings: {
+							mode: "Async"
+						},
+            order: {
+                phone: orderInfo.phone,
+                //completeBefore: orderInfo.date,
+                customer: {
+									name: orderInfo.name,
+									comment: orderInfo.phone
+								},
+								deliveryPoint:{
+									address:{
+										street:{
+											name:orderInfo.address.street,
+											city:orderInfo.address.city
+										},
+										house:orderInfo.address.home,
+										floor:orderInfo.address.floor,
+										flat:orderInfo.address.flat,
+										entrance:orderInfo.address.entrance,
+										doorphone:orderInfo.address.intercom
+									},
+									
+								},
 								
 								guests: {
 									count: 1,
@@ -125,11 +170,9 @@ export class IikoService implements IIiko {
                         : "DeliveryByCourier"
 								*/					
             }
-        };
-
-				
-
-        return result
+        	};
+				}
+        
 		}
     /*-----------------| getOrderTypesId |-----------------------*/
     public async getOrderTypesId(
@@ -199,14 +242,10 @@ export class IikoService implements IIiko {
     }
 
 		async statusOrder(organizationId:string,orderIds:string){
-			console.log('order start',organizationId,orderIds);
 			const statusOrder = await this.axios.orderCheckStatusOrder({
 				organizationId:organizationId,
 				orderIds:[orderIds]
 			})
-			console.log('order',statusOrder);
-			
-			
 			return statusOrder
 		}
 

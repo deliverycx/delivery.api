@@ -69,6 +69,26 @@ export class IIkoAxios extends Axios {
         return data;
     }
 
+		public async termiralGroops(organization:string) {
+			const token = await this.token();
+			const { data } = await this._axios.post<any>(
+					`/terminal_groups`,
+					{
+						organizationIds: [
+							organization
+						],
+						includeDisabled: true
+					},
+					{
+						headers: { Authorization: `Bearer ${token}` }
+					}
+			);
+
+
+
+			return data.terminalGroups[0].items[0].id;
+		}
+
     public async orderCreate(orderData: any) {
         const token = await this.token();
 
@@ -94,6 +114,8 @@ export class IIkoAxios extends Axios {
 						headers: { Authorization: `Bearer ${token}` }
 					}
 			);
+
+			console.log('data',data);
 
 
 			return data.orders[0];

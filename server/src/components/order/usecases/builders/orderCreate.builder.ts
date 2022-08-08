@@ -34,7 +34,8 @@ export class OrderCreateBuilder {
 
         private readonly DeliveryService: IDeliveryService,
 
-        private readonly botService: IBotService
+        private readonly botService: IBotService,
+
     ) {}
 
     async initialize(userId: UniqueId, orderInfo: OrderDTO) {
@@ -44,7 +45,7 @@ export class OrderCreateBuilder {
         this._state.cart = await this.CartRepository.getAll(userId);
     }
 
-    private repeatOrderUntilSuccess(organizationId:string, orderId:string,counter?:number) {
+    private repeatOrderUntilSuccess(organizationId:string, orderId:string,counter?:number):any {
         counter = counter || 0;
 				console.log('count',counter);
         return new Promise(async (resolve, reject) => {
@@ -52,34 +53,43 @@ export class OrderCreateBuilder {
                 
                 const result = await this.orderService.statusOrder(organizationId,orderId)
 
-                if (result.creationStatus === 'InProgress') {
-                    //reject(new CannotDeliveryError(result.errorInfo));
+                if (result.errorInfo || result.creationStatus === 'InProgress') {
+										console.log(result.errorInfo);
+                    
+										if (counter >= 3) {
+											
+											resolve({
+												result:null,
+												problem:"Возникла не предвиденная ошибка"
+											});
+
+											
+									} else {
+											setTimeout(async () => {
+													resolve(
+															await this.repeatOrderUntilSuccess(organizationId,orderId,counter + 1)
+													);
+											}, 5000);
+									}
                 }else if(!result.errorInfo && result.creationStatus === 'Success'){
-										//resolve(result);
+										resolve({
+											result,
+											problem:null
+										});
 								}
 								
 
                 
             } catch (e) {
 							console.log('catch');
-							
-                if (counter >= 3) {
-                    reject(
-                        new CannotDeliveryError(
-                            "Возникла не предвиденная ошибка"
-                        )
-                    );
-                } else {
-                    setTimeout(async () => {
-                        resolve(
-                            await this.repeatOrderUntilSuccess(organizationId,orderId,counter + 1)
-                        );
-                    }, 5000);
-                }
+								reject(
+									new CannotDeliveryError(
+											"Возникла не предвиденная ошибка"
+									)
+								);
+                
             }
-        }).catch((E) => {
-            throw E;
-        });
+        })
     }
 
     async createOrder() {
@@ -98,27 +108,29 @@ export class OrderCreateBuilder {
             orderInfo,
             deliveryPrices
         );
+				console.log('orderInfoPross',orderInfoPross);
+
 
 				console.log('start');
-				const q = await this.repeatOrderUntilSuccess(orderInfoPross.organizationId,orderInfoPross.id)
-				console.log('status',q);
+				const {result,problem} = await this.repeatOrderUntilSuccess(orderInfoPross.organizationId,orderInfoPross.id)
+				console.log('status',result);
 
 				
 
-				/*
+				
         if (problem) {
             throw new CannotDeliveryError(problem);
         }
-				*/
+				
 
 
         await this.orderRepository.create(
             user,
             deliveryPrices.totalPrice,
-            '123'
+            result.id
         );
 
-        this._state.orderNumber = '123';
+        this._state.orderNumber = result.id;
 
         await this.CartRepository.removeAll(user);
     }
