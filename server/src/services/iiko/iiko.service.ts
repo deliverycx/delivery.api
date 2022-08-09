@@ -94,7 +94,7 @@ export class IikoService implements IIiko {
         
 
         const result = {
-            organization1: organization.id,
+            organization: organization.id,
             customer: {
                 name: orderInfo.name,
                 phone: orderInfo.phone
