@@ -73,7 +73,7 @@ export namespace iiko {
     }
 
     export interface IOrderBody {
-        organization: UniqueId;
+        organization1: UniqueId;
         customer: {
             name: string;
             phone: string;
