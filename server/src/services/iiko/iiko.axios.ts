@@ -57,12 +57,12 @@ export class IIkoAxios extends Axios {
 
     public async orderCreate(orderData: iiko.IOrderBody) {
         const token = await this.token();
-
+				
         const { data } = await this._axios.post<OrderInfoIiko>(
             `/api/0/orders/add?access_token=${token}`,
             orderData
         );
-
+				console.log(data);
         return data;
     }
 
