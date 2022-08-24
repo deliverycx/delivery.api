@@ -97,5 +97,18 @@ export class DeliveryService implements IDeliveryService {
 					discountDozen:0
 				}
 		}
+		async deliveryZone(organization:string){
+			const {coordinates} = await this.iiko.getDeliveryZones({
+				organizationIds:[organization]
+			})
+			const mass = coordinates.reduce((acc:number[][],val,index)=>{
+				acc.push([Number(val.latitude),Number(val.longitude)])
+				
+				return acc
+			},[])
+
+			return mass
+		}
+		
 		
 }

@@ -99,4 +99,8 @@ export class CartUsecase {
 				...prices
 			}
 		}
+
+		async getDeliveryZones({organizationIds}){
+			return this.DeliveryService.deliveryZone(organizationIds)
+		}
 }

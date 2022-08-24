@@ -49,6 +49,5 @@ export abstract class IIiko {
 			organizationId: UniqueId,
 			cart: Array<CartEntity>,
 		) => any;
-
 		
 }

@@ -152,6 +152,22 @@ export class IIkoAxios extends Axios {
 			
 			return data
 	}
+	public async getDeliveryZones(body:{organizationIds:string[]}):Promise<iiko.IZone>{
+		const token = await this.token();
+
+		const { data } = await this._axios.post(
+			`/delivery_restrictions`,
+					body,
+					{
+						headers: { Authorization: `Bearer ${token}` }
+					}
+			);
+
+			
+			
+			return data.deliveryRestrictions[0].deliveryZones[0]
+	}
+
 }
 
 export const iikoAxiosProviders = [

@@ -80,4 +80,12 @@ export namespace iiko {
         };
         order: INestedOrderBody;
     }
+
+		export interface IZone{
+			name:string
+			coordinates:[{
+				latitude:number,
+				longitude:number
+			}]
+		}
 }
