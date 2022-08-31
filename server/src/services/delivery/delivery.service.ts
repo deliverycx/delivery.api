@@ -26,7 +26,8 @@ export class DeliveryService implements IDeliveryService {
     }
     private async cartPriceCalculating(userId: UniqueId,discount?:number): Promise<number> {
         let totalPrice = await this.cartRepository.calc(userId);
-        return totalPrice - discount;
+				console.log(totalPrice,discount,totalPrice - discount);
+        return discount ? totalPrice - discount : totalPrice
     }
 
     public async calculatingPrices(
@@ -43,6 +44,8 @@ export class DeliveryService implements IDeliveryService {
             totalPrice,
             orderType
         );
+
+				console.log(totalPrice);
 
 				
 				
