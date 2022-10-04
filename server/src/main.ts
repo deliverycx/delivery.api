@@ -9,12 +9,32 @@ async function bootstrap() {
 
     const allowedRequestedFromHosts = process.env.CLIENT_PATH.split(" ");
 
-    app.set("trust proxy", true);
+    
+		/*
     app.enableCors({
         origin: allowedRequestedFromHosts,
 
         credentials: true
     });
+		*/
+		//app.enableCors();
+		/*
+		const options = {
+			origin:'*',
+			methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+			preflightContinue: true,
+			optionsSuccessStatus: 204,
+			credentials: true,
+		};
+		app.enableCors(options);
+		*/
+		app.enableCors({
+			origin: true,
+			methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+			credentials: true,
+		});
+		
+		app.set("trust proxy", true);
 
     doc(app);
 
