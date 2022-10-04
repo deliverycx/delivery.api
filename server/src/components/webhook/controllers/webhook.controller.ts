@@ -108,4 +108,9 @@ export class WebhookController {
 				response.status(400).json({status:'no'});
 			}
     }
+		@Post("push")	
+		async push(@Body() body:any){
+			console.log('push body',body);
+			return 'ok'
+		}
 }
