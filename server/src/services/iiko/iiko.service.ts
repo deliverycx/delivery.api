@@ -138,14 +138,17 @@ export class IikoService implements IIiko {
         const data = await this.axios.orderTypes(organizationGUID.id);
 					
         const result = data.items.find((orderTypeEl) => {
-            const type = orderTypeEl.orderServiceType.includes(orderType);
-						
-						return type
+            //const type = orderTypeEl.orderServiceType.includes(orderType);
+						if(orderType == 'PICKUP'){
+							return orderTypeEl.id === '5b1508f9-fe5b-d6af-cb8d-043af587d5c2' && orderTypeEl
+						}
+						if(orderType == 'COURIER'){
+							return orderTypeEl.id === '9ee06fcc-8233-46fa-b74d-ff6f50128afb' && orderTypeEl
+						}
+					
         });
 
-				if(result.name === 'Яндекс Еда Курьеры Я.Еды'){
-					result.name = 'Самовывоз'		
-				}
+				
 
         return { name: result?.name, id: result?.id };
     }

@@ -100,7 +100,7 @@ export class PaymentService extends IPaymentService {
 				const q = {"merchantId":"a9a372fb-93bd-4ef4-b4d3-6df112a4b24c","testMode":true,"amount":{"currency":"RUB","value":"10.50"},"invoice":{"description":"Оплата заказа в ","params":{"user":"633bfde907e30ed25cd330d3","hash":"025b77abe64be4d2","organization":"629f21a6edc033458bbbc07c","name":"test","date":"2022-10-04 13:00:50","address_city":"Симферополь","address_street":"улица Горького","address_home":"1","address_flat":"","address_intercom":"","address_entrance":"","address_floor":"","orderType":"COURIER","phone":"+7 978 755 46 54","comment":"test","paymentMethod":"CARD"}},"protocol":{"callbackUrl":"https://cxdevproxy.ngrok.io/webhook/paymentCallback","returnUrl":"https://xn--90avg.xn--e1aybc.xn--80apgfh0ct5a.xn--p1ai/success/025b77abe64be4d2"},"reciept":{"client":{"phone":"+7 978 755 46 54"},"items":[[{"name":"Хинкали с бараниной и зеленью","quantity":5,"price":250,"vatType":"None","paymentSubject":"Commodity","paymentMethod":"FullPayment"}]]}}
 
         const paymentResult = await this.Paymaster.paymentUrl(
-					q,
+					payMasterBody,
             organizationPaymentInfo.token
         );
         return new RedirectEntity(
