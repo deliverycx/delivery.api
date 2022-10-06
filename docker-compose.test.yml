@@ -33,7 +33,7 @@ services:
         container_name: development_mongodb
         image: mongo
         volumes:
-            - ./mongo/data:/data/db   
+            - ./mongo/data:/data/db    
         networks:
             - mynetwork
 networks:
