@@ -39,7 +39,7 @@ export class WebhookController {
     ) {}
 
     @Post("paymentCallback")
-    @UseGuards(YooWebhookGuard)
+    //@UseGuards(YooWebhookGuard)
     async yowebhook(
         @Body() body: IPaymentWebhookDto,
         @Res() response: Response
