@@ -43,9 +43,11 @@ try {
         MongooseModule.forRoot(process.env.CONNECTION, {
             connectionName: "DatabaseConnection"
         }),
+				/*
 				MongooseModule.forRoot(process.env.CONNECTION_ADMIN, {
 					connectionName: "ADMINDatabaseConnection"
 				}),
+				*/
         RedisModule,
         LoggerModule.forRoot({
             pinoHttp: [

@@ -10,10 +10,5 @@ export const cardProviders = [
             connection.model("Card", CardSchema),
         inject: [getConnectionToken("DatabaseConnection")]
     },
-		{
-			provide: "Test",
-			useFactory: (connection: Connection) =>
-					connection.model("Test", testSchema),
-			inject: [getConnectionToken("ADMINDatabaseConnection")]
-	}
+	
 ];
