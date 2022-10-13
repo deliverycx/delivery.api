@@ -45,6 +45,7 @@ export class PaymentService extends IPaymentService {
 
     async _byCard(body: OrderDTO, userId: UniqueId): Promise<any> {
         // checking bank card support
+				
 
         const organizationPaymentInfo =
             await this.organizationRepository.getPaymentsInfo(
@@ -55,6 +56,8 @@ export class PaymentService extends IPaymentService {
             userId,
             body.orderType
         );
+
+				
 
         const cart = await this.cartRepository.getAll(userId);
         const orderHash = createOrderHash();
@@ -74,8 +77,8 @@ export class PaymentService extends IPaymentService {
                 }
             },
             protocol: {
-                callbackUrl: process.env.PAYMENT_SERVICE_CALLBACK_URL,
-                returnUrl: `${process.env.CLIENT_PATH}/success/${orderHash}`
+                callbackUrl: `${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
+                returnUrl: `${body.localhost}/success/${orderHash}`
             },
             reciept: {
                 client: {
@@ -96,6 +99,9 @@ export class PaymentService extends IPaymentService {
                 ]
             }
         };
+
+
+				console.log('paybody',payMasterBody);
         const paymentResult = await this.Paymaster.paymentUrl(
             payMasterBody,
             organizationPaymentInfo.token

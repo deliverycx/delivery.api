@@ -57,6 +57,7 @@ export class OrderController {
         @Session() session: Record<string, string>,
         @Res() response: Response
     ) {
+				console.log('create',body); 
         const paymentResult = await this.PaymentService.route(
             body,
             session.user

@@ -71,4 +71,9 @@ export class CardController {
 
         response.status(200).json(result);
     }
+
+		@Get("test")
+		async test(){
+			return await this.cardUsecase.testAll()
+		}
 }

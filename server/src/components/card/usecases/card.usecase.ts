@@ -26,4 +26,9 @@ export class CardUsecase {
 
         return result.map((card) => card.prepareForClient());
     }
+
+		public async testAll(){
+			const result = await this.cardRepository.addtest()
+			return result
+		}
 }

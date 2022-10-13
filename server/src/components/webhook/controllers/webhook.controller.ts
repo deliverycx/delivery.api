@@ -44,6 +44,8 @@ export class WebhookController {
         @Body() body: IPaymentWebhookDto,
         @Res() response: Response
     ) {
+
+			console.log('oplata',body);
         if (body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
             await this.PaymentService.captrurePayment(body.invoice.params);
         }

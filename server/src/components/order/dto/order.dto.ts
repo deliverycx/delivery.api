@@ -57,6 +57,7 @@ export class OrderDTO {
 
     @ApiProperty()
     comment: string;
+		localhost:string
 
     @ApiProperty({
         enum: PaymentMethods
