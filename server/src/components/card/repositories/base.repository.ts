@@ -2,7 +2,6 @@ import { Inject, Injectable } from "@nestjs/common";
 import { Model } from "mongoose";
 import { BaseRepository } from "src/common/abstracts/base.repository";
 import { CardClass } from "src/database/models/card.model";
-import { TestModelClass } from "src/database/models/test.model";
 import { AddCardDTO } from "../dto/addCard.dto";
 import { CardEntity } from "../entities/card.entity";
 import { cardMapper } from "../entities/card.mapper";
@@ -15,9 +14,8 @@ export class CardRepository
 {
     constructor(
         @Inject("Card")
-        private readonly CardModel: Model<CardClass>,
-				@Inject("Test")
-        private readonly TestModel: Model<TestModelClass>
+        private readonly CardModel: Model<CardClass>
+				
     ) {
         super(CardModel, cardMapper, "user");
     }
@@ -52,7 +50,5 @@ export class CardRepository
 
         return result;
     }
-		async addtest(){
-			return await this.TestModel.create({name:'vasa'})
-		}
+		
 }
