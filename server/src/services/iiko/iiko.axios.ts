@@ -46,7 +46,7 @@ export class IIkoAxios extends Axios {
 						}
         );
 				
-
+			  console.log('tokennnn',data);
         return data.token;
     }
 
