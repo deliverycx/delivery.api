@@ -115,7 +115,7 @@ export class WebhookController {
     }
 		@Post("push")	
 		async push(@Body() body:any){
-			console.log('push body',body);
+			//console.log('push body',body);
 			return 'ok'
 		}
 }
