@@ -45,9 +45,12 @@ export class WebhookController {
         @Res() response: Response
     ) {
 
-			console.log('oplata',body);
+			console.log('oplata paymentCallback',body);
         if (body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
-            await this.PaymentService.captrurePayment(body.invoice.params);
+						const check:any = await this.PaymentService.checkPymentOrder(body)
+						if(!check){
+							await this.PaymentService.captrurePayment(body);
+						}
         }
 
         response.status(200).json({});

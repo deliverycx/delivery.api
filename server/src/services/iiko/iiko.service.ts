@@ -1,5 +1,5 @@
 import { iiko } from "src/services/iiko/interfaces";
-import { IIiko, IReturnCreateOrder, OrderTypesEnum } from "./iiko.abstract";
+import { constOrderPaymentTypes, IIiko, IReturnCreateOrder, OrderTypesEnum } from "./iiko.abstract";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { OrderDTO } from "src/components/order/dto/order.dto";
 import { Inject } from "@nestjs/common";
@@ -49,6 +49,7 @@ export class IikoService implements IIiko {
             Получение айдишнка типа заказа
         */
 
+
 						
         const { id: orderTypeId } = await this.getOrderTypesId(
             orderInfo.organization,
@@ -93,7 +94,7 @@ export class IikoService implements IIiko {
                     amount: cartEl.getAmount
                 };
             }),
-            deliveryProductObject
+            //deliveryProductObject
         ].filter(Boolean);
 
 				const terminal = await this.axios.termiralGroops(organization.id)
@@ -163,12 +164,24 @@ export class IikoService implements IIiko {
                 items: requestOrderItems,
                 comment: orderInfo.comment,
                 orderTypeId: orderTypeId,
+								payments: 
+									orderInfo.paymentMethod === constOrderPaymentTypes.CARD
+										? [
+											{
+												"paymentTypeKind": "Card",
+												"sum": deliveryPrice,
+												"paymentTypeId": "1032a471-be2c-434f-b8c0-9bd686d8b2b5",
+												"isProcessedExternally": true
+											}
+										]
+									: null
+
 								/*
                 orderServiceType:
                     orderInfo.orderType === OrderTypesEnum.PICKUP
                         ? "DeliveryPickUp"
                         : "DeliveryByCourier"
-								*/					
+								*/			,		
             }
         	};
 				}
@@ -223,20 +236,21 @@ export class IikoService implements IIiko {
             prices.deliveryPrice
         );
 
-				
+				console.log('тело заказа',orderBody);
+				/*
       const orderResponseInfo = await this.axios.orderCreate(orderBody);
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );
 
 				
-			/*
+			
         return {
             result: orderResponseInfo.id,
             problem:orderResponseInfo.errorInfo
         };
 				*/
-				return orderResponseInfo
+				return {} //orderResponseInfo
 
 				
     }

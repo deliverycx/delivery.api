@@ -10,6 +10,11 @@ export enum OrderTypesEnum {
     COURIER = "COURIER"
 }
 
+export const constOrderPaymentTypes = {
+	CASH:"CASH",
+	CARD:"CARD"
+}
+
 export interface IReturnIikoOrderTypes {
     name: string;
     id: UniqueId;

@@ -17,6 +17,7 @@ interface IState {
     orderInfo: OrderDTO;
     cart: Array<CartEntity>;
     orderNumber: number | string;
+		organizationId:string
 }
 
 @Injectable({ scope: Scope.REQUEST })
@@ -109,7 +110,7 @@ export class OrderCreateBuilder {
             deliveryPrices
         );
 				console.log('orderInfoPross',orderInfoPross);
-
+				this._state.organizationId = orderInfoPross.organizationId	
 
 				console.log('start');
 				const {result,problem} = await this.repeatOrderUntilSuccess(orderInfoPross.organizationId,orderInfoPross.id)
@@ -178,4 +179,10 @@ export class OrderCreateBuilder {
     getOrderEntity(): OrderEntity {
         return new OrderEntity(this._state.orderNumber);
     }
+
+		async getOrderStatus(orderId:string){
+			console.log('order state',this._state);
+			const result = await this.orderService.statusOrder(this._state.organizationId,this._state.orderNumber as string)
+			return result
+		}
 }

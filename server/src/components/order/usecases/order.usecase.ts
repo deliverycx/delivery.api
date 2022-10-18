@@ -42,4 +42,8 @@ export class OrderUsecase {
 
         return orderNumber;
     }
+
+		async getStatusOrder(id:string){
+			return await this.orderCreateBuilder.getOrderStatus(id)
+		}
 }
