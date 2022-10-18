@@ -49,7 +49,6 @@ export class IikoService implements IIiko {
             Получение айдишнка типа заказа
         */
 
-
 						
         const { id: orderTypeId } = await this.getOrderTypesId(
             orderInfo.organization,
@@ -164,16 +163,16 @@ export class IikoService implements IIiko {
                 items: requestOrderItems,
                 comment: orderInfo.comment,
                 orderTypeId: orderTypeId,
-								payments: 
+								payments:
 									orderInfo.paymentMethod === constOrderPaymentTypes.CARD
-										? [
+									? [
 											{
-												"paymentTypeKind": "Card",
-												"sum": deliveryPrice,
-												"paymentTypeId": "1032a471-be2c-434f-b8c0-9bd686d8b2b5",
-												"isProcessedExternally": true
+											"paymentTypeKind": "Card",
+											"sum": deliveryPrice,
+											"paymentTypeId": "1032a471-be2c-434f-b8c0-9bd686d8b2b5",
+											"isProcessedExternally": true
 											}
-										]
+									]
 									: null
 
 								/*
@@ -181,7 +180,7 @@ export class IikoService implements IIiko {
                     orderInfo.orderType === OrderTypesEnum.PICKUP
                         ? "DeliveryPickUp"
                         : "DeliveryByCourier"
-								*/			,		
+								*/					
             }
         	};
 				}
@@ -236,21 +235,20 @@ export class IikoService implements IIiko {
             prices.deliveryPrice
         );
 
-				console.log('тело заказа',orderBody);
-				/*
+				
       const orderResponseInfo = await this.axios.orderCreate(orderBody);
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );
 
 				
-			
+			/*
         return {
             result: orderResponseInfo.id,
             problem:orderResponseInfo.errorInfo
         };
 				*/
-				return {} //orderResponseInfo
+				return orderResponseInfo
 
 				
     }
