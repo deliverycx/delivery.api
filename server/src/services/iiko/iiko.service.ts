@@ -168,7 +168,7 @@ export class IikoService implements IIiko {
 									? [
 											{
 											"paymentTypeKind": "Card",
-											"sum": deliveryPrice,
+											"sum": orderInfo.paymentsum,
 											"paymentTypeId": "1032a471-be2c-434f-b8c0-9bd686d8b2b5",
 											"isProcessedExternally": true
 											}
@@ -229,18 +229,22 @@ export class IikoService implements IIiko {
         orderInfo: OrderDTO,
         prices: IDeliveryPrices
     ): Promise<any> {
+
+
         const orderBody = await this.createOrderBody(
             orderInfo,
             cart,
             prices.deliveryPrice
         );
 
-				
+				/**/
+
+				console.log('инфа о заказке',orderBody);
       const orderResponseInfo = await this.axios.orderCreate(orderBody);
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );
-
+					
 				
 			/*
         return {

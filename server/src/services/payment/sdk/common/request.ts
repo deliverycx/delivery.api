@@ -28,4 +28,27 @@ export class PaymasterRequests extends Axios {
 
         return data;
     }
+
+		public async retunts(
+			requestBody: PaymasterRequest.PayRetutns,
+			token: string
+		) {
+				const { data } = await this._axios.post(
+						"/api/v2/refunds",
+						{
+							"paymentId": String(requestBody.paymentid),
+							"amount": {
+								"value": Number(requestBody.paymentAmount),
+								"currency": "RUB"
+							}
+						},
+						{
+								headers: {
+										Authorization: `Bearer ${token}`
+								}
+						}
+				);
+
+				return data;
+		}
 }

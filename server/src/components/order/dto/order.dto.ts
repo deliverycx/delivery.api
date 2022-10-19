@@ -68,4 +68,5 @@ export class OrderDTO {
     @IsEmail({ message: "Не корректный e-mail" })
     @IsOptional()
     email?: string;
+		paymentsum:number
 }

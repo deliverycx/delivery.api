@@ -11,4 +11,8 @@ export class Paymaster {
     public async paymentUrl(body: PaymasterRequest.IInvoice, token: string) {
         return this.requester.invoices(body, token);
     }
+
+		public async paymentRetunts(body: PaymasterRequest.PayRetutns, token: string) {
+			return this.requester.retunts(body, token);
+	}
 }

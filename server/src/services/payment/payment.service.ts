@@ -38,7 +38,7 @@ export class PaymentService extends IPaymentService {
     }
 
     async captrurePayment(body: any) {
-        const preparedBody = decodeBody<OrderDTO & { user: string }>(body.invoice.params);
+        const preparedBody = decodeBody<OrderDTO & { user: string }>({...body.invoice.params,paymentsum:body.amount.value});
 
        
 				/**/
@@ -155,18 +155,41 @@ export class PaymentService extends IPaymentService {
     }
 
 		async checkPymentOrder(body:any){
-			const result = await this.paymentRepository.findOrderPayment(body.id)
-			return result.length > 0 ? true : false
+			const result = await this.paymentRepository.findOrderPayment(body)
+			return result
+		}
+
+		async checkPymentOrderStatus(order:any){
+			const check = await this.paymentRepository.findOrderPayment({orderId:order.orderId})
+			
+			if(check){
+
+				const status = order.text.split(':')[2].replace(/[^a-zа-яё]/gi, '')
+				await this.paymentRepository.setOrderPaymentStatus(order.orderId,status)
+				if(status === 'canceled'){
+					const organizationPaymentInfo = await this.organizationPaymentInfo(check.paymentparams.organization)
+					await this.Paymaster.paymentRetunts(
+						{
+							paymentid:String(check.paymentid),
+							paymentAmount:Number(check.paymentAmount)
+						},
+						organizationPaymentInfo.token)
+				}
+			}
+			return check
+		}
+
+		async organizationPaymentInfo(id:string){
+			return await this.organizationRepository.getPaymentsInfo(
+				id
+			);
 		}
 
     async _byCard(body: OrderDTO, userId: UniqueId): Promise<any> {
         // checking bank card support
 				
 
-        const organizationPaymentInfo =
-            await this.organizationRepository.getPaymentsInfo(
-                body.organization
-            );
+        const organizationPaymentInfo = await this.organizationPaymentInfo(body.organization)
 
         const { totalPrice } = await this.DeliveryService.calculatingPrices(
             userId,
@@ -193,7 +216,7 @@ export class PaymentService extends IPaymentService {
                 }
             },
             protocol: {
-                callbackUrl: `${body.localhost}/api/webhook/paymentCallback`, //'https://b3b1-89-107-138-252.ngrok.io/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
+                callbackUrl: 'https://c8b3-89-107-138-252.ngrok.io/webhook/paymentCallback', //'https://b3b1-89-107-138-252.ngrok.io/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
                 returnUrl: `${body.localhost}/success/${orderHash}`
             },
             reciept: {

@@ -29,11 +29,22 @@ export class PaymentRepository {
 			
 		}
 
-		async findOrderPayment(id:number){
-			 const result = await this.paymentOrder.find({
-				paymentid:id
-			})
-			console.log('check find pay',result)
-			return result;
+		async findOrderPayment(body:any){
+			 const result = await this.paymentOrder.findOne(body)
+			 return result;
 		}
+
+		async setOrderPaymentStatus(orderId:string,status:string){
+			const result = await this.paymentOrder.findOneAndUpdate(
+				{
+					orderId:orderId
+				},
+				{
+					$set:{
+						orderStatus:status
+					}
+				}
+			)
+		 return result;
+	 }
 }		
