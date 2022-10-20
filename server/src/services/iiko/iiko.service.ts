@@ -162,7 +162,8 @@ export class IikoService implements IIiko {
 								},
                 items: requestOrderItems,
                 comment: orderInfo.comment,
-                orderTypeId: orderTypeId,
+                orderTypeId:
+									orderInfo.paymentMethod === "BYCARD" ? 'e23ef54e-fc50-4e15-835f-311d440a9744'  : orderTypeId,
 								payments:
 									orderInfo.paymentMethod === constOrderPaymentTypes.CARD
 									? [
@@ -230,16 +231,13 @@ export class IikoService implements IIiko {
         prices: IDeliveryPrices
     ): Promise<any> {
 
-
         const orderBody = await this.createOrderBody(
             orderInfo,
             cart,
             prices.deliveryPrice
         );
 
-				/**/
-
-				console.log('инфа о заказке',orderBody);
+			
       const orderResponseInfo = await this.axios.orderCreate(orderBody);
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`

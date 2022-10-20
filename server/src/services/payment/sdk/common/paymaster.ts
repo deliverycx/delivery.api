@@ -20,7 +20,7 @@ export class Paymaster {
 				paymentid:String(order.paymentid),
 				paymentAmount:Number(order.paymentAmount)
 			}, token);
-			await this.statusReturnPamyMent(token,order,retuntpay.id,paymentRepository)
+			return await this.statusReturnPamyMent(token,order,retuntpay.id,paymentRepository)
 		}
 
 		async statusReturnPamyMent(token:string,order:any,id:string,paymentRepository:any){

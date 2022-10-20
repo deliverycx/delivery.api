@@ -5,7 +5,8 @@ import { RedirectEntity } from "src/components/order/entities/redirect.entity";
 
 export enum PaymentMethods {
     CASH = "CASH",
-    CARD = "CARD"
+    CARD = "CARD",
+		BYCARD = "BYCARD"
 }
 
 export abstract class IPaymentService {
@@ -20,6 +21,8 @@ export abstract class IPaymentService {
                 return await this._byCard(body, userId);
             case PaymentMethods.CASH:
                 return await this._byCash(body, userId);
+						case PaymentMethods.BYCARD:
+								return await this._byCash(body, userId);		
             default:
                 throw new BadRequestException();
         }
