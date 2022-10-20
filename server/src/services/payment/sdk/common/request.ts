@@ -51,4 +51,21 @@ export class PaymasterRequests extends Axios {
 
 				return data;
 		}
+
+		public async retuntsStatus(
+			token: string,
+			id:string
+		) {
+				const { data } = await this._axios.get(
+						`/api/v2/refunds/${id}`,
+					
+						{
+								headers: {
+										Authorization: `Bearer ${token}`
+								}
+						}
+				);
+
+				return data;
+		}
 }

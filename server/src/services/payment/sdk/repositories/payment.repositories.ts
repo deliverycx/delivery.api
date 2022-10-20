@@ -45,6 +45,27 @@ export class PaymentRepository {
 					}
 				}
 			)
+			console.log('обновило статус заказа');
 		 return result;
 	 }
+
+		 async setPaymentStatus(payid:number,status:string){
+			console.log('в обновлении',payid,status);
+			const result = await this.paymentOrder.findOneAndUpdate({
+				paymentid:payid
+			},
+			{
+				$set:{
+					paymentStatus:status
+				}
+			},{
+				new:true
+			}
+			
+			)
+
+			console.log('обновило статус оплаты');
+		 return result;
+ }
+	 
 }		
