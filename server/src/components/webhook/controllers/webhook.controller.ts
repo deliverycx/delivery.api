@@ -61,22 +61,35 @@ export class WebhookController {
             "Подключение по http://localhost:9870/iiko для дева, и для прода / и указать порт 9870. Слушать событие stoplist_event",
         type: StopListEntity
     })
-    @Post("iiko")
-    @UseGuards(IikoWebhookGuard)
+    @Post("stoplist")
+    //@UseGuards(IikoWebhookGuard)
     async iikowebhook(
-        @Body() body: iiko.IWebhookEvent,
+        @Body() body: iiko.stoplist,
         @Res() response: Response
     ) {
-        console.log("Iiko send data from webhook");
+        console.log("Iiko send data from webhook",body);
+				/*
         try {
-            const stopListEntity = await this.IikoService.getStopList(body);
 
-            this.IikoStopListGateway.sendStopListToClient(stopListEntity);
+						console.log('sokettttttttttttttttttttttttttttttt',body);
+            //const stopListEntity = await this.IikoService.getStopList(body);
+
+            this.IikoStopListGateway.sendStopListToClient({});
 
             response.status(200).json({});
         } catch (e) {
             console.log(e);
         }
+				*/
+				try {
+					const stopListEntity = await this.IikoService.getStopList(body.organizationId);
+					console.log(stopListEntity);
+					response.status(200).json(stopListEntity)
+				} catch (error) {
+					response.status(500).json({})
+				}
+				
+				
     }
     
     @ApiResponse({

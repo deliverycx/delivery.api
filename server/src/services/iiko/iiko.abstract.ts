@@ -48,8 +48,8 @@ export abstract class IIiko {
     ) => Promise<iiko.ICheckResult>;
 
     abstract getStopList: (
-        body: iiko.IWebhookEvent
-    ) => Promise<ReturnTypeAsync<FilterNoZeroBalanceType>>;
+			organizationId:string
+    ) => Promise<any>;
 
 		abstract getDiscount: (
 			organizationId: UniqueId,

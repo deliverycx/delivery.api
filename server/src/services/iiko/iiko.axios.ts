@@ -133,11 +133,23 @@ export class IIkoAxios extends Axios {
 
     public async stopList(organization: UniqueId) {
         const token = await this.token();
-        const { data } = await this._axios.get<iiko.IStopListBody>(
-            `/api/0/stopLists/getDeliveryStopList?access_token=${token}&organization=${organization}`
-        );
+        const { data } = await this._axios.post(
+					`/stop_lists`,
+					{
+						"organizationIds": [
+							organization
+						]
+					},
+					{
+						headers: { Authorization: `Bearer ${token}` }
+					}
+			);
 
-        return data;
+
+
+        return data.terminalGroupStopLists.map((val:any) =>{
+					return val.organizationId === organization &&  val.items
+				})[0];
     }
 
 		public async discontList(body:any) {

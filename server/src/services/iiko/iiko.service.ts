@@ -297,25 +297,26 @@ export class IikoService implements IIiko {
         by websocket.
         save stop-list to the stopList collection
     */
-    async getStopList(body: iiko.IWebhookEvent) {
-        const data = await this.axios.stopList(body.organizationId);
-        const stopList = data.stopList
-            .map((stopListArrayItem) => stopListArrayItem.items)
-            .flat();
-
+    async getStopList(organizationId:string) {
+			const stoplist = await this.StopListUsecase.getAll(organizationId)
+				/*	
         const stopListArray = stopList.map((el) => {
             return {
                 ...el,
                 product: el.productId
             };
         });
-
+	
+				
         const stopListEntity = await this.StopListUsecase.stopListEventAction(
             body.organizationId,
             stopListArray
         );
+				
 
-        return stopListEntity;
+        return stopListArray;
+				*/
+				return stoplist
     }
 		async getDiscount(
 			organizationId: UniqueId,

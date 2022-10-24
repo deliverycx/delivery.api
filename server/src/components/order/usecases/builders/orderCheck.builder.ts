@@ -77,6 +77,30 @@ export class OrderCheckBuilder {
         }
     }
 
+		async checkStopList(){
+			
+			const organization = await this.OrganizationRepository.getOne(this._state.orderInfo.organization)
+			const organizationID = organization.getGuid.toString();
+			const stoplist = await this.orderService.getStopList(organizationID)
+			const arrStoplist = stoplist.map((el) => el.product)
+
+			
+			const result = this._state.cart.filter((el) =>{
+				return arrStoplist.includes(el.getProductIdObj.toString())
+			})
+
+			
+			this._state.errors.push(
+				new CannotDeliveryError(
+					result.map((el:any) =>{
+						return `в стоплисте - ${el.getProductName}`
+					})
+				)
+				
+			);
+			
+		}
+
     async serviceValidate() {
         const { cart, orderInfo, user } = this._state;
 

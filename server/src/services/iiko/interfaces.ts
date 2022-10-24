@@ -34,8 +34,13 @@ export namespace iiko {
         eventInfo: any;
     }
 
+		export interface stoplist {
+			organizationId: UniqueId;
+	}
+
     export interface IStopListItem {
         productId: UniqueId;
+				product:UniqueId;
         balance: number;
     }
 

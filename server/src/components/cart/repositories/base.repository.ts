@@ -130,10 +130,19 @@ export class CartRepository
     }
 
     async removeSome(removeItems: Array<UniqueId>) {
-        const result = await this.CartModel.deleteMany({
+			try {
+				const result = await this.CartModel.deleteMany({
             product: { $in: removeItems }
         });
+				return !!result.deletedCount 
+			} catch (error) {
+				return false
+			}
+        
     }
+
+	
+
 		async getAllDisc(userid:string){
 			const result = await (this.CartModel
 				.find({

@@ -19,5 +19,6 @@ export abstract class ICartRepository {
 
     abstract removeSome(removeItems: Array<UniqueId>);
 
+
 		abstract getAllDisc(userId: UniqueId): Promise<any>;
 }

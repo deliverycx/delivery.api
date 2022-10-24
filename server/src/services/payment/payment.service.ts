@@ -241,10 +241,14 @@ export class PaymentService extends IPaymentService {
 
 
 				console.log('paybody',payMasterBody);
+				
         const paymentResult = await this.Paymaster.paymentUrl(
             payMasterBody,
             organizationPaymentInfo.token
         );
+
+				await this.orderUsecase.checkOrder(userId, body)	
+
         return new RedirectEntity(
             paymentResult.url.replace("payments", "cpay")
         );

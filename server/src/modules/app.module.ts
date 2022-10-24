@@ -24,6 +24,7 @@ import * as fs from "fs";
 import { MongooseModule } from "@nestjs/mongoose";
 import { RedisModule } from "./redis/redis.module";
 import { REDIS } from "./redis/redis.constants";
+import { StopListModule } from "src/ioc/stoplist.module";
 
 // КОСТЫЛЬ
 try {
@@ -72,7 +73,8 @@ try {
         OrderModule,
         FavoriteModule,
         WebhookModule,
-        CardModule
+        CardModule,
+				StopListModule
     ],
     providers: [
         {
