@@ -15,6 +15,7 @@ export abstract class IBotService {
         cart: Array<CartEntity>,
         orderType: string
   ): void;
-  
+  abstract PaymentOrder(organizationId,data:any)
+	abstract ReturnPaymentOrder(organizationId,data:any)
   abstract sendReserveTable(data:BotReverveTableDTO)
 }

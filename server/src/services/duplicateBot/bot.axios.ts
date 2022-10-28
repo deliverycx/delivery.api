@@ -32,6 +32,21 @@ export class BotAxios {
             this.axios.post(`/sendDuplicate/${organization}`, data);
         }
     }
+
+		async PaymentOrder(
+			organization: UniqueId,
+			data: Bot.IRequestBody
+		): Promise<void> {
+				this.axios.post(`/payment/${organization}`, data);
+		}
+
+		async ReturntPayment(
+			organization: UniqueId,
+			data: Bot.IRequestBody
+		): Promise<void> {
+				this.axios.post(`/return_payment/${organization}`, data);
+		}
+
     async reserveTable(
         organization: UniqueId,
         data: Bot.IRequestBodyReserve

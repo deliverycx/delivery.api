@@ -12,8 +12,6 @@ export class BotService extends IBotService {
         @Inject("BOT_AXIOS")
         private readonly botRequest: BotAxios,
 
-				@Inject("Organization")
-        private readonly OrganizationModel: Model<OrganizationClass>,
     ) {
         super();
     }
@@ -40,6 +38,14 @@ export class BotService extends IBotService {
             orderType
         });
     }
+		public PaymentOrder(organizationId,data:any){
+			this.botRequest.PaymentOrder(organizationId,data)
+		}
+
+		public ReturnPaymentOrder(organizationId,data:any){
+			this.botRequest.ReturntPayment(organizationId,data)
+		}
+
     public sendReserveTable(data:BotReverveTableDTO) {
 			this.botRequest.reserveTable(data.organizationId,data)
     }

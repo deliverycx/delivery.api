@@ -49,7 +49,14 @@ export class WebhookController {
         if (body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
 						const check:any = await this.PaymentService.checkPymentOrder({paymentid:body.id})
 						if(!check){
-							await this.PaymentService.captrurePayment(body);
+							try {
+								
+								await this.PaymentService.captrurePayment(body);
+								await this.BotService.PaymentOrder(body.invoice.params.orgguid,{...body,statusOrder:'В обработке'})
+							} catch (error) {
+								await this.BotService.PaymentOrder(body.invoice.params.orgguid,{...body,statusOrder:'Ошибка при заказе'})
+							}
+							
 						}
         }
 
@@ -129,7 +136,10 @@ export class WebhookController {
 		@Post("push")	
 		async push(@Body() body:any){
 			console.log('push body',body);
-			await this.PaymentService.checkPymentOrderStatus(body)
+			const result = await this.PaymentService.checkPymentOrderStatus(body)
+			if(result){
+				await this.BotService.ReturnPaymentOrder(result.organizationid,result) //result.organizationid
+			}
 			return 'ok'
 		}
 }

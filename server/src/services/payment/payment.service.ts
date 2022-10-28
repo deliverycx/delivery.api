@@ -40,13 +40,13 @@ export class PaymentService extends IPaymentService {
     async captrurePayment(body: any) {
         const preparedBody = decodeBody<OrderDTO & { user: string }>({...body.invoice.params,paymentsum:body.amount.value});
 
-       
-				/**/
+				//throw new Error("Whoops!");
+				
 				const orderResult = await this.orderUsecase.create(
 					preparedBody.user,
 					preparedBody
 				);
-
+/**/
 
 				/*
 				const orderResult = {
@@ -174,9 +174,10 @@ export class PaymentService extends IPaymentService {
 							this.paymentRepository
 						)
 						console.log('возврат',status);
+						return {organizationid:check.paymentparams.orgguid,...status}
 				}
 			}
-			return check
+			
 		}
 
 		async organizationPaymentInfo(id:string){
@@ -196,6 +197,7 @@ export class PaymentService extends IPaymentService {
             body.orderType
         );
 
+				const organizationID = await this.organizationRepository.getOne(body.organization)
 				
 
         const cart = await this.cartRepository.getAll(userId);
@@ -212,11 +214,12 @@ export class PaymentService extends IPaymentService {
                 params: {
                     user: userId,
                     hash: orderHash,
+										orgguid:organizationID.getGuid, //organizationID.getGuid,
                     ...encodeBody(body)
                 }
             },
             protocol: {
-                callbackUrl: `${body.localhost}/api/webhook/paymentCallback`, //'https://b3b1-89-107-138-252.ngrok.io/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
+                callbackUrl: `https://f92a-89-107-138-252.ngrok.io/webhook/paymentCallback`, //'https://b3b1-89-107-138-252.ngrok.io/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
                 returnUrl: `${body.localhost}/success/${orderHash}`
             },
             reciept: {
