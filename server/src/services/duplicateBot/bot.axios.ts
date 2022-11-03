@@ -13,7 +13,10 @@ export class BotAxios {
 
     private init() {
         this.axios = axios.create({
-            baseURL: process.env.BOT_URL
+            baseURL: process.env.BOT_URL,
+					  headers: {
+					    Authorization : `Bearer ${process.env.BOT_TOKEN}`
+					    }
         });
 
         this.axios.interceptors.response.use(
