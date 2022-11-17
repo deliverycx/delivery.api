@@ -24,7 +24,7 @@ interface IProduct {
     id: UniqueId;
     name: string;
     tags: Array<string>;
-    measureUnit: "порц" | "шт";
+    measureUnit: "порц" | "шт | мл";
     price: number;
     type: string;
     weight: number;

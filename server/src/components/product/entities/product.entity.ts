@@ -23,7 +23,7 @@ export class ProductEntity {
     @ApiProperty({
         enum: ["шт", "порц"]
     })
-    private readonly measureUnit?: "шт" | "порц";
+    private readonly measureUnit?: string;
 
     @ApiProperty()
     private readonly image?: ImagePath;
@@ -41,7 +41,7 @@ export class ProductEntity {
         additionalInfo?: string,
         price?: number,
         weight?: number,
-        measureUnit?: "шт" | "порц",
+        measureUnit?: string,
         image?: ImagePath,
         categoryImage?: ImagePath,
         isFav?: boolean
