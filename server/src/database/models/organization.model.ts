@@ -37,7 +37,7 @@ export class OrganizationClass {
     public revision!: number;
 
     @prop()
-    public workTime!: string;
+    public workTime!: string[] | string;
     
     @prop({ default: null })
     public delivMetod:string | null

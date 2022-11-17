@@ -26,7 +26,8 @@ export class DeliveryService implements IDeliveryService {
     }
     private async cartPriceCalculating(userId: UniqueId,discount?:number): Promise<number> {
         let totalPrice = await this.cartRepository.calc(userId);
-        return totalPrice;
+				console.log(totalPrice,discount,totalPrice - discount);
+        return discount ? totalPrice - discount : totalPrice
     }
 
     public async calculatingPrices(
@@ -38,11 +39,15 @@ export class DeliveryService implements IDeliveryService {
 				const carts = await this.cartRepository.getAllDisc(userId)
 				const {count,min} = validationHIdiscount(carts)
 
-        const totalPrice = await this.cartPriceCalculating(userId,discount);
+        const totalPrice = await this.cartPriceCalculating(userId,min);
         const deliveryPrice = await this.deliveryPriceCalculating(
             totalPrice,
             orderType
         );
+
+				console.log(totalPrice);
+
+				
 				
 				
 				
@@ -55,7 +60,7 @@ export class DeliveryService implements IDeliveryService {
 				if(count !== 0){
 					return {
             deliveryPrice,
-            totalPrice: totalPrice + deliveryPrice - min,
+            totalPrice: totalPrice + deliveryPrice,
             deltaPrice:deltaPrice !== 0 ? deltaPrice : 0
         	};
 				}

@@ -29,7 +29,7 @@ export class OrganizationEntity {
     private readonly phone?: string;
 
     @ApiProperty()
-    private readonly workTime?: string;
+    private readonly workTime?: string | string[];
 
     @ApiProperty()
     private readonly cardPay?: boolean;
@@ -52,7 +52,7 @@ export class OrganizationEntity {
         city?: string,
         cords?: [number, number],
         phone?: string,
-        workTime?: string,
+        workTime?: string | string[],
         guid?: UniqueId,
         delivMetod?:string | null,
         isHidden?:boolean,
