@@ -41,6 +41,19 @@ export class BotAxios {
     ) {
         this.axios.post(`/reserveTable/${organization}`, data);
     }
+		async PaymentOrder(
+			organization: UniqueId,
+			data: Bot.IRequestBody
+		): Promise<void> {
+				this.axios.post(`/payment/${organization}`, data);
+		}
+
+		async ReturntPayment(
+			organization: UniqueId,
+			data: Bot.IRequestBody
+		): Promise<void> {
+				this.axios.post(`/return_payment/${organization}`, data);
+		}
 }
 
 export const BotAxiosProvider = {
