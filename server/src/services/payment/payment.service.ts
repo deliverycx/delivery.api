@@ -219,7 +219,7 @@ export class PaymentService extends IPaymentService {
                 }
             },
             protocol: {
-                callbackUrl: `https://f92a-89-107-138-252.ngrok.io/webhook/paymentCallback`, //'https://b3b1-89-107-138-252.ngrok.io/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
+                callbackUrl: `${body.localhost}/api/webhook/paymentCallback`, //'https://b3b1-89-107-138-252.ngrok.io/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
                 returnUrl: `${body.localhost}/success/${orderHash}`
             },
             reciept: {

@@ -135,9 +135,10 @@ export class WebhookController {
     }
 		@Post("push")	
 		async push(@Body() body:any){
-			console.log('push body',body);
+			
 			const result = await this.PaymentService.checkPymentOrderStatus(body)
 			if(result){
+				console.log('push body',body);
 				await this.BotService.ReturnPaymentOrder(result.organizationid,result) //result.organizationid
 			}
 			return 'ok'
