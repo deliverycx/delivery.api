@@ -31,9 +31,7 @@ export class BotAxios {
         organization: UniqueId,
         data: Bot.IRequestBody
     ): Promise<void> {
-        if (process.env.BOT_ACTIVE_FLAG !== "false") {
-            this.axios.post(`/sendDuplicate/${organization}`, data);
-        }
+				this.axios.post(`/sendDuplicate/${organization}`, data);
     }
     async reserveTable(
         organization: UniqueId,
