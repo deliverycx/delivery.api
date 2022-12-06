@@ -32,7 +32,6 @@ export class OrganizationUsecase {
     }
 		async getBuID(orgid: UniqueId) {
 			const result = await this.organizationRepository.getOneByGUID(orgid);
-			console.log(result);
 			return result;
 	}
 }

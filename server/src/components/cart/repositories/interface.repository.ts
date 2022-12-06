@@ -21,4 +21,6 @@ export abstract class ICartRepository {
 
 
 		abstract getAllDisc(userId: UniqueId): Promise<any>;
+
+		abstract getAllOrgTables(id:string): Promise<any>;
 }

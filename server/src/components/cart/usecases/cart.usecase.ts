@@ -103,4 +103,8 @@ export class CartUsecase {
 		async getDeliveryZones({organizationIds}){
 			return this.DeliveryService.deliveryZone(organizationIds)
 		}
+
+		async getOrganiztionTable(id:string){
+			return this.CartRepository.getAllOrgTables(id)
+		}
 }

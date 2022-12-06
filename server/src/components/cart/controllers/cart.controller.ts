@@ -224,4 +224,12 @@ console.log('zone',result);
 				response.status(200).json(result);
 		}
 
+		@Get("organizationtables")
+		async tables(
+			@Query() query: {id:string}
+		) {
+			const result = await this.cartUsecase.getOrganiztionTable(query.id)
+			return 	result
+		}
+
 }
