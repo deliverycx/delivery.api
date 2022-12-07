@@ -88,7 +88,7 @@ export class IIkoAxios extends Axios {
 			return data.terminalGroups[0].items[0].id;
 		}
 
-    public async orderCreate(orderData: any) {
+    public async orderCreateDelivery(orderData: any) {
         const token = await this.token();
 
         const { data } = await this._axios.post(
@@ -103,11 +103,43 @@ export class IIkoAxios extends Axios {
         return data.orderInfo;
     }
 
-		public async orderCheckStatusOrder(orderData: any) {
+		public async orderCreate(orderData: any) {
+			const token = await this.token();
+
+			const { data } = await this._axios.post(
+					`/order/create`,
+					orderData,
+					{
+						headers: { Authorization: `Bearer ${token}` }
+					}
+			);
+
+
+			return data.orderInfo;
+	}
+
+		public async orderCheckStatusOrderDelivery(orderData: any) {
 			const token = await this.token();
 
 			const { data } = await this._axios.post(
 					`/deliveries/by_id`,
+					orderData,
+					{
+						headers: { Authorization: `Bearer ${token}` }
+					}
+			);
+
+			console.log('data',data);
+
+
+			return data.orders[0];
+	}
+
+	public async orderCheckStatusOrder(orderData: any) {
+		const token = await this.token();
+
+			const { data } = await this._axios.post(
+					`/order/by_id`,
 					orderData,
 					{
 						headers: { Authorization: `Bearer ${token}` }

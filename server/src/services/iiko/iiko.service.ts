@@ -127,6 +127,42 @@ export class IikoService implements IIiko {
 								*/					
             }
         	};
+				} else if(orderInfo.orderType === OrderTypesEnum.ONSPOT){
+					return {
+							organizationId: organization.id,
+							terminalGroupId:terminal,
+							createOrderSettings: {
+								mode: "Async"
+							},
+	            order: {
+	                phone: orderInfo.phone,
+	                //completeBefore: orderInfo.date,
+	                customer: {
+										name: orderInfo.name,
+										comment: orderInfo.phone
+									},
+									tableIds: [
+										orderInfo.orderTable.id
+									],
+									guests: {
+										count: 1,
+										splitBetweenPersons: false
+									},
+	                items: requestOrderItems,
+	                comment: orderInfo.comment,
+									payments:
+									orderInfo.paymentMethod === constOrderPaymentTypes.CARD
+									? [
+											{
+											"paymentTypeKind": "Card",
+											"sum": orderInfo.paymentsum,
+											"paymentTypeId": "1032a471-be2c-434f-b8c0-9bd686d8b2b5",
+											"isProcessedExternally": true
+											}
+									]
+									: null
+	            }
+	        	};
 				}else{
 					return {
 						organizationId: organization.id,
@@ -237,8 +273,11 @@ export class IikoService implements IIiko {
             prices.deliveryPrice
         );
 
-			
-      const orderResponseInfo = await this.axios.orderCreate(orderBody);
+				console.log('ТЕЛО ЗАКАЗА',orderInfo.orderTable);
+			/**/ 
+      const orderResponseInfo = orderInfo.orderType ===  OrderTypesEnum.ONSPOT
+				? await this.axios.orderCreate(orderBody) 
+				: await this.axios.orderCreateDelivery(orderBody);
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );
@@ -255,8 +294,13 @@ export class IikoService implements IIiko {
 				
     }
 
-		async statusOrder(organizationId:string,orderIds:string){
-			const statusOrder = await this.axios.orderCheckStatusOrder({
+		async statusOrder(organizationId:string,orderIds:string,orderTypes:string){
+			const statusOrder = orderTypes === OrderTypesEnum.ONSPOT 
+				? await this.axios.orderCheckStatusOrder({
+					organizationIds:[organizationId],
+					orderIds:[orderIds]
+				})
+				: await this.axios.orderCheckStatusOrderDelivery({
 				organizationId:organizationId,
 				orderIds:[orderIds]
 			})

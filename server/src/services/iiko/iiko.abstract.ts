@@ -7,7 +7,8 @@ import { IDeliveryPrices } from "../delivery/delivery.abstract";
 
 export enum OrderTypesEnum {
     PICKUP = "PICKUP",
-    COURIER = "COURIER"
+    COURIER = "COURIER",
+		ONSPOT = "ONSPOT"
 }
 
 export const constOrderPaymentTypes = {
@@ -33,7 +34,7 @@ export abstract class IIiko {
     ) => Promise<any>;
 
 		abstract statusOrder: (
-			organizationId:string,orderIds:string
+			organizationId:string,orderIds:string,orderTypes:string
 	) => Promise<any>;
 
     abstract getOrderTypesId: (

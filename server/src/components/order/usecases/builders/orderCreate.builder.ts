@@ -52,7 +52,7 @@ export class OrderCreateBuilder {
         return new Promise(async (resolve, reject) => {
             try {
                 
-                const result = await this.orderService.statusOrder(organizationId,orderId)
+                const result = await this.orderService.statusOrder(organizationId,orderId,this._state.orderInfo.orderType)
 
                 if (result.errorInfo || result.creationStatus === 'InProgress') {
 										console.log(result.errorInfo);
@@ -182,7 +182,7 @@ export class OrderCreateBuilder {
 
 		async getOrderStatus(orderId:string){
 			console.log('order state',this._state);
-			const result = await this.orderService.statusOrder(this._state.organizationId,this._state.orderNumber as string)
+			const result = await this.orderService.statusOrder(this._state.organizationId,this._state.orderNumber as string,this._state.orderInfo.orderType)
 			return result
 		}
 }

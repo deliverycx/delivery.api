@@ -43,9 +43,15 @@ export class OrderDTO {
     };
 
     @ApiProperty({
-        enum: ["COURIER", "PICKUP"]
+        enum: ["COURIER", "PICKUP","ONSPOT"]
     })
     orderType: OrderTypesEnum;
+
+		orderTable:{
+			section: string
+			id: string
+			numb: number
+		}
 
     @ApiProperty()
     @IsPhoneNumber("RU", {

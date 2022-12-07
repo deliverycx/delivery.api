@@ -18,7 +18,7 @@ export class DeliveryService implements IDeliveryService {
         price: number,
         orderType: OrderTypesEnum
     ): Promise<number> {
-        if (orderType === OrderTypesEnum.PICKUP) {
+        if (orderType === OrderTypesEnum.PICKUP || orderType === OrderTypesEnum.ONSPOT) {
             return 0;
         }
 
