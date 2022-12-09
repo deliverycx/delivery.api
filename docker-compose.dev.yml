@@ -1,14 +1,6 @@
 version: "3.9"
 
 services:
-    deliverycx_bot:
-        container_name: deliverycx_bot
-        build:
-            context: ./bot
-        depends_on:
-            - mongodb
-        networks:
-            - mynetwork
     deliverycx_backend:
         container_name: development_backend
         env_file:
@@ -42,6 +34,8 @@ services:
         image: mongo
         volumes:
             - ./mongo/data:/data/db     
+        ports:
+          - "27017:27017"
         networks:
             - mynetwork
 networks:
