@@ -131,7 +131,7 @@ export class OrderCreateBuilder {
             result.id
         );
 
-        this._state.orderNumber = result.id;
+        this._state.orderNumber = result.number;
 
         await this.CartRepository.removeAll(user);
     }
