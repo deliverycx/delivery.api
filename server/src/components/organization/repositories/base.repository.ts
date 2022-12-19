@@ -10,6 +10,7 @@ import { RecvisitesEntity } from "../entities/recvisites.entity";
 import { RecvisitesClass } from "src/database/models/recvisites.model";
 import { PaymentInfoEntity } from "../entities/payments.entity";
 import { PaymentServiceDataClass } from "src/database/models/payment.model";
+import { OrganizationStatusClass } from "src/database/models/organizationStatus.model";
 
 @Injectable()
 export class OrganizationRepository
@@ -22,8 +23,12 @@ export class OrganizationRepository
 
         @Inject("Recvisites")
         private readonly RecvisitesModel: Model<RecvisitesClass>,
+
         @Inject("PaymentServiceData")
-        private readonly PaymentServiceDataModel: Model<PaymentServiceDataClass>
+        private readonly PaymentServiceDataModel: Model<PaymentServiceDataClass>,
+
+				@Inject("organizationstatus")
+        private readonly OrganizationstatusModel: Model<OrganizationStatusClass>
     ) {
         super(OrganizationModel, organizationMapper, "city", "city");
     }
@@ -97,4 +102,9 @@ export class OrganizationRepository
             organizationId
         );
     }
+		public async getOrgStatus(organization:string){
+			const result = await this.OrganizationstatusModel.findOne({organization})
+			console.log(result,organization);
+			return result
+		}
 }

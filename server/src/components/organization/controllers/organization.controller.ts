@@ -6,11 +6,15 @@ import { ApiTags, ApiResponse, ApiBody } from "@nestjs/swagger";
 import { OrganizationEntity } from "../entities/organization.entity";
 import { RecvisitesEntity } from "../entities/recvisites.entity";
 import { RecvisitesDTO } from "../interfaces/getRecvisites.dto";
+import { IOrganizationRepository } from "../repositories/interface.repository";
 
 @ApiTags("Organization endpoints")
 @Controller("organization")
 export class OrganizationController {
-    constructor(private readonly organizationUsecase: OrganizationUsecase) {}
+    constructor(
+			private readonly organizationUsecase: OrganizationUsecase,
+			private readonly organizationRepository: IOrganizationRepository
+		) {}
 
     @ApiResponse({
         status: 200,
@@ -69,5 +73,11 @@ export class OrganizationController {
         );
 
         response.status(HttpStatus.OK).json(result);
+    }
+
+		@Get("organizationstatus")
+    async getOrgStatus(@Query() query: {organization:string}) {
+				console.log('qqqq',query);
+        return this.organizationRepository.getOrgStatus(query.organization)
     }
 }
