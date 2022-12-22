@@ -77,7 +77,10 @@ export class OrganizationController {
 
 		@Get("organizationstatus")
     async getOrgStatus(@Query() query: {organization:string}) {
-				console.log('qqqq',query);
         return this.organizationRepository.getOrgStatus(query.organization)
+    }
+		@Get("organizationstatusall")
+    async getOrgStatusAll(@Query() query: {organization:string}) {
+        return this.organizationRepository.getOrgStatusAll(query.organization)
     }
 }

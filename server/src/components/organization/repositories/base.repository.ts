@@ -104,7 +104,10 @@ export class OrganizationRepository
     }
 		public async getOrgStatus(organization:string){
 			const result = await this.OrganizationstatusModel.findOne({organization})
-			console.log(result,organization);
+			return result
+		}
+		public async getOrgStatusAll(organization:string){
+			const result = await this.OrganizationstatusModel.find({organization})
 			return result
 		}
 }

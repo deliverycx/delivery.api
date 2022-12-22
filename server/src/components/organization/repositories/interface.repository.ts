@@ -11,4 +11,5 @@ export abstract class IOrganizationRepository {
         organizationId: UniqueId
     ): Promise<PaymentInfoEntity>;
 		abstract getOrgStatus(organization:string): Promise<any>
+		abstract getOrgStatusAll(organization:string): Promise<any>
 }
