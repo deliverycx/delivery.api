@@ -28,6 +28,16 @@ export class OrganizationRepository
         super(OrganizationModel, organizationMapper, "city", "city");
     }
 
+		async getAll(id?: UniqueId): Promise<Array<OrganizationEntity>> {
+				const result = await (<any>this.OrganizationModel
+						.find({
+							city: id
+						})
+						.sort({ order: 1 })
+						.populate("city"));
+				return organizationMapper(result);
+		}
+
     public async getOneByGUID(id: UniqueId): Promise<OrganizationEntity> {
         const organizationDoc = await this.OrganizationModel.findOne({ id }).populate("city");
         const organizationEntity = new OrganizationEntity(
