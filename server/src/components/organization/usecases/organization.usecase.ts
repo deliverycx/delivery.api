@@ -9,7 +9,6 @@ export class OrganizationUsecase {
 
     async getAll(cityId: UniqueId) {
         const result = await this.organizationRepository.getAll(cityId);
-				console.log(result);
         return result;
     }
 
@@ -32,7 +31,6 @@ export class OrganizationUsecase {
     }
 		async getBuID(orgid: UniqueId) {
 			const result = await this.organizationRepository.getOneByGUID(orgid);
-			console.log(result);
 			return result;
 	}
 }

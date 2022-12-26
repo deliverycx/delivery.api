@@ -62,7 +62,7 @@ export class IIkoAxios extends Axios {
             `/api/0/orders/add?access_token=${token}`,
             orderData
         );
-				console.log(data);
+				console.log('orderCreate',data);
         return data;
     }
 
