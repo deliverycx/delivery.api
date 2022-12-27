@@ -211,6 +211,47 @@ export class IIkoAxios extends Axios {
 			return data.deliveryRestrictions[0].deliveryZones[0]
 	}
 
+	public async getStreetCity(organizationIds:string,cityId:string):Promise<any>{
+		const token = await this.token();
+
+		const { data } = await this._axios.post(
+			`/streets/by_city`,
+					{
+						"organizationId": organizationIds,
+						"cityId": cityId
+					},
+					{
+						headers: { Authorization: `Bearer ${token}` }
+					}
+			);
+
+			
+			
+			return data.streets
+	}
+
+	public async getOrganization(id = ""):Promise<any>{
+		const token = await this.token();
+
+		const { data } = await this._axios.post(
+			`/organizations`,
+					{
+						"organizationIds": [
+							id
+						],
+						"returnAdditionalInfo": true,
+						"includeDisabled": true
+					},
+					{
+						headers: { Authorization: `Bearer ${token}` }
+					}
+			);
+
+			
+			
+			return id ? data.organizations[0] : data.organizations
+	}
+
 }
 
 export const iikoAxiosProviders = [

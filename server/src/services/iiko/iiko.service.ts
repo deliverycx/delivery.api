@@ -377,5 +377,11 @@ export class IikoService implements IIiko {
 			});
 			*/
 		}
+
+		async getStreetCityIkko({organizationId}){
+			const result = await this.axios.getOrganization(organizationId)
+			console.log(result);
+			return this.axios.getStreetCity(organizationId,result.defaultDeliveryCityId)
+		}
 	
 }

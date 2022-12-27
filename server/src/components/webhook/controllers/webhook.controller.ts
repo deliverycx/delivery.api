@@ -143,4 +143,10 @@ export class WebhookController {
 			}
 			return 'ok'
 		}
+
+		@Post("getstreet")	
+		async getStreet(@Body() body:any){
+			console.log(body);
+			 return await this.IikoService.getStreetCityIkko(body)
+		}
 }

@@ -56,5 +56,12 @@ export abstract class IIiko {
 			organizationId: UniqueId,
 			cart: Array<CartEntity>,
 		) => any;
+
+		abstract getStreetCityIkko: (
+			body:{
+				organizationId:string
+				cityId:string
+			}
+		) => any;
 		
 }
