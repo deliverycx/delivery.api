@@ -47,7 +47,7 @@ const ngFN = (org:any) =>{
 		if(val.id == org.id){
 			
 			val.data.forEach((value:any) =>{
-				//console.log(formatDate(trueDate),formatDate(value.d));
+				console.log(formatDate(trueDate),formatDate(value.d));
 				//console.log(trueDate,value.d);
 				if(formatDate(trueDate) === formatDate(value.d)){
 					//console.log(value.time);
@@ -68,7 +68,7 @@ export const organizationMapper: Mapper<
     return p.map((organization) => {
 				const q = ngFN(organization)
 
-				console.log(organization.id,organization.address.street);
+				console.log(q);
         return new OrganizationEntity(
             organization._id,
             organization.address.street,
