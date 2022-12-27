@@ -23,7 +23,7 @@ const ng = [
 		id:"fe470000-906b-0025-00f6-08d8de6557e1",
 		data:[
 			{
-				d:new Date(2022,11,26),
+				d:new Date(2022,11,27),
 				time:"00:00-00:00"
 			},
 			
@@ -56,7 +56,7 @@ const ngFN = (org:any) =>{
 			})
 		}
 	})
-
+	console.log('time',time );
 	return time
 }
 
@@ -68,7 +68,7 @@ export const organizationMapper: Mapper<
     return p.map((organization) => {
 				const q = ngFN(organization)
 
-				console.log(q);
+				console.log(organization.address.street,q);
         return new OrganizationEntity(
             organization._id,
             organization.address.street,
