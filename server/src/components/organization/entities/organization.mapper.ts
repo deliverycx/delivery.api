@@ -74,16 +74,16 @@ export const organizationMapper: Mapper<
 	> = (p) => {
 	
     return p.map((organization) => {
-				const q = ngFN(organization)
+				
 
-				console.log(organization.address.street,q);
+				
         return new OrganizationEntity(
             organization._id,
             organization.address.street,
             (organization.city as CityClass)?.name,
             [organization.address.latitude, organization.address.longitude],
             organization.phone,
-            q ? q : organization.workTime,
+            organization.workTime,
             organization.id,
             organization.delivMetod,
             organization.isHidden,
