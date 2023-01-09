@@ -131,7 +131,10 @@ export class OrderCreateBuilder {
             result.id
         );
 
-        this._state.orderNumber = String(result.number);
+				
+
+        this._state.orderNumber = String(result.order.number);
+
 
         await this.CartRepository.removeAll(user);
     }
@@ -181,7 +184,6 @@ export class OrderCreateBuilder {
     }
 
 		async getOrderStatus(orderId:string){
-			console.log('order state',this._state);
 			const result = await this.orderService.statusOrder(this._state.organizationId,this._state.orderNumber as string,this._state.orderInfo.orderType)
 			return result
 		}
