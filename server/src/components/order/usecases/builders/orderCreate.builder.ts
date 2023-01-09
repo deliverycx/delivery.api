@@ -17,6 +17,7 @@ interface IState {
     orderInfo: OrderDTO;
     cart: Array<CartEntity>;
     orderNumber: number | string;
+		orderID:string
 		organizationId:string
 }
 
@@ -111,6 +112,7 @@ export class OrderCreateBuilder {
         );
 				console.log('orderInfoPross',orderInfoPross);
 				this._state.organizationId = orderInfoPross.organizationId	
+				this._state.orderID = orderInfoPross.id
 
 				console.log('start');
 				const {result,problem} = await this.repeatOrderUntilSuccess(orderInfoPross.organizationId,orderInfoPross.id)
@@ -184,7 +186,7 @@ export class OrderCreateBuilder {
     }
 
 		async getOrderStatus(orderId:string){
-			const result = await this.orderService.statusOrder(this._state.organizationId,this._state.orderNumber as string,this._state.orderInfo.orderType)
+			const result = await this.orderService.statusOrder(this._state.organizationId,this._state.orderID as string,this._state.orderInfo.orderType)
 			return result
 		}
 }
