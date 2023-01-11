@@ -185,7 +185,7 @@ export class OrderCreateBuilder {
         return new OrderEntity(this._state.orderNumber);
     }
 
-		async getOrderStatus(orderId:string){
+		async getOrderStatus(){
 			const result = await this.orderService.statusOrder(this._state.organizationId,this._state.orderID as string,this._state.orderInfo.orderType)
 			return result
 		}

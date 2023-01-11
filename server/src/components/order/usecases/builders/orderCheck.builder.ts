@@ -88,7 +88,7 @@ export class OrderCheckBuilder {
 			const result = this._state.cart.filter((el) =>{
 				return arrStoplist.includes(el.getProductIdObj.toString())
 			})
-			console.log('stoplist',result);
+
 
 			if(result.length !== 0){
 				this._state.errors.push(

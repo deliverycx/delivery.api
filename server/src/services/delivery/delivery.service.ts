@@ -26,7 +26,6 @@ export class DeliveryService implements IDeliveryService {
     }
     private async cartPriceCalculating(userId: UniqueId,discount?:number): Promise<number> {
         let totalPrice = await this.cartRepository.calc(userId);
-				console.log(totalPrice,discount,totalPrice - discount);
         return discount ? totalPrice - discount : totalPrice
     }
 
@@ -45,11 +44,6 @@ export class DeliveryService implements IDeliveryService {
             orderType
         );
 
-				console.log(totalPrice);
-
-				
-				
-				
 				
         let deltaPrice = 0;
 
@@ -75,7 +69,7 @@ export class DeliveryService implements IDeliveryService {
 		async discountDozenServise(userId: UniqueId,organization:string){
 				const carts = await this.cartRepository.getAllDisc(userId)
 				const cartValid = validationHIdiscount(carts)
-				console.log(cartValid);
+
 				/*
 				if(organization){
 					const data = await this.iiko.discontList(

@@ -129,7 +129,6 @@ export class IIkoAxios extends Axios {
 					}
 			);
 
-			console.log('data',data);
 
 
 			return data.orders[0];
@@ -145,9 +144,6 @@ export class IIkoAxios extends Axios {
 						headers: { Authorization: `Bearer ${token}` }
 					}
 			);
-
-			console.log('data',data);
-
 
 			return data.orders[0];
 	}

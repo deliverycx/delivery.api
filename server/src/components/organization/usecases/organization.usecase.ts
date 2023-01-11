@@ -9,7 +9,6 @@ export class OrganizationUsecase {
 
     async getAll(cityId: UniqueId) {
         const result = await this.organizationRepository.getAll(cityId);
-				console.log(result);
         return result;
     }
 

@@ -273,7 +273,7 @@ export class IikoService implements IIiko {
             prices.deliveryPrice
         );
 
-				console.log('ТЕЛО ЗАКАЗА',orderInfo.orderTable);
+
 			/**/ 
       const orderResponseInfo = orderInfo.orderType ===  OrderTypesEnum.ONSPOT
 				? await this.axios.orderCreate(orderBody) 
@@ -366,8 +366,7 @@ export class IikoService implements IIiko {
 			organizationId: UniqueId,
 			cart: Array<CartEntity>,
 		){
-			console.log(organizationId);
-			console.log(cart);
+
 			/*
 			const data = await this.axios.discontList({
 				organization:organizationId,
