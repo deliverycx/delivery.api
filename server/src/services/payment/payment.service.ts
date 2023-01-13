@@ -41,16 +41,17 @@ export class PaymentService extends IPaymentService {
         const preparedBody = decodeBody<OrderDTO & { user: string }>({...body.invoice.params,paymentsum:body.amount.value});
 
 				//throw new Error("Whoops!");
-				
+				/**/
 				const orderResult = await this.orderUsecase.create(
 					preparedBody.user,
 					preparedBody
 				);
-/**/
+
 
 				/*
 				const orderResult = {
-					getNumber:'0ca1058a-4162-4c31-8beb-5e8dfa367b16'
+					getOrderId:'0ca1058a-4162-4c31-8beb-5e8dfa367b16',
+					getNumber:123
 				}	
 				const orderStatus = {
 					id: '0ca1058a-4162-4c31-8beb-5e8dfa367b16',
@@ -145,10 +146,10 @@ export class PaymentService extends IPaymentService {
 				}
 				*/
 
-				const orderStatus = await this.orderUsecase.getStatusOrder(orderResult.getNumber.toString())
+				const orderStatus = await this.orderUsecase.getStatusOrder()
 				
 				const create = await this.paymentRepository.createOrderPayment(body,orderStatus)
-				console.log('создало');
+				console.log('создало заказ в админке');
 				
 				
       this.redis.set(body.invoice.params.hash, orderResult.getNumber.toString());
@@ -163,10 +164,11 @@ export class PaymentService extends IPaymentService {
 			const check = await this.paymentRepository.findOrderPayment({orderId:order.orderId})
 			
 			if(check){
-
-				const status = order.text.split(':')[2].replace(/[^a-zа-яё]/gi, '')
-				await this.paymentRepository.setOrderPaymentStatus(order.orderId,status)
-				if(status === 'canceled'){
+				console.log('возврат - ответ из териминала',order);
+				const statuses = order.text.split(':')[2].replace(/[^a-zа-яё]/gi, '')
+				await this.paymentRepository.setOrderPaymentStatus(order.orderId,statuses)
+				if(statuses === 'canceled'){
+					console.log('возврат отмена статус');
 					const organizationPaymentInfo = await this.organizationPaymentInfo(check.paymentparams.organization)
 					const status = await this.Paymaster.paymentRetunts(
 							check,
@@ -204,7 +206,7 @@ export class PaymentService extends IPaymentService {
         const orderHash = createOrderHash();
         const payMasterBody = {
             merchantId: organizationPaymentInfo.merchantId,
-            testMode: true,
+            //testMode: true,
             amount: {
                 currency: "RUB",
                 value: intToDecimal(totalPrice)
@@ -242,8 +244,7 @@ export class PaymentService extends IPaymentService {
             }
         };
 
-
-				console.log('paybody',payMasterBody);
+				console.log('тело оплаты',payMasterBody);
 				
         const paymentResult = await this.Paymaster.paymentUrl(
             payMasterBody,

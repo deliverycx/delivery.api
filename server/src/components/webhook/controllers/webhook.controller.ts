@@ -45,7 +45,7 @@ export class WebhookController {
         @Res() response: Response
     ) {
 
-			console.log('oplata paymentCallback',body);
+			console.log('ответ из пумастера тело',body);
         if (body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
 						const check:any = await this.PaymentService.checkPymentOrder({paymentid:body.id})
 						if(!check){
@@ -74,11 +74,11 @@ export class WebhookController {
         @Body() body: iiko.stoplist,
         @Res() response: Response
     ) {
-        console.log("Iiko send data from webhook",body);
+        
 				/*
         try {
 
-						console.log('sokettttttttttttttttttttttttttttttt',body);
+						
             //const stopListEntity = await this.IikoService.getStopList(body);
 
             this.IikoStopListGateway.sendStopListToClient({});
@@ -90,7 +90,7 @@ export class WebhookController {
 				*/
 				try {
 					const stopListEntity = await this.IikoService.getStopList(body.organizationId);
-					console.log(stopListEntity);
+
 					response.status(200).json(stopListEntity)
 				} catch (error) {
 					response.status(500).json({})
@@ -138,9 +138,14 @@ export class WebhookController {
 			
 			const result = await this.PaymentService.checkPymentOrderStatus(body)
 			if(result){
-				console.log('push body',body);
+				console.log('возврат для бота',result);
 				await this.BotService.ReturnPaymentOrder(result.organizationid,result) //result.organizationid
 			}
 			return 'ok'
+		}
+
+		@Post("getstreet")	
+		async getStreet(@Body() body:any){
+			 return await this.IikoService.getStreetCityIkko(body)
 		}
 }

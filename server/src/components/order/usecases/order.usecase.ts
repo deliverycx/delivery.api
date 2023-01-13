@@ -18,7 +18,7 @@ export class OrderUsecase {
 
         await this.orderCreateBuilder.createOrder();
 
-        //await this.orderCreateBuilder.duplicateOrder();
+        await this.orderCreateBuilder.duplicateOrder();
 
 
         return this.orderCreateBuilder.getOrderEntity();
@@ -46,7 +46,7 @@ export class OrderUsecase {
         return orderNumber;
     }
 
-		async getStatusOrder(id:string){
-			return await this.orderCreateBuilder.getOrderStatus(id)
+		async getStatusOrder(){
+			return await this.orderCreateBuilder.getOrderStatus()
 		}
 }

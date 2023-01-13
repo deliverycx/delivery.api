@@ -25,20 +25,20 @@ export class Paymaster {
 
 		async statusReturnPamyMent(token:string,order:any,id:string,paymentRepository:any){
 			const statuspay = await this.repeatReturnUntilSuccess(token,id)
-			console.log('статус ',statuspay,order.paymentid)
+			console.log('статус возврата старт',statuspay,order.paymentid)
 			if(statuspay.status === 'Success'){
 				await paymentRepository.setPaymentStatus(order.paymentid,'Return')
 			}else if(statuspay.status === 'Rejected'){
 				await paymentRepository.setPaymentStatus(order.paymentid,'Rejected')
 			}
-			console.log('статус 222',statuspay);
+			console.log('статус возврата конец',statuspay);
 			return statuspay
 		}
 
 		async repeatReturnUntilSuccess(token:string,id:string,counter?:number):Promise<any> {
 				counter = counter || 0;
 				let tik:any
-				console.log('count',counter);
+				console.log('count в возврате',counter);
 				return new Promise(async (resolve, reject) => {
 						try {
 								

@@ -24,7 +24,7 @@ app.post("/sendDuplicate/:organizationId", async (req, res) => {
     const body = req.body;
     const organizationDoc = await OrganizationRepository.getOne(organization);
 
-    console.log(body,organization,organizationDoc)
+  
     if (!organizationDoc) {
         return res.status(200).json({
             haveProblem: true,
@@ -46,7 +46,7 @@ app.post("/reserveTable/:organizationId", async (req, res) => {
   const body = req.body;
   const organizationDoc = await OrganizationRepository.getOne(organization);
 
-  console.log(body,organization,organizationDoc)
+
   if (!organizationDoc) {
       return res.status(200).json({
           haveProblem: true,
@@ -68,7 +68,6 @@ app.post("/payment/:organizationId", async (req, res) => {
   const body = req.body;
   const organizationDoc = await OrganizationRepository.getOne(organization);
 
-  console.log(body,organization,organizationDoc)
   if (!organizationDoc) {
       return res.status(200).json({
           haveProblem: true,
@@ -90,7 +89,7 @@ app.post("/return_payment/:organizationId", async (req, res) => {
   const body = req.body;
   const organizationDoc = await OrganizationRepository.getOne(organization);
 
-  console.log(body,organization,organizationDoc)
+
   if (!organizationDoc) {
       return res.status(200).json({
           haveProblem: true,
@@ -110,7 +109,7 @@ bot.onText(/\/reg (.+)/i, async (msg, match) => {
     const chatId = msg.chat.id;
 
   const organizationDoc = await OrganizationRepository.getOne(match[1]);
-  console.log(organizationDoc,chatId)
+
 
     if (organizationDoc) {
         return bot.sendMessage(

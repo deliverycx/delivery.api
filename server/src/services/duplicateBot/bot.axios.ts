@@ -22,7 +22,8 @@ export class BotAxios {
         this.axios.interceptors.response.use(
             (response) => response,
             (error) => {
-                throw new ServiceUnavailableException();
+							console.log(error.response);
+                //throw new ServiceUnavailableException();
             }
         );
     }
