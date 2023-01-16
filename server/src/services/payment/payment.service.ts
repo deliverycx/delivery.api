@@ -206,7 +206,7 @@ export class PaymentService extends IPaymentService {
         const orderHash = createOrderHash();
         const payMasterBody = {
             merchantId: organizationPaymentInfo.merchantId,
-            //testMode: true,
+            testMode: true,
             amount: {
                 currency: "RUB",
                 value: intToDecimal(totalPrice)
