@@ -83,4 +83,8 @@ export class OrganizationController {
     async getOrgStatusAll(@Query() query: {organization:string}) {
         return this.organizationRepository.getOrgStatusAll(query.organization)
     }
+		@Get("checkorganization")
+    async checkOrg(@Query() query: {organization:string}) {
+        return this.organizationRepository.getOrgStatusAll(query.organization)
+    }
 }
