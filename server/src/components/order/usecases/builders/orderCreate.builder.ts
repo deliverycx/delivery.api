@@ -177,7 +177,9 @@ export class OrderCreateBuilder {
             comment,
             getGuid,
             this._state.cart,
-            orderTypeName
+            orderTypeName,
+						this._state.orderInfo.orderType,
+						this._state.orderInfo.orderTable.numb
         );
     }
 

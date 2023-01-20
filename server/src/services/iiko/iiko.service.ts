@@ -237,13 +237,15 @@ export class IikoService implements IIiko {
 				
 
         const result = data.orderTypes[0].items.find((orderTypeEl) => {
+					console.log('типы дост',orderType,orderTypeEl);
 
 					switch(orderType){
 						case OrderTypesEnum.PICKUP :
-							return orderTypeEl.orderServiceType === 'DeliveryPickUp' && orderTypeEl
+							return orderTypeEl.id === '5b1508f9-fe5b-d6af-cb8d-043af587d5c2' && orderTypeEl
 						case OrderTypesEnum.COURIER :
-							return orderTypeEl.orderServiceType === 'DeliveryByCourier' && orderTypeEl
-							
+							return orderTypeEl.id === '9ee06fcc-8233-46fa-b74d-ff6f50128afb' && orderTypeEl
+						case OrderTypesEnum.ONSPOT :
+							return orderTypeEl.id === 'bbbef4dc-5a02-7ea3-81d3-826f4e8bb3e0' && orderTypeEl
 					}
 					/*
             const type = orderTypeEl.orderServiceType.includes(orderType);
@@ -274,7 +276,7 @@ export class IikoService implements IIiko {
         );
 
 
-			/**/ 
+			/* */
       const orderResponseInfo = orderInfo.orderType ===  OrderTypesEnum.ONSPOT
 				? await this.axios.orderCreate(orderBody) 
 				: await this.axios.orderCreateDelivery(orderBody);

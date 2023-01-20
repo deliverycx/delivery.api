@@ -13,7 +13,9 @@ export abstract class IBotService {
         comment: string,
         organization: UniqueId,
         cart: Array<CartEntity>,
-        orderType: string
+        orderTypeName: string,
+				orderType:string,
+				ONSPOTTable:number
   ): void;
   abstract PaymentOrder(organizationId,data:any)
 	abstract ReturnPaymentOrder(organizationId,data:any)
