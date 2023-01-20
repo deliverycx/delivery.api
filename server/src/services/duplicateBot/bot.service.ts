@@ -22,8 +22,8 @@ export class BotService extends IBotService {
         comment: string,
         organization: UniqueId,
         cart: Array<CartEntity>,
-        orderTypeName: string,
-				orderType:string,
+        orderType: string,
+				orderTypeName:string,
 				ONSPOTTable:number
     ) {
         this.botRequest.sendDuplicate(organization, {
@@ -37,8 +37,8 @@ export class BotService extends IBotService {
                     name: el.getProductName
                 };
             }),
-            orderTypeName,
-						orderType,
+            orderType,
+						orderTypeName,
 						ONSPOTTable
         });
     }
