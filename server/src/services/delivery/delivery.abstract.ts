@@ -23,4 +23,5 @@ export abstract class IDeliveryService {
 		abstract deliveryZone(
 			organization:string
 		) : Promise<any>
+
 }

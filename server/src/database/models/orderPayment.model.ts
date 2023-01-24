@@ -28,6 +28,9 @@ export class OrderPaymentClass {
 	public paymentAmount:number
 
 	@prop({ type: () => String })
+	public dyalPaymentAmount:string
+
+	@prop({ type: () => String })
 	public paymentTime:string
 
 	@prop({ type: () => Object })
@@ -38,6 +41,9 @@ export class OrderPaymentClass {
 
 	@prop({ type: () => String })
 	public orderId:string
+
+	@prop({ type: () => String })
+	public orderHash:string
 
 	@prop({ type: () => String })
 	public orderStatus:string

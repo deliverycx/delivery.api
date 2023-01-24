@@ -1,6 +1,12 @@
+import { userId } from "src/components/order/__TESTS__/stubs";
+import { encodeBody } from "../../utils/encodeBody";
+import { intToDecimal } from "../../utils/intToDecimal";
 import { PaymentRepository } from "../repositories/payment.repositories";
 import { PaymasterRequest } from "../types/request.type";
 import { PaymasterRequests } from "./request";
+import { createOrderHash } from "../../utils/hash";
+import { IPayMasterBody } from "../types/paymaster.type";
+import { CartEntity } from "src/components/cart/entities/cart.entity";
 
 export class Paymaster {
     private readonly requester: PaymasterRequests;
@@ -76,5 +82,119 @@ export class Paymaster {
 								
 						}
 				})
+		}
+
+		paymasterChechBar(cart:Array<CartEntity>){
+			let prices = 0
+			cart.map((item:any) =>{
+				if(item.productTags.includes("bar")){
+					return prices += item.price
+				}
+			})
+			return prices
+		}
+		
+
+		paymasterBody({
+			orderBody,
+			organizationPaymentInfo,
+			totalPrice,
+			organizationID,
+			cart
+		}:IPayMasterBody){
+			const orderHash = createOrderHash();
+
+			const checkCartBar = this.paymasterChechBar(cart)
+			
+			if(checkCartBar){
+
+
+				return {
+					merchantId: organizationPaymentInfo.merchantId,
+					testMode: true,
+					dualMode: true,
+						amount: {
+								currency: "RUB",
+								value: intToDecimal(totalPrice - checkCartBar)
+						},
+						invoice: {
+								description: 'Оплата "Заказ-Бар" в Старик Хинкалыч',
+								
+								params: {
+										user: userId,
+										hash: orderHash,
+										dualpayments:String(checkCartBar),
+										orgguid:organizationID.getGuid, //organizationID.getGuid,
+										...encodeBody(orderBody)
+								}
+						},
+						protocol: {
+								callbackUrl:`${orderBody.localhost}/api/webhook/paymentCallback`, //'https://b3b1-89-107-138-252.ngrok.io/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
+								returnUrl: `${orderBody.localhost}/dualpayment/${orderHash}`
+						},
+						reciept: {
+								client: {
+										email: orderBody.email,
+										phone: orderBody.phone
+								},
+								
+								items: [
+										cart.map((el) => {
+												return {
+														name: el.getProductName,
+														quantity: el.getAmount,
+														price: el.getPrice,
+														vatType: "None",
+														paymentSubject: "Commodity",
+														paymentMethod: "FullPayment"
+												};
+										})
+								]
+						}
+				};
+			}else{
+				return {
+					merchantId: organizationPaymentInfo.merchantId,
+					dualMode: true,
+					testMode: true,
+						amount: {
+								currency: "RUB",
+								value: intToDecimal(totalPrice)
+						},
+						invoice: {
+								description: 'Оплата заказа в Старик Хинкалыч',
+								params: {
+										user: userId,
+										hash: orderHash,
+										orgguid:organizationID.getGuid, //organizationID.getGuid,
+										...encodeBody(orderBody)
+								}
+						},
+						protocol: {
+								callbackUrl: `${orderBody.localhost}/api/webhook/paymentCallback`, //'https://b3b1-89-107-138-252.ngrok.io/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
+								returnUrl: `${orderBody.localhost}/success/${orderHash}`
+						},
+						reciept: {
+								client: {
+										email: orderBody.email,
+										phone: orderBody.phone
+								},
+								items: [
+										cart.map((el) => {
+												return {
+														name: el.getProductName,
+														quantity: el.getAmount,
+														price: el.getPrice,
+														vatType: "None",
+														paymentSubject: "Commodity",
+														paymentMethod: "FullPayment"
+												};
+										})
+								]
+						}
+				};
+			}
+
+			
 		}
 }

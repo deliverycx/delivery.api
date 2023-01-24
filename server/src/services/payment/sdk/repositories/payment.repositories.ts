@@ -16,10 +16,12 @@ export class PaymentRepository {
 				merchantId:paybody.merchantId,
 				paymentStatus:paybody.status,
 				paymentAmount:paybody.amount.value,
+				dyalPaymentAmount:paybody.invoice.params.dualpayment,
 				paymentTime:paybody.created,
 				paymentparams:paybody.invoice.params,
 				paymentData:paybody.paymentData,
 				orderId:orderbody.id,
+				orderHash:paybody.invoice.params.hash,
 				orderStatus:orderbody.order.status,
 				orderAmount:orderbody.order.sum,
 				orderItems:orderbody.order.items

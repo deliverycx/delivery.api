@@ -41,14 +41,14 @@ export class PaymentService extends IPaymentService {
         const preparedBody = decodeBody<OrderDTO & { user: string }>({...body.invoice.params,paymentsum:body.amount.value});
 
 				//throw new Error("Whoops!");
-				/**/
+				/*
 				const orderResult = await this.orderUsecase.create(
 					preparedBody.user,
 					preparedBody
 				);
+*/
 
-
-				/*
+				
 				const orderResult = {
 					getOrderId:'0ca1058a-4162-4c31-8beb-5e8dfa367b16',
 					getNumber:123
@@ -144,17 +144,18 @@ export class PaymentService extends IPaymentService {
 						processedPaymentsSum: 0
 					}
 				}
-				*/
+				/*
 
 				const orderStatus = await this.orderUsecase.getStatusOrder()
-				
+				*/
 				const create = await this.paymentRepository.createOrderPayment(body,orderStatus)
-				console.log('создало заказ в админке');
+				console.log('создало заказ в админке',create);
 				
 				
       this.redis.set(body.invoice.params.hash, orderResult.getNumber.toString());
     }
 
+		//поиск заказа в админке
 		async checkPymentOrder(body:any){
 			const result = await this.paymentRepository.findOrderPayment(body)
 			return result
@@ -182,6 +183,7 @@ export class PaymentService extends IPaymentService {
 			
 		}
 
+		// информация точки о паумастере в админке(магазин, токен)
 		async organizationPaymentInfo(id:string){
 			return await this.organizationRepository.getPaymentsInfo(
 				id
@@ -203,7 +205,21 @@ export class PaymentService extends IPaymentService {
 				
 
         const cart = await this.cartRepository.getAll(userId);
+
+				const payMasterBody =  this.Paymaster.paymasterBody({
+					orderBody:body,
+					organizationPaymentInfo,
+					totalPrice,
+					organizationID,
+					cart
+				})	
+				console.log(payMasterBody);
+
+				/*
         const orderHash = createOrderHash();
+
+				
+
         const payMasterBody = {
             merchantId: organizationPaymentInfo.merchantId,
             testMode: true,
@@ -245,7 +261,7 @@ export class PaymentService extends IPaymentService {
         };
 
 				console.log('тело оплаты',payMasterBody);
-				
+				*/
         const paymentResult = await this.Paymaster.paymentUrl(
             payMasterBody,
             organizationPaymentInfo.token
@@ -256,6 +272,7 @@ export class PaymentService extends IPaymentService {
         return new RedirectEntity(
             paymentResult.url.replace("payments", "cpay")
         );
+				
     }
 
     async _byCash(body: OrderDTO, userId: UniqueId): Promise<RedirectEntity> {

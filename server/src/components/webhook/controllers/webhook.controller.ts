@@ -5,7 +5,9 @@ import {
     Res,
     UseGuards,
     UseFilters,
-    Inject
+    Inject,
+		Get,
+		Param
 } from "@nestjs/common";
 import { iiko } from "src/services/iiko/interfaces";
 import { IPaymentWebhookDto } from "../../order/dto/paymentWebhook.dto";
@@ -46,7 +48,7 @@ export class WebhookController {
     ) {
 
 			console.log('ответ из пумастера тело',body);
-        if (body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
+        if (body.status === PaymasterResponse.PaymentStatuses.AUTHORIZED || body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
 						const check:any = await this.PaymentService.checkPymentOrder({paymentid:body.id})
 						if(!check){
 							try {
@@ -55,6 +57,7 @@ export class WebhookController {
 								await this.BotService.PaymentOrder(body.invoice.params.orgguid,{...body,statusOrder:'В обработке'})
 							} catch (error) {
 								await this.BotService.PaymentOrder(body.invoice.params.orgguid,{...body,statusOrder:'Ошибка при заказе'})
+								console.log(error);
 							}
 							
 						}
@@ -62,6 +65,24 @@ export class WebhookController {
 
         response.status(200).json({});
     }
+
+		@Get("dualPayment/:hash")
+    //@UseGuards(YooWebhookGuard)
+    async dualpayment(
+				@Param("hash") hash: string,
+        @Res() response: Response
+    ){
+			try {
+				const check:any = await this.PaymentService.checkPymentOrder({orderHash:hash})
+				if(check){
+					
+				}
+			} catch (error) {
+				
+			}
+			response.status(200).json({});
+		}
+
 
     @ApiResponse({
         description:
