@@ -41,14 +41,14 @@ export class PaymentService extends IPaymentService {
         const preparedBody = decodeBody<OrderDTO & { user: string }>({...body.invoice.params,paymentsum:body.amount.value});
 
 				//throw new Error("Whoops!");
-				
+				/*
 				const orderResult = await this.orderUsecase.create(
 					preparedBody.user,
 					preparedBody
 				);
+*/
 
-
-				/*
+				
 				const orderResult = {
 					getOrderId:'0ca1058a-4162-4c31-8beb-5e8dfa367b16',
 					getNumber:123
@@ -144,10 +144,10 @@ export class PaymentService extends IPaymentService {
 						processedPaymentsSum: 0
 					}
 				}
-				*/
+				/*
 
 				const orderStatus = await this.orderUsecase.getStatusOrder()
-	
+				*/
 				const create = await this.paymentRepository.createOrderPayment(body,orderStatus)
 				console.log('создало заказ в админке',create);
 				
