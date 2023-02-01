@@ -180,7 +180,7 @@ export class IikoService implements IIiko {
 								deliveryPoint:{
 									address:{
 										street:{
-											name:orderInfo.address.street,
+											name:"Турецкая", //orderInfo.address.street
 											city:orderInfo.address.city
 										},
 										house:orderInfo.address.home,
@@ -189,7 +189,7 @@ export class IikoService implements IIiko {
 										entrance:orderInfo.address.entrance,
 										doorphone:orderInfo.address.intercom
 									},
-									
+									comment:`${orderInfo.address.street},дом - ${orderInfo.address.home},${orderInfo.address.floor},${orderInfo.address.flat},${orderInfo.address.entrance},${orderInfo.address.intercom}`
 								},
 								
 								guests: {
