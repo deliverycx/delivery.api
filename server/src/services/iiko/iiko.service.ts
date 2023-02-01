@@ -189,7 +189,7 @@ export class IikoService implements IIiko {
 										entrance:orderInfo.address.entrance,
 										doorphone:orderInfo.address.intercom
 									},
-									comment:`${orderInfo.address.street},дом - ${orderInfo.address.home},${orderInfo.address.floor},${orderInfo.address.flat},${orderInfo.address.entrance},${orderInfo.address.intercom}`
+									comment:`${orderInfo.address.street},${orderInfo.address.home}`
 								},
 								
 								guests: {
