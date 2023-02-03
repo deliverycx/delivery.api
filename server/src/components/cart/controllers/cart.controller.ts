@@ -71,7 +71,7 @@ export class CartController {
         @Res() response: Response
     ) {
         const result = await this.cartUsecase.add(session.user, addBody);
-
+				console.log('корзина');
         response.status(200).json(result);
     }
 
