@@ -237,8 +237,7 @@ export class IikoService implements IIiko {
 				
 
         const result = data.orderTypes[0].items.find((orderTypeEl) => {
-					console.log('типы дост',orderType,orderTypeEl);
-
+					
 					switch(orderType){
 						case OrderTypesEnum.PICKUP :
 							return orderTypeEl.id === '5b1508f9-fe5b-d6af-cb8d-043af587d5c2' && orderTypeEl
