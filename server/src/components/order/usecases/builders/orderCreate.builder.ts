@@ -168,7 +168,7 @@ export class OrderCreateBuilder {
             orderType
       );
 
-      console.log('orderinfo', this._state.orderInfo);
+      console.log('к боту orderinfo', this._state);
       
 
         this.botService.sendDuplicate(
@@ -179,7 +179,7 @@ export class OrderCreateBuilder {
             this._state.cart,
             orderTypeName,
 						this._state.orderInfo.orderType,
-						this._state.orderInfo.orderTable.numb
+						this._state.orderInfo.orderTable ? this._state.orderInfo.orderTable.numb : 0
         );
     }
 
