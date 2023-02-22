@@ -27,7 +27,7 @@ export class OrderUsecase {
     async checkOrder(userId: UniqueId, orderInfo: OrderDTO) {
         await this.orderCheckBuilder.initialize(userId, orderInfo);
 
-        await this.orderCheckBuilder.checkCardPaymentAviables();
+        //await this.orderCheckBuilder.checkCardPaymentAviables();
 
         await this.orderCheckBuilder.validateCart();
 

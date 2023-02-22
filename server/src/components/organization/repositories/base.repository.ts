@@ -90,17 +90,14 @@ export class OrganizationRepository
         );
     }
 
-    public async getPaymentsInfo(organizationId: UniqueId) {
+    public async getPaymentsInfo(organizationId: UniqueId,type = 'ip') {
         const paymentDoc = await this.PaymentServiceDataModel.findOne({
-            organization: organizationId
+						organization: organizationId,
+						typemagaz:type
         });
+				
 
-        return new PaymentInfoEntity(
-            paymentDoc?.merchantId,
-            paymentDoc?.token,
-            !!paymentDoc?.isActive,
-            organizationId
-        );
+        return paymentDoc
     }
 		public async getOrgStatus(organization:string){
 			const result = await this.OrganizationstatusModel.findOne({organization})

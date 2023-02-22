@@ -8,6 +8,10 @@ import { createOrderHash } from "../../utils/hash";
 import { IPayMasterBody } from "../types/paymaster.type";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 
+console.log(process.env);
+const paycalback = (order?:string) =>  'https://6f19-89-107-138-213.ngrok.io/webhook/paymentCallback' // `${body.localhost}/api/webhook/paymentCallback`
+const paycalbackBar = (order?:string) =>  'https://6f19-89-107-138-213.ngrok.io/webhook/paymentCallbackBar' // `${body.localhost}/api/webhook/paymentCallbackBar`
+
 export class Paymaster {
     private readonly requester: PaymasterRequests;
 
@@ -19,6 +23,8 @@ export class Paymaster {
         return this.requester.invoices(body, token);
     }
 
+
+		// возврат
 		public async paymentRetunts(order: any, token: string,paymentRepository:any) {
 
 
@@ -29,6 +35,7 @@ export class Paymaster {
 			return await this.statusReturnPamyMent(token,order,retuntpay.id,paymentRepository)
 		}
 
+		// возврат статус в адмике
 		async statusReturnPamyMent(token:string,order:any,id:string,paymentRepository:any){
 			const statuspay = await this.repeatReturnUntilSuccess(token,id)
 			console.log('статус возврата старт',statuspay,order.paymentid)
@@ -41,6 +48,7 @@ export class Paymaster {
 			return statuspay
 		}
 
+		// возврат проверка подверждения из паумастера
 		async repeatReturnUntilSuccess(token:string,id:string,counter?:number):Promise<any> {
 				counter = counter || 0;
 				let tik:any
@@ -84,6 +92,15 @@ export class Paymaster {
 				})
 		}
 
+
+		async canselPayment(order:any,token:string,paymentRepository:any){
+			await paymentRepository.setPaymentStatus(order.paymentid,'Cancelled')
+			await this.requester.canselPayment(order.paymentid,token);
+			return{
+				paymentId:order.paymentid
+			}
+		}
+
 		paymasterChechBar(cart:Array<CartEntity>){
 			let prices = 0
 			cart.map((item:any) =>{
@@ -100,7 +117,8 @@ export class Paymaster {
 			organizationPaymentInfo,
 			totalPrice,
 			organizationID,
-			cart
+			cart,
+			userId
 		}:IPayMasterBody){
 			const orderHash = createOrderHash();
 
@@ -129,7 +147,7 @@ export class Paymaster {
 								}
 						},
 						protocol: {
-								callbackUrl:`${orderBody.localhost}/api/webhook/paymentCallback`, //'https://b3b1-89-107-138-252.ngrok.io/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
+								callbackUrl:paycalback(), //paycalback(body.localhost), //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
 								returnUrl: `${orderBody.localhost}/dualpayment/${orderHash}`
 						},
 						reciept: {
@@ -171,7 +189,7 @@ export class Paymaster {
 								}
 						},
 						protocol: {
-								callbackUrl: `${orderBody.localhost}/api/webhook/paymentCallback`, //'https://b3b1-89-107-138-252.ngrok.io/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
+								callbackUrl: paycalback(), ////paycalback(body.localhost)   'https://b3b1-89-107-138-252.ngrok.io/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
 								returnUrl: `${orderBody.localhost}/success/${orderHash}`
 						},
 						reciept: {
@@ -195,6 +213,35 @@ export class Paymaster {
 				};
 			}
 
+			
+		}
+
+
+		paymasterBodyBar({orderBody,organizationPaymentInfo,localhost}:any){
+			/**/
+			return {
+				merchantId: organizationPaymentInfo.merchantId,
+				testMode: true,
+				dualMode: true,
+					amount: {
+							currency: "RUB",
+							value: orderBody.dyalPayment.BarPaymentAmount
+					},
+					invoice: {
+							description: 'Оплата "Бар" в Старик Хинкалыч',
+							
+							params: {
+								idorganization:orderBody.idorganization,
+								orderId:orderBody.orderId,
+								orderHash:orderBody.orderHash
+							}
+					},
+					protocol: {
+							callbackUrl:paycalbackBar(), //paycalback(body.localhost), //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
+							returnUrl: `${localhost}/success/${orderBody.orderHash}`
+					},
+
+			}
 			
 		}
 }

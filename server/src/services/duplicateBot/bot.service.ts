@@ -50,6 +50,10 @@ export class BotService extends IBotService {
 			this.botRequest.ReturntPayment(organizationId,data)
 		}
 
+		public canselPaymentOrder(organizationId,data:any){
+			this.botRequest.calseledPayment(organizationId,data)
+		}
+
     public sendReserveTable(data:BotReverveTableDTO) {
 			this.botRequest.reserveTable(data.organizationId,data)
     }

@@ -54,6 +54,13 @@ export class BotAxios {
 		): Promise<void> {
 				this.axios.post(`/return_payment/${organization}`, data);
 		}
+
+		async calseledPayment(
+			organization: UniqueId,
+			data: Bot.IRequestBody
+		): Promise<void> {
+				this.axios.post(`/canselpayment/${organization}`, data);
+		}
 }
 
 export const BotAxiosProvider = {

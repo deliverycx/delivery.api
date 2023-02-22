@@ -27,8 +27,8 @@ export class OrderPaymentClass {
 	@prop({ type: () => Number })
 	public paymentAmount:number
 
-	@prop({ type: () => String })
-	public dyalPaymentAmount:string
+	@prop()
+	public dyalPayment:any
 
 	@prop({ type: () => String })
 	public paymentTime:string
@@ -41,6 +41,9 @@ export class OrderPaymentClass {
 
 	@prop({ type: () => String })
 	public orderId:string
+
+	@prop()
+	public orderNumber:number
 
 	@prop({ type: () => String })
 	public orderHash:string

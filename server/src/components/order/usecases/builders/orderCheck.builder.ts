@@ -67,7 +67,7 @@ export class OrderCheckBuilder {
         }
 
         const { isActive } = await this.OrganizationRepository.getPaymentsInfo(
-            this._state.orderInfo.organization
+            this._state.orderInfo.organization,
         );
 
         if (!isActive) {

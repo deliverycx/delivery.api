@@ -11,4 +11,5 @@ export type IPayMasterBody = {
 	totalPrice:number,
 	organizationID:OrganizationEntity
 	cart:Array<CartEntity>
+	userId:any
 }

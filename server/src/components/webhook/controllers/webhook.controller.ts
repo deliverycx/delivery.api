@@ -66,6 +66,32 @@ export class WebhookController {
         response.status(200).json({});
     }
 
+		@Post("paymentCallbackBar")
+    //@UseGuards(YooWebhookGuard)
+    async yowebhookBar(
+        @Body() body: any,
+        @Res() response: Response
+    ) {
+
+			console.log('ответ БАР из пумастера тело',body);
+        if (body.status === PaymasterResponse.PaymentStatuses.AUTHORIZED || body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
+						const check:any = await this.PaymentService.checkPymentOrder({orderId:body.invoice.params.orderId})
+						if(check){
+							try {
+								
+								await this.PaymentService.captrurePaymentBar(body);
+								await this.BotService.PaymentOrder(body.invoice.params.idorganization,{...body,statusOrder:'Бар оплачен'})
+							} catch (error) {
+								await this.BotService.PaymentOrder(body.invoice.params.idorganization,{...body,statusOrder:'Ошибка при оплате Бара'})
+								console.log(error);
+							}
+							
+						}
+        }
+
+        response.status(200).json({});
+    }
+
 		@Get("dualPayment/:hash")
     //@UseGuards(YooWebhookGuard)
     async dualpayment(
@@ -75,12 +101,31 @@ export class WebhookController {
 			try {
 				const check:any = await this.PaymentService.checkPymentOrder({orderHash:hash})
 				if(check){
-					
+					response.status(200).json(check);
 				}
 			} catch (error) {
-				
+				response.status(400).json({error:'Заказ не найден'});
 			}
-			response.status(200).json({});
+			
+		}
+
+		@Post("dualPaymentCreate")
+    //@UseGuards(YooWebhookGuard)
+    async dualpaymentcreate(
+				@Body() body:any,
+        @Res() response: Response
+    ){
+			try {
+				console.log(body);
+				const check:any = await this.PaymentService.checkPymentOrder({orderHash:body.hash})
+				if(check){
+					const payurl = await this.PaymentService.createBarPayment(check,body.localhost)
+					response.status(200).json(payurl);
+				}
+			} catch (error) {
+				response.status(400).json({error:'Заказ не найден'});
+			}
+			
 		}
 
 
@@ -160,7 +205,7 @@ export class WebhookController {
 			const result = await this.PaymentService.checkPymentOrderStatus(body)
 			if(result){
 				console.log('возврат для бота',result);
-				await this.BotService.ReturnPaymentOrder(result.organizationid,result) //result.organizationid
+				await this.BotService.canselPaymentOrder(result.organizationid,result) //result.organizationid
 			}
 			return 'ok'
 		}

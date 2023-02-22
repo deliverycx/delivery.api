@@ -41,14 +41,14 @@ export class PaymentService extends IPaymentService {
         const preparedBody = decodeBody<OrderDTO & { user: string }>({...body.invoice.params,paymentsum:body.amount.value});
 
 				//throw new Error("Whoops!");
-				/*
+				/**/
 				const orderResult = await this.orderUsecase.create(
 					preparedBody.user,
 					preparedBody
 				);
-*/
 
-				
+
+				/*
 				const orderResult = {
 					getOrderId:'0ca1058a-4162-4c31-8beb-5e8dfa367b16',
 					getNumber:123
@@ -144,10 +144,10 @@ export class PaymentService extends IPaymentService {
 						processedPaymentsSum: 0
 					}
 				}
-				/*
-
+				
+*/
 				const orderStatus = await this.orderUsecase.getStatusOrder()
-				*/
+				
 				const create = await this.paymentRepository.createOrderPayment(body,orderStatus)
 				console.log('создало заказ в админке',create);
 				
@@ -161,47 +161,77 @@ export class PaymentService extends IPaymentService {
 			return result
 		}
 
+		// статус заказа
 		async checkPymentOrderStatus(order:any){
-			const check = await this.paymentRepository.findOrderPayment({orderId:order.orderId})
+			const orderfomAdmin = await this.paymentRepository.findOrderPayment({orderId:order.orderId})
 			
-			if(check){
-				console.log('возврат - ответ из териминала',order);
+			if(orderfomAdmin){
+				console.log('отмена - ответ из териминала',order);
 				const statuses = order.text.split(':')[2].replace(/[^a-zа-яё]/gi, '')
 				await this.paymentRepository.setOrderPaymentStatus(order.orderId,statuses)
 				if(statuses === 'canceled'){
-					console.log('возврат отмена статус');
-					const organizationPaymentInfo = await this.organizationPaymentInfo(check.paymentparams.organization)
-					const status = await this.Paymaster.paymentRetunts(
+					console.log('отмена статус');
+					const organizationPaymentInfo = await this.organizationRepository.getPaymentsInfo(orderfomAdmin.idorganization,'ip')
+					
+					console.log(organizationPaymentInfo);
+					// отмена холдинга(оплаты)
+					const result = await this.Paymaster.canselPayment(
+						orderfomAdmin,
+						organizationPaymentInfo.token,
+						this.paymentRepository
+					)
+
+					/**
+					 * возврат
+					 * const status = await this.Paymaster.paymentRetunts(
 							check,
 							organizationPaymentInfo.token,
 							this.paymentRepository
 						)
 						console.log('возврат',status);
 						return {organizationid:check.paymentparams.orgguid,...status}
+					 */
+						return {organizationid:orderfomAdmin.paymentparams.orgguid,...result}
 				}
 			}
 			
 		}
 
-		// информация точки о паумастере в админке(магазин, токен)
-		async organizationPaymentInfo(id:string){
-			return await this.organizationRepository.getPaymentsInfo(
-				id
+
+		// создание оплаты для бара
+		async createBarPayment(orderBody:any,localhost:string){
+			const organizationPaymentInfo = await this.organizationRepository.getPaymentsInfo(orderBody.idorganization,'ooo')
+			const createPayBarBody = this.Paymaster.paymasterBodyBar({orderBody,organizationPaymentInfo,localhost})
+				const paymentResult = await this.Paymaster.paymentUrl(
+					createPayBarBody,
+					organizationPaymentInfo.token
 			);
+
+				return new RedirectEntity(
+						paymentResult.url.replace("payments", "cpay")
+				);
 		}
+
+		//изменение в заказе о статусе оплаты бара
+		async captrurePaymentBar(body:any){
+			await this.paymentRepository.setBarPaymentStatus(body)
+		}
+
+
 
     async _byCard(body: OrderDTO, userId: UniqueId): Promise<any> {
         // checking bank card support
 				
-
-        const organizationPaymentInfo = await this.organizationPaymentInfo(body.organization)
+				const organizationID = await this.organizationRepository.getOne(body.organization)
+        const organizationPaymentInfo = await this.organizationRepository.getPaymentsInfo(organizationID.getGuid,'ip')
+				
 
         const { totalPrice } = await this.DeliveryService.calculatingPrices(
             userId,
             body.orderType
         );
 
-				const organizationID = await this.organizationRepository.getOne(body.organization)
+				
 				
 
         const cart = await this.cartRepository.getAll(userId);
@@ -211,9 +241,10 @@ export class PaymentService extends IPaymentService {
 					organizationPaymentInfo,
 					totalPrice,
 					organizationID,
-					cart
+					cart,
+					userId
 				})	
-				console.log(payMasterBody);
+				console.log('payMasterBody',cart);
 
 				/*
         const orderHash = createOrderHash();

@@ -19,5 +19,6 @@ export abstract class IBotService {
   ): void;
   abstract PaymentOrder(organizationId,data:any)
 	abstract ReturnPaymentOrder(organizationId,data:any)
+	abstract canselPaymentOrder(organizationId,data?:any)
   abstract sendReserveTable(data:BotReverveTableDTO)
 }

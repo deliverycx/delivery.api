@@ -16,11 +16,16 @@ export class PaymentRepository {
 				merchantId:paybody.merchantId,
 				paymentStatus:paybody.status,
 				paymentAmount:paybody.amount.value,
-				dyalPaymentAmount:paybody.invoice.params.dualpayment,
+				dyalPayment:{
+					BarPaymentAmount:paybody.invoice.params.dualpayments,
+					BarPaymentid:''
+				},
+				
 				paymentTime:paybody.created,
 				paymentparams:paybody.invoice.params,
 				paymentData:paybody.paymentData,
 				orderId:orderbody.id,
+				orderNumber:orderbody.order.number,
 				orderHash:paybody.invoice.params.hash,
 				orderStatus:orderbody.order.status,
 				orderAmount:orderbody.order.sum,
@@ -68,6 +73,24 @@ export class PaymentRepository {
 
 			console.log('обновило статус оплаты');
 		 return result;
- }
+ 	}
+
+	async setBarPaymentStatus(paybody:any){
+		const result = await this.paymentOrder.findOneAndUpdate({
+			orderId:paybody.invoice.params.orderId
+		},
+		{
+			$set:{
+				dyalPayment:{
+					BarPaymentAmount:paybody.amount.value,
+					BarPaymentid:paybody.id
+				}
+			}
+		},{
+			new:true
+		}
+		
+		)
+	}
 	 
 }		

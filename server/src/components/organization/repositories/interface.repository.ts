@@ -8,8 +8,9 @@ export abstract class IOrganizationRepository {
     abstract getRecvisites(organizationId: UniqueId): Promise<RecvisitesEntity>;
     abstract getOne(id: UniqueId): Promise<OrganizationEntity>;
     abstract getPaymentsInfo(
-        organizationId: UniqueId
-    ): Promise<PaymentInfoEntity>;
+        organizationId: UniqueId,
+				type?:string
+    ): Promise<any>;
 		abstract getOrgStatus(organization:string): Promise<any>
 		abstract getOrgStatusAll(organization:string): Promise<any>
 }

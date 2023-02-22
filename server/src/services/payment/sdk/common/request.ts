@@ -68,4 +68,23 @@ export class PaymasterRequests extends Axios {
 
 				return data;
 		}
+
+		public async canselPayment(
+			id:string,
+			token: string
+		) {
+			console.log(id,token);
+				const { data } = await this._axios.put(
+						`/api/v2/payments/${id}/cancel`,
+						{},
+						{
+								headers: {
+										Authorization: `Bearer ${token}`,
+										"Content-Type": "application/json"
+								}
+						}
+				);
+
+				return data;
+		}
 }
