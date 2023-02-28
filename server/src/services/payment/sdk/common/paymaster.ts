@@ -237,7 +237,7 @@ export class Paymaster {
 							}
 					},
 					protocol: {
-							callbackUrl:paycalbackBar(orderBody.localhost), //paycalback(body.localhost), //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
+							callbackUrl:paycalbackBar(localhost), //paycalback(body.localhost), //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
 							returnUrl: `${localhost}/success/${orderBody.orderHash}`
 					},
 
