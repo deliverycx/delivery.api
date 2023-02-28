@@ -9,8 +9,8 @@ import { IPayMasterBody } from "../types/paymaster.type";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 
 console.log(process.env);
-const paycalback = (order?:string) =>  'https://6f19-89-107-138-213.ngrok.io/webhook/paymentCallback' // `${body.localhost}/api/webhook/paymentCallback`
-const paycalbackBar = (order?:string) =>  'https://6f19-89-107-138-213.ngrok.io/webhook/paymentCallbackBar' // `${body.localhost}/api/webhook/paymentCallbackBar`
+const paycalback = (localhost?:any) => `${localhost}/api/webhook/paymentCallback`  //'https://6f19-89-107-138-213.ngrok.io/webhook/paymentCallback' // `${body.localhost}/api/webhook/paymentCallback`
+const paycalbackBar = (localhost?:any) => `${localhost}/api/webhook/paymentCallbackBar`  //'https://6f19-89-107-138-213.ngrok.io/webhook/paymentCallbackBar' // `${body.localhost}/api/webhook/paymentCallbackBar`
 
 export class Paymaster {
     private readonly requester: PaymasterRequests;
@@ -147,7 +147,7 @@ export class Paymaster {
 								}
 						},
 						protocol: {
-								callbackUrl:paycalback(), //paycalback(body.localhost), //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
+								callbackUrl:paycalback(orderBody.localhost), //paycalback(), //paycalback(body.localhost), //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
 								returnUrl: `${orderBody.localhost}/dualpayment/${orderHash}`
 						},
 						reciept: {
@@ -189,7 +189,7 @@ export class Paymaster {
 								}
 						},
 						protocol: {
-								callbackUrl: paycalback(), ////paycalback(body.localhost)   'https://b3b1-89-107-138-252.ngrok.io/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
+								callbackUrl: paycalback(orderBody.localhost), ////paycalback(body.localhost)   'https://b3b1-89-107-138-252.ngrok.io/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
 								returnUrl: `${orderBody.localhost}/success/${orderHash}`
 						},
 						reciept: {
@@ -237,7 +237,7 @@ export class Paymaster {
 							}
 					},
 					protocol: {
-							callbackUrl:paycalbackBar(), //paycalback(body.localhost), //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
+							callbackUrl:paycalbackBar(orderBody.localhost), //paycalback(body.localhost), //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
 							returnUrl: `${localhost}/success/${orderBody.orderHash}`
 					},
 
