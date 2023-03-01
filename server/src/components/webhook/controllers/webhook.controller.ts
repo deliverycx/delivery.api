@@ -27,6 +27,7 @@ import { subscriptionDTO, subscriptionResponse } from "src/services/mail/mail.ga
 import { Bot } from "src/services/duplicateBot/interfaces";
 import { BotReverveTableDTO } from "src/services/duplicateBot/bot.DTO";
 import { IBotService } from "src/services/duplicateBot/bot.abstract";
+import axios from 'axios';
 
 @Controller("webhook")
 export class WebhookController {
@@ -213,5 +214,51 @@ export class WebhookController {
 		@Post("getstreet")	
 		async getStreet(@Body() body:any){
 			 return await this.IikoService.getStreetCityIkko(body)
+		}
+
+
+		@Get("daData/:street")
+    //@UseGuards(YooWebhookGuard)
+    async daData(
+				@Param("street") street: string,
+        @Res() response: Response
+    ){
+			try {
+				const url = "https://cleaner.dadata.ru/api/v1/clean/address";
+				const token = "4d575df5b58e315429934796a55711d488a8fdec";
+				const secret = "1894ee2d296d0ebc7b52704972a965c5dc54a860";
+				const query = "мск сухонска 11/-89";
+
+				const options = {
+				    method: "POST",
+				    mode: "cors",
+				    headers: {
+				        "Content-Type": "application/json",
+				        "Authorization": "Token " + token,
+				        "X-Secret": secret
+				    },
+				    body: JSON.stringify([query])
+				}
+
+				const {data} = await axios.post(
+					url,
+					{
+						mode: "cors",
+						body: JSON.stringify([query])
+					},
+					{
+						headers: {
+							"Content-Type": "application/json",
+							"Authorization": "Token " + token,
+							"X-Secret": secret
+						},
+					}
+				)
+
+				response.status(200).json(data)
+			} catch (error) {
+				response.status(400).json({error:'Заказ не найден'});
+			}
+			
 		}
 }
