@@ -49,6 +49,7 @@ export class IikoService implements IIiko {
             Получение айдишнка типа заказа
         */
 
+
 						
         const { id: orderTypeId } = await this.getOrderTypesId(
             orderInfo.organization,
@@ -180,7 +181,7 @@ export class IikoService implements IIiko {
 								deliveryPoint:{
 									address:{
 										street:{
-											name:"Турецкая", //orderInfo.address.street
+											classifierId: orderInfo.address.kladrid, //orderInfo.address.street
 											city:orderInfo.address.city
 										},
 										house:orderInfo.address.home,

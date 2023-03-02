@@ -40,6 +40,7 @@ export class OrderDTO {
         intercom: number;
         entrance: number;
         floor: number;
+				kladrid:string
     };
 
     @ApiProperty({
