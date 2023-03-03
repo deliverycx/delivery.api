@@ -45,6 +45,9 @@ export class OrganizationClass {
     @prop({ default: true })
     public isHidden:boolean
 
+		@prop()
+    public redirect:string
+
 		@prop({ default: false })
     public reservetable:boolean
 
