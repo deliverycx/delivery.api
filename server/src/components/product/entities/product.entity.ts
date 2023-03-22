@@ -8,6 +8,9 @@ export class ProductEntity {
     @ApiProperty()
     private readonly name?: string;
 
+		@ApiProperty()
+		private readonly productId?:string
+
     @ApiProperty()
     private readonly description?: string;
 
@@ -37,6 +40,7 @@ export class ProductEntity {
     constructor(
         id: Types.ObjectId | undefined,
         name?: string,
+				productId?:string,
         description?: string,
         additionalInfo?: string,
         price?: number,
@@ -48,6 +52,7 @@ export class ProductEntity {
     ) {
         this.id = id;
         this.name = name;
+				this.productId = productId;
         this.description = description;
         this.additionalInfo = additionalInfo;
         this.price = price;
