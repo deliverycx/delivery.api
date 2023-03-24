@@ -12,7 +12,6 @@ export class StopListController {
 
         const result = await this.stopListUsecase.getAll(query.organizationId);
 				await this.stopListUsecase.deleteStopList(query.organizationId,result)
-				console.log(result);
         return result
     }
 }
