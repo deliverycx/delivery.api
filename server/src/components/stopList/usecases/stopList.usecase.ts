@@ -22,7 +22,7 @@ export class StopListUsecase {
 
 		async getAll(organizationGUID:string){
 			const data = await this.axios.stopList(organizationGUID);
-			if(data.length !== 0){
+			if(data.length === 0){
 				return []
 			}
 				
