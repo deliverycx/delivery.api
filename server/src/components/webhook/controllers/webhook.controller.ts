@@ -27,6 +27,7 @@ import { subscriptionDTO, subscriptionResponse } from "src/services/mail/mail.ga
 import { Bot } from "src/services/duplicateBot/interfaces";
 import { BotReverveTableDTO } from "src/services/duplicateBot/bot.DTO";
 import { IBotService } from "src/services/duplicateBot/bot.abstract";
+import { ClientProxy } from "@nestjs/microservices";
 
 @Controller("webhook")
 export class WebhookController {
@@ -37,7 +38,8 @@ export class WebhookController {
         private readonly PaymentService: PaymentService,
         private readonly IikoStopListGateway: IikoWebsocketGateway,
         private readonly MailService: MailService,
-        private readonly BotService: IBotService
+        private readonly BotService: IBotService,
+				
     ) {}
 
     @Post("paymentCallback")

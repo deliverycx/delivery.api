@@ -25,6 +25,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { RedisModule } from "./redis/redis.module";
 import { REDIS } from "./redis/redis.constants";
 import { StopListModule } from "src/ioc/stoplist.module";
+import { ClientsModule, Transport } from "@nestjs/microservices";
 
 // КОСТЫЛЬ
 try {
@@ -63,6 +64,13 @@ try {
                 })
             ]
         }),
+				ClientsModule.register([
+					{
+						name: 'COMMUNICATION',
+						transport: Transport.TCP,
+					},
+					
+				]),
 
         ProductModule,
         CategoryModule,
