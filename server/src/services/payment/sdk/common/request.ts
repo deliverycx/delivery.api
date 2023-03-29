@@ -73,7 +73,6 @@ export class PaymasterRequests extends Axios {
 			id:string,
 			token: string
 		) {
-			console.log(id,token);
 				const { data } = await this._axios.put(
 						`/api/v2/payments/${id}/cancel`,
 						{},
