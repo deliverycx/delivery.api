@@ -173,7 +173,9 @@ export class IIkoAxios extends Axios {
 					}
 			);
 
-
+				if(data.terminalGroupStopLists.length === 0){
+					return []
+				}
 
         return data.terminalGroupStopLists.map((val:any) =>{
 					return val.organizationId === organization &&  val.items

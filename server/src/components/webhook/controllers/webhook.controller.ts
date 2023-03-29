@@ -28,6 +28,9 @@ import { Bot } from "src/services/duplicateBot/interfaces";
 import { BotReverveTableDTO } from "src/services/duplicateBot/bot.DTO";
 import { IBotService } from "src/services/duplicateBot/bot.abstract";
 import { ClientProxy } from "@nestjs/microservices";
+import axios from 'axios';
+import { WebHookServices } from "../services/webhook.services";
+
 
 @Controller("webhook")
 export class WebhookController {
@@ -39,7 +42,7 @@ export class WebhookController {
         private readonly IikoStopListGateway: IikoWebsocketGateway,
         private readonly MailService: MailService,
         private readonly BotService: IBotService,
-				
+				private readonly webHookServices: WebHookServices
     ) {}
 
     @Post("paymentCallback")
@@ -203,7 +206,7 @@ export class WebhookController {
     }
 		@Post("push")	
 		async push(@Body() body:any){
-			console.log('пуш с терминала',body);
+			//console.log('пуш с терминала',body);
 			const result = await this.PaymentService.checkPymentOrderStatus(body)
 			if(result){
 				console.log('возврат для бота',result);
@@ -215,5 +218,16 @@ export class WebhookController {
 		@Post("getstreet")	
 		async getStreet(@Body() body:any){
 			 return await this.IikoService.getStreetCityIkko(body)
+		}
+
+
+		@Get("daData/:street")
+    //@UseGuards(YooWebhookGuard)
+    async daData(
+				@Param("street") street: string,
+        @Res() response: Response
+    ){
+			
+			this.webHookServices.getData(street)
 		}
 }
