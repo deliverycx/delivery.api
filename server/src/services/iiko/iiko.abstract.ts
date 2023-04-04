@@ -14,7 +14,8 @@ export enum OrderTypesEnum {
 export const constOrderPaymentTypes = {
 	CASH:"CASH",
 	CARD:"CARD",
-	BYCARD:"BYCARD"
+	BYCARD:"BYCARD",
+	PAY:"PAY"
 }
 
 export interface IReturnIikoOrderTypes {
