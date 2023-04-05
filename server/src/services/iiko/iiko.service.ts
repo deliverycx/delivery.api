@@ -276,15 +276,14 @@ export class IikoService implements IIiko {
             prices.deliveryPrice
         );
 
-					console.log('bofyyyyyyyyyyyyyyor',orderBody);
-			/* 
+				
       const orderResponseInfo = orderInfo.orderType ===  OrderTypesEnum.ONSPOT
 				? await this.axios.orderCreate(orderBody) 
 				: await this.axios.orderCreateDelivery(orderBody);
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );
-			*/		
+					
 				
 			/*
         return {
@@ -292,7 +291,7 @@ export class IikoService implements IIiko {
             problem:orderResponseInfo.errorInfo
         };
 				*/
-				return {} //orderResponseInfo
+				return orderResponseInfo
 
 				
     }
