@@ -97,6 +97,8 @@ export class IikoService implements IIiko {
             //deliveryProductObject
         ].filter(Boolean);
 
+				
+
 				const terminal = await this.axios.termiralGroops(organization.id)
 
 				if(orderInfo.orderType === OrderTypesEnum.PICKUP){
@@ -202,7 +204,14 @@ export class IikoService implements IIiko {
                 orderTypeId:orderTypeId,
 								payments:
 									orderInfo.paymentMethod === constOrderPaymentTypes.BYCARD
-									? '1032a471-be2c-434f-b8c0-9bd686d8b2b5' :
+									? [
+												{
+												"paymentTypeKind": "Card",
+												"sum": deliveryPrice,
+												"paymentTypeId": "1032a471-be2c-434f-b8c0-9bd686d8b2b5",
+												"isProcessedExternally": true
+												}
+										] :
 									 orderInfo.paymentMethod === constOrderPaymentTypes.PAY 
 									? [
 												{
@@ -273,10 +282,11 @@ export class IikoService implements IIiko {
         const orderBody = await this.createOrderBody(
             orderInfo,
             cart,
-            prices.deliveryPrice
+            prices.totalPrice
         );
 
-				
+					console.log('bofyyyyyyyyyyyyyyor',orderBody);
+			/* */
       const orderResponseInfo = orderInfo.orderType ===  OrderTypesEnum.ONSPOT
 				? await this.axios.orderCreate(orderBody) 
 				: await this.axios.orderCreateDelivery(orderBody);
