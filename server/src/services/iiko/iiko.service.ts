@@ -97,6 +97,8 @@ export class IikoService implements IIiko {
             //deliveryProductObject
         ].filter(Boolean);
 
+				console.log(orderInfo);
+
 				const terminal = await this.axios.termiralGroops(organization.id)
 
 				if(orderInfo.orderType === OrderTypesEnum.PICKUP){
@@ -199,18 +201,26 @@ export class IikoService implements IIiko {
 								},
                 items: requestOrderItems,
                 comment: orderInfo.comment,
-                orderTypeId:
-									orderInfo.paymentMethod === "BYCARD" ? 'e23ef54e-fc50-4e15-835f-311d440a9744'  : orderTypeId,
+                orderTypeId:orderTypeId,
 								payments:
-									orderInfo.paymentMethod === constOrderPaymentTypes.CARD
+									orderInfo.paymentMethod === constOrderPaymentTypes.BYCARD
 									? [
-											{
-											"paymentTypeKind": "Card",
-											"sum": orderInfo.paymentsum,
-											"paymentTypeId": "1032a471-be2c-434f-b8c0-9bd686d8b2b5",
-											"isProcessedExternally": true
-											}
-									]
+												{
+												"paymentTypeKind": "Card",
+												"sum": deliveryPrice,
+												"paymentTypeId": "dfeb1b1e-36bb-4861-baf8-03be367e169a",
+												
+												}
+										] :
+									 orderInfo.paymentMethod === constOrderPaymentTypes.PAY 
+									? [
+												{
+												"paymentTypeKind": "Card",
+												"sum": orderInfo.paymentsum,
+												"paymentTypeId": "f2cc4be8-e7cb-405c-a4d8-c2712b5dc740",
+												"isProcessedExternally": true
+												}
+										]
 									: null
 
 								/*
@@ -272,10 +282,10 @@ export class IikoService implements IIiko {
         const orderBody = await this.createOrderBody(
             orderInfo,
             cart,
-            prices.deliveryPrice
+            prices.totalPrice
         );
 
-
+					console.log('bofyyyyyyyyyyyyyyor',orderBody);
 			/* */
       const orderResponseInfo = orderInfo.orderType ===  OrderTypesEnum.ONSPOT
 				? await this.axios.orderCreate(orderBody) 
