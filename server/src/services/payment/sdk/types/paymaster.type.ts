@@ -9,7 +9,7 @@ export type IPayMasterBody = {
 	orderBody:OrderDTO,
 	organizationPaymentInfo:PaymentInfoEntity,
 	totalPrice:number,
-	organizationID:OrganizationEntity
+	organizationID:string
 	cart:Array<CartEntity>
 	userId:any
 }

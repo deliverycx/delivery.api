@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { OrderCreateEntity } from "../entities/order.entity";
 
 @Injectable()
 export abstract class IOrderRepository {
@@ -7,4 +8,6 @@ export abstract class IOrderRepository {
         cartPrice: number,
         orderNumber: string
     ): Promise<void>;
+
+		abstract	createOrder(entiti:OrderCreateEntity): Promise<void>
 }

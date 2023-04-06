@@ -23,6 +23,8 @@ import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { PaymentService } from "../../../services/payment/payment.service";
 import { PaymentException } from "src/filters/payment.filter";
 import { RedirectEntity } from "../entities/redirect.entity";
+import { OrderCheckDto } from "../dto/orderCheck.dto";
+import { OrderService } from "../services/order/order.service";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
@@ -43,7 +45,8 @@ import { RedirectEntity } from "../entities/redirect.entity";
 export class OrderController {
     constructor(
         private readonly OrderUsecase: OrderUsecase,
-        private readonly PaymentService: PaymentService
+        private readonly PaymentService: PaymentService,
+				private readonly orderService: OrderService
     ) {}
 
     @ApiResponse({
@@ -51,14 +54,14 @@ export class OrderController {
         type: RedirectEntity,
         description: "Возращает урл для редиректа"
     })
-    @Post("create")
+    @Post("createPaymentOrder")
     async create(
         @Body() body: OrderDTO,
         @Session() session: Record<string, string>,
         @Res() response: Response
     ) {
 				console.log('создание заказа заказа',body);
-        const paymentResult = await this.PaymentService.route(
+        const paymentResult = await this.PaymentService._byCard(
             body,
             session.user
         );
@@ -79,14 +82,14 @@ export class OrderController {
     })
     @Post("check")
     async checkOrder(
-        @Body() body: OrderDTO,
+        @Body() body: OrderCheckDto,
         @Session() session: Record<string, string>,
-        @Res() response: Response
+       
     ) {
 				console.log('чек заказа',body);
-        await this.OrderUsecase.checkOrder(session.user, body);
+        const hash = await this.OrderUsecase.checkOrder(session.user, body);
 
-        response.status(200).json({ message: "Order can be send" });
+        return hash
     }
 
     @ApiResponse({
@@ -103,4 +106,16 @@ export class OrderController {
 
         response.status(200).json(result);
     }
+ 
+		@Post("createOrderMicro")
+    async createOrderMicro(
+        @Body() body: OrderDTO,
+				@Session() session: Record<string, string>,
+    ) {
+				const orderbody = await this.orderService.orderBody(session.user, body)
+				await this.orderService.createOrderModel(orderbody,session.user)
+				const result = await this.orderService.orderSubmitRabbit(orderbody)
+    }
+
+
 }

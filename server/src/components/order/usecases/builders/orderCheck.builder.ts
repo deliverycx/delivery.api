@@ -14,10 +14,12 @@ import {
     ValidationCountError
 } from "../../errors/order.error";
 import { ValidationCount } from "../../services/validationCount/validationCount.service";
+import { OrderCheckDto } from "../../dto/orderCheck.dto";
+import { createOrderHash } from "src/services/payment/utils/hash";
 
 interface IState {
     user: UniqueId;
-    orderInfo: OrderDTO;
+    orderInfo: OrderCheckDto;
     cart: Array<CartEntity>;
     errors: Array<BaseError>;
 }
@@ -37,7 +39,7 @@ export class OrderCheckBuilder {
         private readonly CartRepository: ICartRepository
     ) {}
 
-    async initialize(userId: UniqueId, orderInfo: OrderDTO) {
+    async initialize(userId: UniqueId, orderInfo: OrderCheckDto) {
         this._state.orderInfo = orderInfo;
         this._state.user = userId;
         this._state.errors = [];
@@ -61,6 +63,7 @@ export class OrderCheckBuilder {
         }
     }
 
+		/*
     async checkCardPaymentAviables() {
         if (this._state.orderInfo.paymentMethod !== PaymentMethods.CARD) {
             return;
@@ -76,12 +79,10 @@ export class OrderCheckBuilder {
             );
         }
     }
+		*/
 
 		async checkStopList(){
-			
-			const organization = await this.OrganizationRepository.getOne(this._state.orderInfo.organization)
-			const organizationID = organization.getGuid.toString();
-			const stoplist = await this.orderService.getStopList(organizationID)
+			const stoplist = await this.orderService.getStopList(this._state.orderInfo.organizationid)
 			const arrStoplist = stoplist.map((el) => el.product)
 
 			
@@ -94,7 +95,7 @@ export class OrderCheckBuilder {
 				this._state.errors.push(
 					new CannotDeliveryError(
 						result.map((el:any) =>{
-							return `в стоплисте - ${el.getProductName}`
+							return `в стоплисте - ${el.getProductName}` 
 						})
 					)
 					
@@ -104,6 +105,7 @@ export class OrderCheckBuilder {
 			
 		}
 
+		/*
     async serviceValidate() {
         const { cart, orderInfo, user } = this._state;
 
@@ -117,10 +119,14 @@ export class OrderCheckBuilder {
             );
         }
     }
+		*/
 
-    getResult(): void {
+    getResult(): string {
+			
         this._state.errors.forEach((error) => {
             throw error;
         });
+				const orderHash = createOrderHash();	
+				return orderHash
     }
 }

@@ -142,7 +142,7 @@ export class Paymaster {
 										user: userId,
 										hash: orderHash,
 										dualpayments:String(checkCartBar),
-										orgguid:organizationID.getGuid, //organizationID.getGuid,
+										orgguid:organizationID, //organizationID.getGuid,
 										...encodeBody(orderBody)
 								}
 						},
@@ -184,7 +184,7 @@ export class Paymaster {
 								params: {
 										user: userId,
 										hash: orderHash,
-										orgguid:organizationID.getGuid, //organizationID.getGuid,
+										orgguid:organizationID, //organizationID.getGuid,
 										...encodeBody(orderBody)
 								}
 						},

@@ -4,6 +4,7 @@ import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { CartClass } from "src/database/models/cart.model";
 import { OrderClass } from "src/database/models/order.model";
 import { IOrderRepository } from "./interface.repository";
+import { OrderCreateEntity } from "../entities/order.entity";
 
 @Injectable()
 export class OrderRepository implements IOrderRepository {
@@ -29,4 +30,9 @@ export class OrderRepository implements IOrderRepository {
             { upsert: true }
         );
     }
+
+		async createOrder(entiti:OrderCreateEntity){
+			console.log(entiti);
+			 await this.orderModel.create(entiti)
+		}
 }

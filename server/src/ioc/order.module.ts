@@ -25,9 +25,27 @@ import { BotService } from "src/services/duplicateBot/bot.service";
 import { IBotService } from "src/services/duplicateBot/bot.abstract";
 import { ClientsModule, Transport } from "@nestjs/microservices";
 import { PaymentRepository } from "src/services/payment/sdk/repositories/payment.repositories";
+import { OrderService } from "src/components/order/services/order/order.service";
 
 @Module({
-    imports: [IikoModule, RedisModule],
+    imports: [
+			ClientsModule.register([
+				{
+					name: 'COMMUNICATION',
+					transport: Transport.RMQ,
+					options: {
+						urls: [`amqp://${process.env.RABBITMQ_HOST}`],
+						queue: 'cats_queue',
+						noAck: false,
+						queueOptions: {
+							durable: false
+						},
+					},
+				},
+			]),
+			IikoModule, 
+			RedisModule
+		],
     controllers: [OrderController],
     providers: [
         PaymentService,
@@ -37,6 +55,7 @@ import { PaymentRepository } from "src/services/payment/sdk/repositories/payment
             useClass: DeliveryService
         },
         OrderUsecase,
+				OrderService,
         {
             provide: IOrderRepository,
             useClass: OrderRepository

@@ -11,8 +11,7 @@ import { PaymentMethods } from "../../../services/payment/payment.abstract";
 
 export class OrderDTO {
     @ApiProperty()
-    @IsMongoIdObject()
-    organization: UniqueId;
+    organization: string;
 
     @ApiProperty()
     name: string;
@@ -71,9 +70,14 @@ export class OrderDTO {
     })
     paymentMethod: PaymentMethods;
 
+		@ApiProperty()
+		hash:string
+
     @ApiProperty({ required: false })
     @IsEmail({ message: "Не корректный e-mail" })
     @IsOptional()
     email?: string;
 		paymentsum:number
+		organizationid:string
+		
 }
