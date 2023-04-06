@@ -6,7 +6,8 @@ import { RedirectEntity } from "src/components/order/entities/redirect.entity";
 export enum PaymentMethods {
     CASH = "CASH",
     CARD = "CARD",
-		BYCARD = "BYCARD"
+		BYCARD = "BYCARD",
+		KUR = "KUR"
 }
 
 export abstract class IPaymentService {

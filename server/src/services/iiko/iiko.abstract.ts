@@ -15,7 +15,8 @@ export const constOrderPaymentTypes = {
 	CASH:"CASH",
 	CARD:"CARD",
 	BYCARD:"BYCARD",
-	PAY:"PAY"
+	PAY:"PAY",
+	KUR:"KUR"
 }
 
 export interface IReturnIikoOrderTypes {

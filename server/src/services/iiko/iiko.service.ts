@@ -97,7 +97,7 @@ export class IikoService implements IIiko {
             //deliveryProductObject
         ].filter(Boolean);
 
-				
+				console.log(orderInfo);
 
 				const terminal = await this.axios.termiralGroops(organization.id)
 
@@ -208,8 +208,8 @@ export class IikoService implements IIiko {
 												{
 												"paymentTypeKind": "Card",
 												"sum": deliveryPrice,
-												"paymentTypeId": "1032a471-be2c-434f-b8c0-9bd686d8b2b5",
-												"isProcessedExternally": true
+												"paymentTypeId": "dfeb1b1e-36bb-4861-baf8-03be367e169a",
+												
 												}
 										] :
 									 orderInfo.paymentMethod === constOrderPaymentTypes.PAY 
