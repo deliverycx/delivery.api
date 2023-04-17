@@ -181,6 +181,10 @@ export class IikoService implements IIiko {
 									comment: orderInfo.phone
 								},
 								deliveryPoint:{
+									coordinates: {
+										latitude: orderInfo.address.cordAdress[0],
+										longitude: orderInfo.address.cordAdress[1]			
+									},
 									address:{
 										street:{
 											classifierId: orderInfo.address.kladrid, //orderInfo.address.street
