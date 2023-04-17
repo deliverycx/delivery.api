@@ -48,6 +48,9 @@ export class OrderClass {
 
 		@prop({ type: () => Object })
 		public orderParams:any
+
+		@prop({default: null })
+		public orderError:any
 }
 
 export const OrderSchema = buildSchema(OrderClass);
