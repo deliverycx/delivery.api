@@ -23,18 +23,23 @@ export class StopListUsecase {
 
 		async getAll(organizationGUID:string){
 			try {
-				const data = await this.axios.stopList(organizationGUID);
-				if(data.length === 0){
+				if(organizationGUID){
+					const data = await this.axios.stopList(organizationGUID);
+					if(data.length === 0){
+						return []
+					}
+						
+					const stopList = data
+							.map((stopListArrayItem) => stopListArrayItem.items)
+							.flat();
+					
+					const result = await this.stopListRepository.getAll(organizationGUID,stopList)
+
+					return result
+				}else{
 					return []
 				}
-					
-				const stopList = data
-						.map((stopListArrayItem) => stopListArrayItem.items)
-						.flat();
 				
-				const result = await this.stopListRepository.getAll(organizationGUID,stopList)
-
-				return result
 			} catch (error) {
 				console.log(error.response.data);
 			}
