@@ -76,7 +76,6 @@ export class IIkoAxios extends Axios {
 						organizationIds: [
 							organization
 						],
-						includeDisabled: true
 					},
 					{
 						headers: { Authorization: `Bearer ${token}` }
