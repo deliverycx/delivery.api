@@ -20,7 +20,10 @@ export const organizationMapper: Mapper<
             organization.id,
             organization.delivMetod,
             organization.isHidden,
-						organization.reservetable
+						organization.reservetable,
+						organization.city as string,
+						organization.redirect,
+						organization.redirectON
         );
     });
 };
