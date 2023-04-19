@@ -8,6 +8,9 @@ export class ProductEntity {
     @ApiProperty()
     private readonly name?: string;
 
+		@ApiProperty()
+		private readonly productId?:string
+
     @ApiProperty()
     private readonly description?: string;
 
@@ -23,7 +26,7 @@ export class ProductEntity {
     @ApiProperty({
         enum: ["шт", "порц"]
     })
-    private readonly measureUnit?: "шт" | "порц";
+    private readonly measureUnit?: string;
 
     @ApiProperty()
     private readonly image?: ImagePath;
@@ -37,17 +40,19 @@ export class ProductEntity {
     constructor(
         id: Types.ObjectId | undefined,
         name?: string,
+				productId?:string,
         description?: string,
         additionalInfo?: string,
         price?: number,
         weight?: number,
-        measureUnit?: "шт" | "порц",
+        measureUnit?: string,
         image?: ImagePath,
         categoryImage?: ImagePath,
         isFav?: boolean
     ) {
         this.id = id;
         this.name = name;
+				this.productId = productId;
         this.description = description;
         this.additionalInfo = additionalInfo;
         this.price = price;

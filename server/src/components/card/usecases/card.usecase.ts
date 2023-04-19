@@ -26,4 +26,6 @@ export class CardUsecase {
 
         return result.map((card) => card.prepareForClient());
     }
+
+
 }

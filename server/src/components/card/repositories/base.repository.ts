@@ -15,6 +15,7 @@ export class CardRepository
     constructor(
         @Inject("Card")
         private readonly CardModel: Model<CardClass>
+				
     ) {
         super(CardModel, cardMapper, "user");
     }
@@ -49,4 +50,5 @@ export class CardRepository
 
         return result;
     }
+		
 }

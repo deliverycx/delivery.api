@@ -40,12 +40,20 @@ export class OrderDTO {
         intercom: number;
         entrance: number;
         floor: number;
+				kladrid:string
+				cordAdress:number[]
     };
 
     @ApiProperty({
-        enum: ["COURIER", "PICKUP"]
+        enum: ["COURIER", "PICKUP","ONSPOT"]
     })
     orderType: OrderTypesEnum;
+
+		orderTable:{
+			section: string
+			id: string
+			numb: number
+		}
 
     @ApiProperty()
     @IsPhoneNumber("RU", {
@@ -57,6 +65,7 @@ export class OrderDTO {
 
     @ApiProperty()
     comment: string;
+		localhost:string
 
     @ApiProperty({
         enum: PaymentMethods
@@ -67,4 +76,5 @@ export class OrderDTO {
     @IsEmail({ message: "Не корректный e-mail" })
     @IsOptional()
     email?: string;
+		paymentsum:number
 }

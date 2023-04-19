@@ -20,19 +20,22 @@ export class OrderUsecase {
 
         await this.orderCreateBuilder.duplicateOrder();
 
+
         return this.orderCreateBuilder.getOrderEntity();
     }
 
     async checkOrder(userId: UniqueId, orderInfo: OrderDTO) {
         await this.orderCheckBuilder.initialize(userId, orderInfo);
 
-        await this.orderCheckBuilder.checkCardPaymentAviables();
+        //await this.orderCheckBuilder.checkCardPaymentAviables();
 
         await this.orderCheckBuilder.validateCart();
 
         await this.orderCheckBuilder.validateCount();
 
-        await this.orderCheckBuilder.serviceValidate();
+        //await this.orderCheckBuilder.serviceValidate();
+
+				//await this.orderCheckBuilder.checkStopList()
 
         await this.orderCheckBuilder.getResult();
     }
@@ -42,4 +45,8 @@ export class OrderUsecase {
 
         return orderNumber;
     }
+
+		async getStatusOrder(){
+			return await this.orderCreateBuilder.getOrderStatus()
+		}
 }

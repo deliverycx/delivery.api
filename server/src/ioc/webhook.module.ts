@@ -25,6 +25,8 @@ import { ValidationCount } from "src/components/order/services/validationCount/v
 import { IBotService } from "src/services/duplicateBot/bot.abstract";
 import { BotService } from "src/services/duplicateBot/bot.service";
 import { stopListProviders } from "src/components/stopList/providers/stopList.provider";
+import { PaymentRepository } from "src/services/payment/sdk/repositories/payment.repositories";
+import { WebHookServices } from "src/components/webhook/services/webhook.services";
 
 @Module({
     imports: [IikoModule, RedisModule],
@@ -71,14 +73,15 @@ import { stopListProviders } from "src/components/stopList/providers/stopList.pr
             useClass: BotService
         },
         BotAxiosProvider,
-        paymasterProvider,
+        ...paymasterProvider,
         IikoWebsocketGateway,
         ...productProviders,
         ...orderProviders,
         ...stopListProviders,
-
+				PaymentRepository,
         OrderUsecase,
-        MailService
+        MailService,
+				WebHookServices
     ]
 })
 export class WebhookModule {}

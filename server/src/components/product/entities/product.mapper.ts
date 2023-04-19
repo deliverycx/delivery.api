@@ -11,6 +11,7 @@ export const productMapper: Mapper<
         return new ProductEntity(
             product._id,
             product.name,
+						product.id,
             product.description,
             product.additionalInfo,
             product.price,

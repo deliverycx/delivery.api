@@ -71,4 +71,6 @@ export class CardController {
 
         response.status(200).json(result);
     }
+
+		
 }

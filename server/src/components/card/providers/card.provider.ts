@@ -8,5 +8,5 @@ export const cardProviders = [
         useFactory: (connection: Connection) =>
             connection.model("Card", CardSchema),
         inject: [getConnectionToken("DatabaseConnection")]
-    }
+    },
 ];

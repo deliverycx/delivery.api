@@ -5,7 +5,9 @@ import {
     Res,
     UseGuards,
     UseFilters,
-    Inject
+    Inject,
+		Get,
+		Param
 } from "@nestjs/common";
 import { iiko } from "src/services/iiko/interfaces";
 import { IPaymentWebhookDto } from "../../order/dto/paymentWebhook.dto";
@@ -25,6 +27,8 @@ import { subscriptionDTO, subscriptionResponse } from "src/services/mail/mail.ga
 import { Bot } from "src/services/duplicateBot/interfaces";
 import { BotReverveTableDTO } from "src/services/duplicateBot/bot.DTO";
 import { IBotService } from "src/services/duplicateBot/bot.abstract";
+import axios from 'axios';
+import { WebHookServices } from "../services/webhook.services";
 
 @Controller("webhook")
 export class WebhookController {
@@ -35,43 +39,133 @@ export class WebhookController {
         private readonly PaymentService: PaymentService,
         private readonly IikoStopListGateway: IikoWebsocketGateway,
         private readonly MailService: MailService,
-        private readonly BotService: IBotService
+        private readonly BotService: IBotService,
+				private readonly webHookServices: WebHookServices
     ) {}
 
     @Post("paymentCallback")
-    @UseGuards(YooWebhookGuard)
+    //@UseGuards(YooWebhookGuard)
     async yowebhook(
         @Body() body: IPaymentWebhookDto,
         @Res() response: Response
     ) {
-        if (body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
-            await this.PaymentService.captrurePayment(body.invoice.params);
+
+			console.log('ответ из пумастера тело',body);
+        if (body.status === PaymasterResponse.PaymentStatuses.AUTHORIZED || body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
+						const check:any = await this.PaymentService.checkPymentOrder({paymentid:body.id})
+						if(!check){
+							try {
+								
+								await this.PaymentService.captrurePayment(body);
+								await this.BotService.PaymentOrder(body.invoice.params.orgguid,{...body,statusOrder:'В обработке'})
+							} catch (error) {
+								await this.BotService.PaymentOrder(body.invoice.params.orgguid,{...body,statusOrder:'Ошибка при заказе'})
+								console.log(error);
+							}
+							
+						}
         }
 
         response.status(200).json({});
     }
+
+		@Post("paymentCallbackBar")
+    //@UseGuards(YooWebhookGuard)
+    async yowebhookBar(
+        @Body() body: any,
+        @Res() response: Response
+    ) {
+
+			console.log('ответ БАР из пумастера тело',body);
+        if (body.status === PaymasterResponse.PaymentStatuses.AUTHORIZED || body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
+						const check:any = await this.PaymentService.checkPymentOrder({orderId:body.invoice.params.orderId})
+						if(check){
+							try {
+								
+								await this.PaymentService.captrurePaymentBar(body);
+								await this.BotService.PaymentOrder(body.invoice.params.idorganization,{...body,statusOrder:'Бар оплачен'})
+							} catch (error) {
+								await this.BotService.PaymentOrder(body.invoice.params.idorganization,{...body,statusOrder:'Ошибка при оплате Бара'})
+								console.log(error);
+							}
+							
+						}
+        }
+
+        response.status(200).json({});
+    }
+
+		@Get("dualPayment/:hash")
+    //@UseGuards(YooWebhookGuard)
+    async dualpayment(
+				@Param("hash") hash: string,
+        @Res() response: Response
+    ){
+			try {
+				const check:any = await this.PaymentService.checkPymentOrder({orderHash:hash})
+				if(check){
+					response.status(200).json(check);
+				}
+			} catch (error) {
+				response.status(400).json({error:'Заказ не найден'});
+			}
+			
+		}
+
+		@Post("dualPaymentCreate")
+    //@UseGuards(YooWebhookGuard)
+    async dualpaymentcreate(
+				@Body() body:any,
+        @Res() response: Response
+    ){
+			try {
+				console.log(body);
+				const check:any = await this.PaymentService.checkPymentOrder({orderHash:body.hash})
+				if(check){
+					const payurl = await this.PaymentService.createBarPayment(check,body.localhost)
+					response.status(200).json(payurl);
+				}
+			} catch (error) {
+				response.status(400).json({error:'Заказ не найден'});
+			}
+			
+		}
+
 
     @ApiResponse({
         description:
             "Подключение по http://localhost:9870/iiko для дева, и для прода / и указать порт 9870. Слушать событие stoplist_event",
         type: StopListEntity
     })
-    @Post("iiko")
-    @UseGuards(IikoWebhookGuard)
+    @Post("stoplist")
+    //@UseGuards(IikoWebhookGuard)
     async iikowebhook(
-        @Body() body: iiko.IWebhookEvent,
+        @Body() body: iiko.stoplist,
         @Res() response: Response
     ) {
-        console.log("Iiko send data from webhook");
+        
+				/*
         try {
-            const stopListEntity = await this.IikoService.getStopList(body);
 
-            this.IikoStopListGateway.sendStopListToClient(stopListEntity);
+						
+            //const stopListEntity = await this.IikoService.getStopList(body);
+
+            this.IikoStopListGateway.sendStopListToClient({});
 
             response.status(200).json({});
         } catch (e) {
             console.log(e);
         }
+				*/
+				try {
+					const stopListEntity = await this.IikoService.getStopList(body.organizationId);
+
+					response.status(200).json(stopListEntity)
+				} catch (error) {
+					response.status(500).json({})
+				}
+				
+				
     }
     
     @ApiResponse({
@@ -108,4 +202,30 @@ export class WebhookController {
 				response.status(400).json({status:'no'});
 			}
     }
+		@Post("push")	
+		async push(@Body() body:any){
+			//console.log('пуш с терминала',body);
+			const result = await this.PaymentService.checkPymentOrderStatus(body)
+			if(result){
+				console.log('возврат для бота',result);
+				await this.BotService.canselPaymentOrder(result.organizationid,result) //result.organizationid
+			}
+			return 'ok'
+		}
+
+		@Post("getstreet")	
+		async getStreet(@Body() body:any){
+			 return await this.IikoService.getStreetCityIkko(body)
+		}
+
+
+		@Get("daData/:street")
+    //@UseGuards(YooWebhookGuard)
+    async daData(
+				@Param("street") street: string,
+        @Res() response: Response
+    ){
+			
+			this.webHookServices.getData(street)
+		}
 }

@@ -6,6 +6,8 @@ import { cartMapper,cartMapperCust } from "../entities/cart.mapper";
 import { ICartRepository } from "./interface.repository";
 import { Model, Types } from "mongoose";
 import { Inject } from "@nestjs/common";
+import { OrganizationTablesClass, } from "src/database/models/organizationTables.model";
+import { identity } from "rxjs";
 
 export class CartRepository
     extends BaseRepository<Array<CartClass>, Array<CartEntity>>
@@ -13,7 +15,9 @@ export class CartRepository
 {
     constructor(
         @Inject("Cart")
-        private readonly CartModel: Model<CartClass>
+        private readonly CartModel: Model<CartClass>,
+				@Inject("Organizationtables")
+        private readonly OrganizationTablesModel: Model<OrganizationTablesClass>
     ) {
         super(CartModel, cartMapper, "user", "product");
     }
@@ -130,10 +134,19 @@ export class CartRepository
     }
 
     async removeSome(removeItems: Array<UniqueId>) {
-        const result = await this.CartModel.deleteMany({
+			try {
+				const result = await this.CartModel.deleteMany({
             product: { $in: removeItems }
         });
+				return !!result.deletedCount 
+			} catch (error) {
+				return false
+			}
+        
     }
+
+	
+
 		async getAllDisc(userid:string){
 			const result = await (this.CartModel
 				.find({
@@ -142,5 +155,12 @@ export class CartRepository
 				.sort({ order: 1 })
 				.populate("product"));
 			return cartMapperCust(result);
+		}
+
+		async getAllOrgTables(id:string){
+			const result = await this.OrganizationTablesModel.find({
+				organization:id
+			})
+			return result.length !== 0 ? result : null
 		}
 }

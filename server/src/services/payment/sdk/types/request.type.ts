@@ -20,4 +20,11 @@ export namespace PaymasterRequest {
             itmes: Array<object>;
         };
     }
+
+		export interface PayRetutns {
+			paymentid:string
+			paymentAmount:number
+			
+		}
+
 }

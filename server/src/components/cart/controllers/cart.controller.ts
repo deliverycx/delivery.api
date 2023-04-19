@@ -71,7 +71,6 @@ export class CartController {
         @Res() response: Response
     ) {
         const result = await this.cartUsecase.add(session.user, addBody);
-
         response.status(200).json(result);
     }
 
@@ -208,4 +207,28 @@ export class CartController {
 
 				response.status(200).json(result);
 		}
+
+		@Post("getDeliveryZone")
+		async deliveryZone(
+					@Body()
+					body: {organizationIds:string},
+					@Session()
+					session: Record<string, string>,
+					@Res() response: Response
+		) {
+
+				
+				const result = await this.cartUsecase.getDeliveryZones(body)
+console.log('zone',result);
+				response.status(200).json(result);
+		}
+
+		@Get("organizationtables")
+		async tables(
+			@Query() query: {id:string}
+		) {
+			const result = await this.cartUsecase.getOrganiztionTable(query.id)
+			return 	result
+		}
+
 }

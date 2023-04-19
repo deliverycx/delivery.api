@@ -18,7 +18,7 @@ export class DeliveryService implements IDeliveryService {
         price: number,
         orderType: OrderTypesEnum
     ): Promise<number> {
-        if (orderType === OrderTypesEnum.PICKUP) {
+        if (orderType === OrderTypesEnum.PICKUP || orderType === OrderTypesEnum.ONSPOT) {
             return 0;
         }
 
@@ -44,10 +44,6 @@ export class DeliveryService implements IDeliveryService {
             orderType
         );
 
-
-				
-				
-				
 				
         let deltaPrice = 0;
 
@@ -73,6 +69,7 @@ export class DeliveryService implements IDeliveryService {
 		async discountDozenServise(userId: UniqueId,organization:string){
 				const carts = await this.cartRepository.getAllDisc(userId)
 				const cartValid = validationHIdiscount(carts)
+
 				/*
 				if(organization){
 					const data = await this.iiko.discontList(
@@ -99,5 +96,20 @@ export class DeliveryService implements IDeliveryService {
 					discountDozen:0
 				}
 		}
+		async deliveryZone(organization:string){
+			const {coordinates} = await this.iiko.getDeliveryZones({
+				organizationIds:[organization]
+			})
+			const mass = coordinates.reduce((acc:number[][],val,index)=>{
+				acc.push([Number(val.latitude),Number(val.longitude)])
+				
+				return acc
+			},[])
+
+			return mass
+		}
+
+
+		
 		
 }
