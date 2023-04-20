@@ -46,12 +46,6 @@ export class OrganizationEntity {
 		@ApiProperty()
 		public readonly cityid:string
 
-		@ApiProperty()
-		public readonly redirect:string
-
-		@ApiProperty()
-		public readonly redirectON:boolean
-
     constructor(
         id: Types.ObjectId,
         address?: string,
@@ -63,9 +57,7 @@ export class OrganizationEntity {
         delivMetod?:string | null,
         isHidden?:boolean,
 				reservetable?:boolean,
-				cityid?:string,
-				redirect?:string,
-				redirectON?:boolean
+				cityid?:string
     ) {
         this.id = id;
         this.address = address;
@@ -77,9 +69,7 @@ export class OrganizationEntity {
         this.delivMetod = delivMetod,
         this.isHidden = isHidden,
 				this.reservetable = reservetable,
-				this.cityid = cityid,
-				this.redirect = redirect,
-				this.redirectON = redirectON
+				this.cityid = cityid
     }
 
     public get getGuid() {

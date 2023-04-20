@@ -17,8 +17,6 @@ interface IState {
     orderInfo: OrderDTO;
     cart: Array<CartEntity>;
     orderNumber: number | string;
-		orderID:string
-		organizationId:string
 }
 
 @Injectable({ scope: Scope.REQUEST })
@@ -36,8 +34,7 @@ export class OrderCreateBuilder {
 
         private readonly DeliveryService: IDeliveryService,
 
-        private readonly botService: IBotService,
-
+        private readonly botService: IBotService
     ) {}
 
     async initialize(userId: UniqueId, orderInfo: OrderDTO) {
@@ -47,51 +44,44 @@ export class OrderCreateBuilder {
         this._state.cart = await this.CartRepository.getAll(userId);
     }
 
-    private repeatOrderUntilSuccess(organizationId:string, orderId:string,counter?:number):any {
-        counter = counter || 0;
-				console.log('count',counter);
-        return new Promise(async (resolve, reject) => {
+    private repeatOrderUntilSuccess(cart, orderInfo, deliveryPrices) {
+        let counter = 0;
+        return new Promise<string>(async (resolve, reject) => {
             try {
-                
-                const result = await this.orderService.statusOrder(organizationId,orderId,this._state.orderInfo.orderType)
+                counter++;
+                const { result, problem } = await this.orderService.create(
+                    cart,
+                    orderInfo,
+                    deliveryPrices
+                );
 
-                if (result.errorInfo || result.creationStatus === 'InProgress') {
-										console.log(result.errorInfo);
-                    
-										if (counter >= 3) {
-											
-											resolve({
-												result:null,
-												problem:"Возникла не предвиденная ошибка"
-											});
+                if (problem) {
+                    reject(new CannotDeliveryError(problem));
+                }
 
-											
-									} else {
-											setTimeout(async () => {
-													resolve(
-															await this.repeatOrderUntilSuccess(organizationId,orderId,counter + 1)
-													);
-											}, 5000);
-									}
-                }else if(!result.errorInfo && result.creationStatus === 'Success'){
-										resolve({
-											result,
-											problem:null
-										});
-								}
-								
-
-                
+                resolve(result);
             } catch (e) {
-							console.log('catch');
-								reject(
-									new CannotDeliveryError(
-											"Возникла не предвиденная ошибка"
-									)
-								);
-                
+                if (counter >= 3) {
+                    reject(
+                        new CannotDeliveryError(
+                            "Возникла не предвиденная ошибка"
+                        )
+                    );
+                } else {
+                    setTimeout(async () => {
+                        resolve(
+                            await this.repeatOrderUntilSuccess(
+                                cart,
+                                orderInfo,
+                                deliveryPrices
+                            )
+                        );
+                    }, 5000);
+                }
             }
-        })
+        }).catch((E) => {
+            throw E;
+        });
     }
 
     async createOrder() {
@@ -105,38 +95,23 @@ export class OrderCreateBuilder {
             orderInfo.orderType
         );
 
-        const orderInfoPross = await this.orderService.create(
+        const { result: orderNumber, problem } = await this.orderService.create(
             cart,
             orderInfo,
             deliveryPrices
         );
-				console.log('orderInfoPross',orderInfoPross);
-				this._state.organizationId = orderInfoPross.organizationId	
-				this._state.orderID = orderInfoPross.id
 
-				console.log('start');
-				const {result,problem} = await this.repeatOrderUntilSuccess(orderInfoPross.organizationId,orderInfoPross.id)
-				console.log('status',result);
-
-				
-
-				
         if (problem) {
             throw new CannotDeliveryError(problem);
         }
-				
-
 
         await this.orderRepository.create(
             user,
             deliveryPrices.totalPrice,
-            result.id
+            orderNumber
         );
 
-				
-
-        this._state.orderNumber = String(result.order.number);
-
+        this._state.orderNumber = orderNumber;
 
         await this.CartRepository.removeAll(user);
     }
@@ -168,7 +143,7 @@ export class OrderCreateBuilder {
             orderType
       );
 
-      console.log('к боту orderinfo', this._state);
+      console.log('orderinfo', this._state.orderInfo);
       
 
         this.botService.sendDuplicate(
@@ -177,18 +152,11 @@ export class OrderCreateBuilder {
             comment,
             getGuid,
             this._state.cart,
-            orderTypeName,
-						this._state.orderInfo.orderType,
-						this._state.orderInfo.orderTable ? this._state.orderInfo.orderTable.numb : 0
+            orderTypeName
         );
     }
 
     getOrderEntity(): OrderEntity {
         return new OrderEntity(this._state.orderNumber);
     }
-
-		async getOrderStatus(){
-			const result = await this.orderService.statusOrder(this._state.organizationId,this._state.orderID as string,this._state.orderInfo.orderType)
-			return result
-		}
 }

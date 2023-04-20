@@ -24,7 +24,6 @@ import * as fs from "fs";
 import { MongooseModule } from "@nestjs/mongoose";
 import { RedisModule } from "./redis/redis.module";
 import { REDIS } from "./redis/redis.constants";
-import { StopListModule } from "src/ioc/stoplist.module";
 
 // КОСТЫЛЬ
 try {
@@ -44,10 +43,6 @@ try {
         MongooseModule.forRoot(process.env.CONNECTION, {
             connectionName: "DatabaseConnection"
         }),
-				MongooseModule.forRoot(process.env.CONNECTION_ADMIN, {
-					connectionName: "ADMINDatabaseConnection"
-			}),
-				
         RedisModule,
         LoggerModule.forRoot({
             pinoHttp: [
@@ -73,8 +68,7 @@ try {
         OrderModule,
         FavoriteModule,
         WebhookModule,
-        CardModule,
-				StopListModule
+        CardModule
     ],
     providers: [
         {

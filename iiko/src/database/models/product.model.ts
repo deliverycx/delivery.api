@@ -50,7 +50,7 @@ export class ProductClass {
     public image!: ImagePath;
 
     @prop()
-    public measureUnit!: string;
+    public measureUnit!: "шт" | "порц";
 }
 
 export const ProductModel = getModelForClass(ProductClass);

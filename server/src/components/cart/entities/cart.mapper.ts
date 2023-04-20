@@ -15,8 +15,7 @@ export const cartMapper: Mapper<Array<CartClass>, Array<CartEntity>> = (p) => {
                 product?.tags,
                 product?.id,
                 cart?.amount,
-                product?.price,
-								product._id
+                product?.price
             );
         })
         .filter((entity) => entity.getId !== undefined);

@@ -22,8 +22,7 @@ export class BotAxios {
         this.axios.interceptors.response.use(
             (response) => response,
             (error) => {
-							console.log(error.response);
-                //throw new ServiceUnavailableException();
+                throw new ServiceUnavailableException();
             }
         );
     }
@@ -32,7 +31,9 @@ export class BotAxios {
         organization: UniqueId,
         data: Bot.IRequestBody
     ): Promise<void> {
-				this.axios.post(`/sendDuplicate/${organization}`, data);
+        if (process.env.BOT_ACTIVE_FLAG !== "false") {
+            this.axios.post(`/sendDuplicate/${organization}`, data);
+        }
     }
     async reserveTable(
         organization: UniqueId,
@@ -40,26 +41,6 @@ export class BotAxios {
     ) {
         this.axios.post(`/reserveTable/${organization}`, data);
     }
-		async PaymentOrder(
-			organization: UniqueId,
-			data: Bot.IRequestBody
-		): Promise<void> {
-				this.axios.post(`/payment/${organization}`, data);
-		}
-
-		async ReturntPayment(
-			organization: UniqueId,
-			data: Bot.IRequestBody
-		): Promise<void> {
-				this.axios.post(`/return_payment/${organization}`, data);
-		}
-
-		async calseledPayment(
-			organization: UniqueId,
-			data: Bot.IRequestBody
-		): Promise<void> {
-				this.axios.post(`/canselpayment/${organization}`, data);
-		}
 }
 
 export const BotAxiosProvider = {

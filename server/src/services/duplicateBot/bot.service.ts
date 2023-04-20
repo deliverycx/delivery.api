@@ -12,6 +12,8 @@ export class BotService extends IBotService {
         @Inject("BOT_AXIOS")
         private readonly botRequest: BotAxios,
 
+				@Inject("Organization")
+        private readonly OrganizationModel: Model<OrganizationClass>,
     ) {
         super();
     }
@@ -22,9 +24,7 @@ export class BotService extends IBotService {
         comment: string,
         organization: UniqueId,
         cart: Array<CartEntity>,
-        orderType: string,
-				orderTypeName:string,
-				ONSPOTTable:number
+        orderType: string
     ) {
         this.botRequest.sendDuplicate(organization, {
             address: address,
@@ -37,23 +37,9 @@ export class BotService extends IBotService {
                     name: el.getProductName
                 };
             }),
-            orderType,
-						orderTypeName,
-						ONSPOTTable
+            orderType
         });
     }
-		public PaymentOrder(organizationId,data:any){
-			this.botRequest.PaymentOrder(organizationId,data)
-		}
-
-		public ReturnPaymentOrder(organizationId,data:any){
-			this.botRequest.ReturntPayment(organizationId,data)
-		}
-
-		public canselPaymentOrder(organizationId,data:any){
-			this.botRequest.calseledPayment(organizationId,data)
-		}
-
     public sendReserveTable(data:BotReverveTableDTO) {
 			this.botRequest.reserveTable(data.organizationId,data)
     }

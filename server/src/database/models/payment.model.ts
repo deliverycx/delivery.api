@@ -21,11 +21,8 @@ export class PaymentServiceDataClass {
     @prop()
     public merchantId!: string;
 
-    @prop()
-    public organization: string;
-
-		@prop()
-    public typemagaz!: string;
+    @prop({ ref: "Organization" })
+    public organization: Ref<OrganizationClass>;
 }
 
 export const PaymentServiceDataSchema = buildSchema(PaymentServiceDataClass);

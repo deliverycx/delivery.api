@@ -24,14 +24,12 @@ import { OrderCheckBuilder } from "src/components/order/usecases/builders/orderC
 import { BotService } from "src/services/duplicateBot/bot.service";
 import { IBotService } from "src/services/duplicateBot/bot.abstract";
 import { ClientsModule, Transport } from "@nestjs/microservices";
-import { PaymentRepository } from "src/services/payment/sdk/repositories/payment.repositories";
 
 @Module({
     imports: [IikoModule, RedisModule],
     controllers: [OrderController],
     providers: [
         PaymentService,
-				PaymentRepository,
         {
             provide: IDeliveryService,
             useClass: DeliveryService
@@ -69,7 +67,7 @@ import { PaymentRepository } from "src/services/payment/sdk/repositories/payment
             provide: IBotService,
             useClass: BotService
         },
-        ...paymasterProvider,
+        paymasterProvider,
         BotAxiosProvider,
         ...productProviders,
         ...cartProviders,

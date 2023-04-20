@@ -34,13 +34,8 @@ export namespace iiko {
         eventInfo: any;
     }
 
-		export interface stoplist {
-			organizationId: UniqueId;
-	}
-
     export interface IStopListItem {
         productId: UniqueId;
-				product:UniqueId;
         balance: number;
     }
 
@@ -85,12 +80,4 @@ export namespace iiko {
         };
         order: INestedOrderBody;
     }
-
-		export interface IZone{
-			name:string
-			coordinates:[{
-				latitude:number,
-				longitude:number
-			}]
-		}
 }

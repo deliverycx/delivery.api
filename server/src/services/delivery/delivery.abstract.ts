@@ -19,9 +19,4 @@ export abstract class IDeliveryService {
 			userId: UniqueId,
 			organization?:string
 		) : Promise<{discountDozen:number}>;
-
-		abstract deliveryZone(
-			organization:string
-		) : Promise<any>
-
 }

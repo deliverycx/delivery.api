@@ -3,7 +3,6 @@ import { PaymentMethods } from "src/services/payment/payment.abstract";
 import { PaymasterResponse } from "src/services/payment/sdk/types/response.type";
 
 export interface IPaymentWebhookParams {
-		orgguid:string
     user: string;
     hash: string;
     body_organization: string;

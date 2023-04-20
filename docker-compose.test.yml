@@ -34,7 +34,6 @@ services:
         image: mongo
         volumes:
             - ./mongo/data:/data/db    
-
         networks:
             - mynetwork
 networks:

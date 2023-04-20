@@ -58,7 +58,7 @@ export class ProductClass {
     public image!: ImagePath;
 
     @prop()
-    public measureUnit!: string;
+    public measureUnit!: "шт" | "порц";
 
     @prop()
     public isFav!: boolean;

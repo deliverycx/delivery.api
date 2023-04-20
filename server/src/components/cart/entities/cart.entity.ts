@@ -27,8 +27,6 @@ export class CartEntity {
 		@ApiProperty()
     private readonly oneprice: number;
 
-		private readonly productobj:any;
-
     constructor(
         id: UniqueId,
         productName: string,
@@ -37,7 +35,6 @@ export class CartEntity {
         productId: UniqueId,
         amount: number,
         price: number,
-				productobj?:any
     ) {
         this.id = id;
         this.productName = productName;
@@ -47,7 +44,6 @@ export class CartEntity {
         this.price = price * amount;
 				this.oneprice = price;
         this.productTags = productTags;
-				this.productobj = productobj
     }
 
     public get getId() {
@@ -77,10 +73,6 @@ export class CartEntity {
     public get getPrice() {
         return this.price;
     }
-
-		public get getProductIdObj() {
-			return this.productobj;
-	}
 
     public static calc(fn: () => number) {
         return fn();

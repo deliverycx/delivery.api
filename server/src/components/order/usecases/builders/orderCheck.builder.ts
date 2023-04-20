@@ -67,7 +67,7 @@ export class OrderCheckBuilder {
         }
 
         const { isActive } = await this.OrganizationRepository.getPaymentsInfo(
-            this._state.orderInfo.organization,
+            this._state.orderInfo.organization
         );
 
         if (!isActive) {
@@ -76,33 +76,6 @@ export class OrderCheckBuilder {
             );
         }
     }
-
-		async checkStopList(){
-			
-			const organization = await this.OrganizationRepository.getOne(this._state.orderInfo.organization)
-			const organizationID = organization.getGuid.toString();
-			const stoplist = await this.orderService.getStopList(organizationID)
-			const arrStoplist = stoplist.map((el) => el.product)
-
-			
-			const result = this._state.cart.filter((el) =>{
-				return arrStoplist.includes(el.getProductIdObj.toString())
-			})
-
-
-			if(result.length !== 0){
-				this._state.errors.push(
-					new CannotDeliveryError(
-						result.map((el:any) =>{
-							return `в стоплисте - ${el.getProductName}`
-						})
-					)
-					
-				);
-			}
-			
-			
-		}
 
     async serviceValidate() {
         const { cart, orderInfo, user } = this._state;

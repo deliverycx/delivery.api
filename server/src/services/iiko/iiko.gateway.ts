@@ -22,7 +22,7 @@ export class IikoWebsocketGateway implements OnGatewayInit {
         console.log("Initialized socket", server);
     }
 
-    async sendStopListToClient(data: any) {
+    async sendStopListToClient(data: StopListEntity) {
         this.server.emit("stoplist_event", { data: data });
     }
 }

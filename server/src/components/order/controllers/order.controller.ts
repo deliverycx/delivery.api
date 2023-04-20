@@ -57,7 +57,6 @@ export class OrderController {
         @Session() session: Record<string, string>,
         @Res() response: Response
     ) {
-				console.log('создание заказа заказа',body);
         const paymentResult = await this.PaymentService.route(
             body,
             session.user
@@ -83,7 +82,6 @@ export class OrderController {
         @Session() session: Record<string, string>,
         @Res() response: Response
     ) {
-				console.log('чек заказа',body);
         await this.OrderUsecase.checkOrder(session.user, body);
 
         response.status(200).json({ message: "Order can be send" });

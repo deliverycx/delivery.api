@@ -44,18 +44,10 @@ interface OrderCheckCreationResult {
 }
 
 interface OrderTypesIiko {
-	
-		orderTypes:[
-			{
-				organizationId:string,
-				items: Array<{
-					id: UniqueId;
-					name: string;
-					orderServiceType: string;
-					externalRevision: number;
-				}>
-			}
-		]
-	
-    
+    items: Array<{
+        id: UniqueId;
+        name: string;
+        orderServiceType: string;
+        externalRevision: number;
+    }>;
 }

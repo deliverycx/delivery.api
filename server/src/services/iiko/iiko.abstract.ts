@@ -7,16 +7,7 @@ import { IDeliveryPrices } from "../delivery/delivery.abstract";
 
 export enum OrderTypesEnum {
     PICKUP = "PICKUP",
-    COURIER = "COURIER",
-		ONSPOT = "ONSPOT"
-}
-
-export const constOrderPaymentTypes = {
-	CASH:"CASH",
-	CARD:"CARD",
-	BYCARD:"BYCARD",
-	PAY:"PAY",
-	KUR:"KUR"
+    COURIER = "COURIER"
 }
 
 export interface IReturnIikoOrderTypes {
@@ -33,11 +24,7 @@ export abstract class IIiko {
         cart: Array<CartEntity>,
         customerInfo: OrderDTO,
         prices: IDeliveryPrices
-    ) => Promise<any>;
-
-		abstract statusOrder: (
-			organizationId:string,orderIds:string,orderTypes:string
-	) => Promise<any>;
+    ) => Promise<IReturnCreateOrder>;
 
     abstract getOrderTypesId: (
         organizationId: UniqueId,
@@ -51,19 +38,13 @@ export abstract class IIiko {
     ) => Promise<iiko.ICheckResult>;
 
     abstract getStopList: (
-			organizationId:string
-    ) => Promise<any>;
+        body: iiko.IWebhookEvent
+    ) => Promise<ReturnTypeAsync<FilterNoZeroBalanceType>>;
 
 		abstract getDiscount: (
 			organizationId: UniqueId,
 			cart: Array<CartEntity>,
 		) => any;
 
-		abstract getStreetCityIkko: (
-			body:{
-				organizationId:string
-				cityId:string
-			}
-		) => any;
 		
 }

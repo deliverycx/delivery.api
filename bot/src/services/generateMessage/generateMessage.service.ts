@@ -32,36 +32,3 @@ export function messageReserveTable(body: CreateMessage.ImessageReserveTable): s
 
   return result;
 }
-
-export function messageCreatePayment(body: CreateMessage.ImessagePaymentOrder): string {
-  let result = ``;
-
-  result += `\n\n`;
-  result += `Оплата заказа: \n`;
-	result += `Статус заказа: ${body.statusOrder}\n`;
-  result += `Имя: ${body.invoice.params.name}\n`;
-  result += `Телефон: ${body.invoice.params.phone}\n`;
-  result += `Дата: ${body.invoice.params.date}\n`;
-  result += `Сумма: ${body.amount.value}\n`;
-  result += `номер платежа: ${body.id}\n`;
-	result += `id магазина: ${body.merchantId}\n`;
-	result += `Статус оплаты: ${body.status === 'Settled' ? 'Оплачено':'Не оплачено'}\n`;
-	
-
-  return result;
-}
-
-
-export function messageReturnPayment(body: CreateMessage.ImessageRetuntPayment): string {
-  let result = ``;
-
-  result += `\n\n`;
-  result += `Возврат полаты: \n`;
-	result += `номер возврата: ${body.id}\n`;
-  result += `номер платежа: ${body.paymentId}\n`;
-  result += `статус возврата: ${body.status === 'Success' ? 'Выполнено':'Не известно'}\n`;
-  result += `сумма возврата: ${body.amount.value}\n`;
-	
-
-  return result;
-}

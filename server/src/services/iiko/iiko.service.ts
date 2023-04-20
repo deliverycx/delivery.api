@@ -1,5 +1,5 @@
 import { iiko } from "src/services/iiko/interfaces";
-import { constOrderPaymentTypes, IIiko, IReturnCreateOrder, OrderTypesEnum } from "./iiko.abstract";
+import { IIiko, IReturnCreateOrder, OrderTypesEnum } from "./iiko.abstract";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { OrderDTO } from "src/components/order/dto/order.dto";
 import { Inject } from "@nestjs/common";
@@ -14,7 +14,6 @@ import { ProductClass } from "src/database/models/product.model";
 import { IIkoAxios } from "./iiko.axios";
 import { StopListUsecase } from "src/components/stopList/usecases/stopList.usecase";
 import { OrganizationClass } from "src/database/models/organization.model";
-import { string } from 'joi';
 
 
 export class IikoService implements IIiko {
@@ -48,9 +47,6 @@ export class IikoService implements IIiko {
         /*
             Получение айдишнка типа заказа
         */
-
-
-						
         const { id: orderTypeId } = await this.getOrderTypesId(
             orderInfo.organization,
             orderInfo.orderType
@@ -88,157 +84,47 @@ export class IikoService implements IIiko {
         const requestOrderItems = [
             ...cart.map((cartEl) => {
                 return {
-										type: "Product",
-                    productId: cartEl.getProductId,
-                    modifiers: [],
+                    id: cartEl.getProductId,
+                    name: cartEl.getProductName,
                     amount: cartEl.getAmount
                 };
             }),
-            //deliveryProductObject
+            deliveryProductObject
         ].filter(Boolean);
+        
 
-				console.log(orderInfo);
-
-				const terminal = await this.axios.termiralGroops(organization.id)
-
-				if(orderInfo.orderType === OrderTypesEnum.PICKUP){
-					return {
-						organizationId: organization.id,
-						terminalGroupId:terminal,
-						createOrderSettings: {
-							mode: "Async"
-						},
+        const result = {
+            organization: organization.id,
+            customer: {
+                name: orderInfo.name,
+                phone: orderInfo.phone
+            },
             order: {
                 phone: orderInfo.phone,
-                //completeBefore: orderInfo.date,
-                customer: {
-									name: orderInfo.name,
-									comment: orderInfo.phone
-								},
-								guests: {
-									count: 1,
-									splitBetweenPersons: false
-								},
+                date: orderInfo.date,
+                
+                address: {
+                    city: orderInfo.address.city,
+                    street: orderInfo.address.street,
+                    home: orderInfo.address.home,
+                    apartment: orderInfo.address.flat,
+                    entrance: orderInfo.address.entrance,
+                    floor: orderInfo.address.floor,
+                    doorphone: orderInfo.address.intercom
+                },
                 items: requestOrderItems,
                 comment: orderInfo.comment,
                 orderTypeId: orderTypeId,
-								/*
-                orderServiceType:
+                isSelfService:
                     orderInfo.orderType === OrderTypesEnum.PICKUP
-                        ? "DeliveryPickUp"
-                        : "DeliveryByCourier"
-								*/					
+                        ? "true"
+                        : "false"
             }
-        	};
-				} else if(orderInfo.orderType === OrderTypesEnum.ONSPOT){
-					return {
-							organizationId: organization.id,
-							terminalGroupId:terminal,
-							createOrderSettings: {
-								mode: "Async"
-							},
-	            order: {
-	                phone: orderInfo.phone,
-	                //completeBefore: orderInfo.date,
-	                customer: {
-										name: orderInfo.name,
-										comment: orderInfo.phone
-									},
-									tableIds: [
-										orderInfo.orderTable.id
-									],
-									guests: {
-										count: 1,
-										splitBetweenPersons: false
-									},
-	                items: requestOrderItems,
-	                comment: orderInfo.comment,
-									payments:
-									orderInfo.paymentMethod === constOrderPaymentTypes.CARD
-									? [
-											{
-											"paymentTypeKind": "Card",
-											"sum": orderInfo.paymentsum,
-											"paymentTypeId": "1032a471-be2c-434f-b8c0-9bd686d8b2b5",
-											"isProcessedExternally": true
-											}
-									]
-									: null
-	            }
-	        	};
-				}else{
-					return {
-						organizationId: organization.id,
-						terminalGroupId:terminal,
-						createOrderSettings: {
-							mode: "Async"
-						},
-            order: {
-                phone: orderInfo.phone,
-                //completeBefore: orderInfo.date,
-                customer: {
-									name: orderInfo.name,
-									comment: orderInfo.phone
-								},
-								deliveryPoint:{
-									coordinates: orderInfo.address.cordAdress.length !== 0 
-									? {
-										latitude: orderInfo.address.cordAdress[0],
-										longitude: orderInfo.address.cordAdress[1]			
-									} : null,
-									address:{
-										street:{
-											classifierId: orderInfo.address.kladrid, //orderInfo.address.street
-											city:orderInfo.address.city
-										},
-										house:orderInfo.address.home,
-										floor:orderInfo.address.floor,
-										flat:orderInfo.address.flat,
-										entrance:orderInfo.address.entrance,
-										doorphone:orderInfo.address.intercom
-									},
-									comment:`${orderInfo.address.street},${orderInfo.address.home}`
-								},
-								
-								guests: {
-									count: 1,
-									splitBetweenPersons: false
-								},
-                items: requestOrderItems,
-                comment: orderInfo.comment,
-                orderTypeId:orderTypeId,
-								payments:
-									orderInfo.paymentMethod === constOrderPaymentTypes.BYCARD
-									? [
-												{
-												"paymentTypeKind": "Card",
-												"sum": deliveryPrice,
-												"paymentTypeId": "dfeb1b1e-36bb-4861-baf8-03be367e169a",
-												
-												}
-										] :
-									 orderInfo.paymentMethod === constOrderPaymentTypes.PAY 
-									? [
-												{
-												"paymentTypeKind": "Card",
-												"sum": orderInfo.paymentsum,
-												"paymentTypeId": "f2cc4be8-e7cb-405c-a4d8-c2712b5dc740",
-												"isProcessedExternally": true
-												}
-										]
-									: null
+        };
 
-								/*
-                orderServiceType:
-                    orderInfo.orderType === OrderTypesEnum.PICKUP
-                        ? "DeliveryPickUp"
-                        : "DeliveryByCourier"
-								*/					
-            }
-        	};
-				}
-        
-		}
+        return result;
+    }
+
     /*-----------------| getOrderTypesId |-----------------------*/
     public async getOrderTypesId(
         organizationId: UniqueId,
@@ -250,25 +136,19 @@ export class IikoService implements IIiko {
         );
 
         const data = await this.axios.orderTypes(organizationGUID.id);
-				
-
-        const result = data.orderTypes[0].items.find((orderTypeEl) => {
 					
-					switch(orderType){
-						case OrderTypesEnum.PICKUP :
+        const result = data.items.find((orderTypeEl) => {
+            //const type = orderTypeEl.orderServiceType.includes(orderType);
+						if(orderType == 'PICKUP'){
 							return orderTypeEl.id === '5b1508f9-fe5b-d6af-cb8d-043af587d5c2' && orderTypeEl
-						case OrderTypesEnum.COURIER :
+						}
+						if(orderType == 'COURIER'){
 							return orderTypeEl.id === '9ee06fcc-8233-46fa-b74d-ff6f50128afb' && orderTypeEl
-						case OrderTypesEnum.ONSPOT :
-							return orderTypeEl.id === 'bbbef4dc-5a02-7ea3-81d3-826f4e8bb3e0' && orderTypeEl
-					}
-					/*
-            const type = orderTypeEl.orderServiceType.includes(orderType);
-						
-						return type
-						*/
+						}
+					
         });
 
+				
 
         return { name: result?.name, id: result?.id };
     }
@@ -283,46 +163,27 @@ export class IikoService implements IIiko {
         orderInfo: OrderDTO,
         prices: IDeliveryPrices
     ): Promise<any> {
-
         const orderBody = await this.createOrderBody(
             orderInfo,
             cart,
-            prices.totalPrice
+            prices.deliveryPrice
         );
 
-					console.log('bofyyyyyyyyyyyyyyor',orderBody);
-			/* */
-      const orderResponseInfo = orderInfo.orderType ===  OrderTypesEnum.ONSPOT
-				? await this.axios.orderCreate(orderBody) 
-				: await this.axios.orderCreateDelivery(orderBody);
+				
+      const orderResponseInfo = await this.axios.orderCreate(orderBody);
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );
-					
-				
-			/*
+
         return {
-            result: orderResponseInfo.id,
-            problem:orderResponseInfo.errorInfo
+            result: orderResponseInfo.number,
+            problem:
+                orderResponseInfo.problem?.hasProblem &&
+                orderResponseInfo?.problem?.problem
         };
-				*/
-				return orderResponseInfo
 
 				
     }
-
-		async statusOrder(organizationId:string,orderIds:string,orderTypes:string){
-			const statusOrder = orderTypes === OrderTypesEnum.ONSPOT 
-				? await this.axios.orderCheckStatusOrder({
-					organizationIds:[organizationId],
-					orderIds:[orderIds]
-				})
-				: await this.axios.orderCheckStatusOrderDelivery({
-				organizationId:organizationId,
-				orderIds:[orderIds]
-			})
-			return statusOrder
-		}
 
     /*-----------------|       check      |-----------------------*/
     /*
@@ -358,26 +219,25 @@ export class IikoService implements IIiko {
         by websocket.
         save stop-list to the stopList collection
     */
-    async getStopList(organizationId:string) {
-			const stoplist = await this.StopListUsecase.getAll(organizationId)
-				/*	
+    async getStopList(body: iiko.IWebhookEvent) {
+        const data = await this.axios.stopList(body.organizationId);
+        const stopList = data.stopList
+            .map((stopListArrayItem) => stopListArrayItem.items)
+            .flat();
+
         const stopListArray = stopList.map((el) => {
             return {
                 ...el,
                 product: el.productId
             };
         });
-	
-				
+
         const stopListEntity = await this.StopListUsecase.stopListEventAction(
             body.organizationId,
             stopListArray
         );
-				
 
-        return stopListArray;
-				*/
-				return stoplist
+        return stopListEntity;
     }
 		async getDiscount(
 			organizationId: UniqueId,
@@ -392,12 +252,6 @@ export class IikoService implements IIiko {
 				}
 			});
 			*/
-		}
-
-		async getStreetCityIkko({organizationId}){
-			const result = await this.axios.getOrganization(organizationId)
-			console.log(result);
-			return this.axios.getStreetCity(organizationId,result.defaultDeliveryCityId)
 		}
 	
 }

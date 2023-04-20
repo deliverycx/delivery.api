@@ -10,7 +10,6 @@ import { RecvisitesEntity } from "../entities/recvisites.entity";
 import { RecvisitesClass } from "src/database/models/recvisites.model";
 import { PaymentInfoEntity } from "../entities/payments.entity";
 import { PaymentServiceDataClass } from "src/database/models/payment.model";
-import { OrganizationStatusClass } from "src/database/models/organizationStatus.model";
 
 @Injectable()
 export class OrganizationRepository
@@ -23,12 +22,8 @@ export class OrganizationRepository
 
         @Inject("Recvisites")
         private readonly RecvisitesModel: Model<RecvisitesClass>,
-
         @Inject("PaymentServiceData")
-        private readonly PaymentServiceDataModel: Model<PaymentServiceDataClass>,
-
-				@Inject("organizationstatus")
-        private readonly OrganizationstatusModel: Model<OrganizationStatusClass>
+        private readonly PaymentServiceDataModel: Model<PaymentServiceDataClass>
     ) {
         super(OrganizationModel, organizationMapper, "city", "city");
     }
@@ -49,9 +44,7 @@ export class OrganizationRepository
             organizationDoc.delivMetod,
 						organizationDoc.isHidden,
 						organizationDoc.reservetable,
-						organizationDoc.city as string,
-						organizationDoc.redirect,
-						organizationDoc.redirectON
+						organizationDoc.city as string
         );
         return organizationEntity;
     }
@@ -88,27 +81,20 @@ export class OrganizationRepository
             organizationDoc.delivMetod,
 						organizationDoc.isHidden,
 						organizationDoc.reservetable,
-						organizationDoc.city as string,
-						organizationDoc.redirect,
-						organizationDoc.redirectON
+
         );
     }
 
-    public async getPaymentsInfo(organizationId: UniqueId,type = 'ip') {
+    public async getPaymentsInfo(organizationId: UniqueId) {
         const paymentDoc = await this.PaymentServiceDataModel.findOne({
-						organization: organizationId,
-						typemagaz:type
+            organization: organizationId
         });
-				
 
-        return paymentDoc
+        return new PaymentInfoEntity(
+            paymentDoc?.merchantId,
+            paymentDoc?.token,
+            !!paymentDoc?.isActive,
+            organizationId
+        );
     }
-		public async getOrgStatus(organization:string){
-			const result = await this.OrganizationstatusModel.findOne({organization})
-			return result
-		}
-		public async getOrgStatusAll(organization:string){
-			const result = await this.OrganizationstatusModel.find({organization})
-			return result
-		}
 }

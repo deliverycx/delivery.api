@@ -7,5 +7,5 @@ export abstract class IStopListRepository {
         stopListArray: Array<iiko.IStopListItem>
     ): Promise<void>;
 
-    abstract getAll(organization: UniqueId,stopList:Array<iiko.IStopListItem>): Promise<any>;
+    abstract getAll(organization: UniqueId): Promise<StopListEntity>;
 }

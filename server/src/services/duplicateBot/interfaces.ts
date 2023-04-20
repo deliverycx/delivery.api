@@ -8,9 +8,7 @@ export namespace Bot {
         name: string;
         phone: string;
         address: string;
-        orderTypeName: string;
-				orderType:string;
-				ONSPOTTable:number;
+        orderType: string;
     }
     export interface IRequestBodyReserve{
         organizationId: UniqueId
