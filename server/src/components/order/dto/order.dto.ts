@@ -40,6 +40,7 @@ export class OrderDTO {
         entrance: number;
         floor: number;
 				kladrid:string
+				cordAdress?:number[]
     };
 
     @ApiProperty({

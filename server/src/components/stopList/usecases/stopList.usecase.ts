@@ -8,6 +8,7 @@ import { IProductRepository } from "src/components/product/repositories/interfac
 import { IIiko } from "src/services/iiko/iiko.abstract";
 import { IIkoAxios } from "src/services/iiko/iiko.axios";
 
+
 @Injectable()
 export class StopListUsecase {
     constructor(
@@ -21,18 +22,28 @@ export class StopListUsecase {
     ) {}
 
 		async getAll(organizationGUID:string){
-			const data = await this.axios.stopList(organizationGUID);
-			if(data.length === 0){
-				return []
-			}
-				
-			const stopList = data
-					.map((stopListArrayItem) => stopListArrayItem.items)
-					.flat();
-			
-			const result = await this.stopListRepository.getAll(organizationGUID,stopList)
+			try {
+				if(organizationGUID){
+					const data = await this.axios.stopList(organizationGUID);
+					if(data.length === 0){
+						return []
+					}
+						
+					const stopList = data
+							.map((stopListArrayItem) => stopListArrayItem.items)
+							.flat();
+					
+					const result = await this.stopListRepository.getAll(organizationGUID,stopList)
 
-			return result
+					return result
+				}else{
+					return []
+				}
+				
+			} catch (error) {
+				console.log(error.response.data);
+			}
+			
 		}
 
 

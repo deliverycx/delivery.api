@@ -1,17 +1,14 @@
-import { Controller, Get, HttpException, HttpStatus, Inject, Query } from "@nestjs/common";
+import { Controller, Get, HttpException, HttpStatus, Query, Req, Res,Headers } from "@nestjs/common";
 import { CityUsecase } from "../usecases/city.usecase";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CityEntity } from "../entities/city.entity";
 import { CityQueryDTO } from "../dto/cityQuery.dto";
-import { ClientProxy } from "@nestjs/microservices";
+import { Response,Request } from "express";
 
 @ApiTags("City endpoints")
 @Controller("city")
 export class CityController {
-    constructor(
-			private readonly cityUsecase: CityUsecase,
-			
-		) {}
+    constructor(private readonly cityUsecase: CityUsecase) {}
 
     @ApiResponse({
         status: 200,
@@ -43,13 +40,18 @@ export class CityController {
         return result;
     }
 
-		@Get('hello')
-	  getHello() {
-	    return this.cityUsecase.getHello();
-	  }
+		@Get("webhook_all")	
+    async webhookgetAll(
+				@Headers('authorization') headers,
+				@Req() req:Request,
+				@Res() response: Response,
+    ) {
 
-		@Get('tohello')
-	  togetHello() {
-	    return this.cityUsecase.togetHello();
-	  }
+				const refreshToken = headers.replace('Bearer', '').trim();
+				console.log(refreshToken);
+        const result = this.cityUsecase.getAll("");
+				
+        //throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+        response.status(200).json(result);
+    }
 }

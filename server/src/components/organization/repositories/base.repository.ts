@@ -49,7 +49,9 @@ export class OrganizationRepository
             organizationDoc.delivMetod,
 						organizationDoc.isHidden,
 						organizationDoc.reservetable,
-						organizationDoc.city as string
+						organizationDoc.city as string,
+						organizationDoc.redirect,
+						organizationDoc.redirectON
         );
         return organizationEntity;
     }
@@ -86,7 +88,9 @@ export class OrganizationRepository
             organizationDoc.delivMetod,
 						organizationDoc.isHidden,
 						organizationDoc.reservetable,
-
+						organizationDoc.city as string,
+						organizationDoc.redirect,
+						organizationDoc.redirectON
         );
     }
 

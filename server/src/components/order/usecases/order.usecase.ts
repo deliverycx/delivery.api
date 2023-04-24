@@ -38,7 +38,7 @@ export class OrderUsecase {
 
         //await this.orderCheckBuilder.serviceValidate();
 
-				await this.orderCheckBuilder.checkStopList()
+				//await this.orderCheckBuilder.checkStopList()
 
         return this.orderCheckBuilder.getResult();
     }
