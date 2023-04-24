@@ -48,8 +48,12 @@ export class CityController {
     ) {
 
 				const refreshToken = headers.replace('Bearer', '').trim();
-				console.log(refreshToken);
-        const result = this.cityUsecase.getAll("");
+				console.log('citytoken',refreshToken);
+				const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcGlMb2dpbklkIjoiYzZjOWJjOGUtYzYxOC00MzdmLTgwMDgtYTc5NWY5Nzk4ZmM5IiwibmJmIjoxNjgxMjg2ODI3LCJleHAiOjE2ODEyOTA0MjcsImlhdCI6MTY4MTI4NjgyNywiaXNzIjoiaWlrbyIsImF1ZCI6ImNsaWVudHMifQ.ZAJR-BmWNs4S9Eqx7gL7jviJ5P0nVAbBwFVI99-YI88'
+				if(refreshToken !== token){
+					response.status(401).json({});
+				} 
+        const result = await this.cityUsecase.getAll("");
 				
         //throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         response.status(200).json(result);
