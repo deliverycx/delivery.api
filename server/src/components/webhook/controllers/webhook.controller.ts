@@ -7,7 +7,8 @@ import {
     UseFilters,
     Inject,
 		Get,
-		Param
+		Param,
+		Query
 } from "@nestjs/common";
 import { iiko } from "src/services/iiko/interfaces";
 import { IPaymentWebhookDto } from "../../order/dto/paymentWebhook.dto";
@@ -227,5 +228,29 @@ export class WebhookController {
     ){
 			
 			this.webHookServices.getData(street)
+		}
+
+
+		@Get("flipcount")
+    //@UseGuards(YooWebhookGuard)
+    async flipcount(
+			@Query() query:any
+		){
+			const token = await axios.get('https://iiko.biz:9900/api/0/auth/access_token?user_id=CX_Apikey_all&user_secret=CX_Apikey_all759')
+			const {data} = await axios.post(`https://iiko.biz:9900/api/0/olaps/olapByPreset?access_token=${token.data}&organizationId=fe470000-906b-0025-00f6-08d8de6557e1&request_timeout=`,
+				{
+					"dateTo":String(query.time), 
+					"dateFrom":"2018-01-02",
+					"presetId":"62435de7-7032-4089-91db-504badb500ad"
+				}
+			)
+
+			const w:string = data.data.split(',')[1] as string
+			const numEl:any = w.match(/(-?\d+(\.\d+)?)/g)
+			console.log(numEl);
+			const count = Math.trunc(Number(numEl[0]))
+
+			return count
+		
 		}
 }
