@@ -236,18 +236,24 @@ export class WebhookController {
     async flipcount(
 			@Query() query:any
 		){
+
 			const token = await axios.get('https://iiko.biz:9900/api/0/auth/access_token?user_id=CX_Apikey_all&user_secret=CX_Apikey_all759')
-			const {data} = await axios.post(`https://iiko.biz:9900/api/0/olaps/olapByPreset?access_token=${token.data}&organizationId=fe470000-906b-0025-00f6-08d8de6557e1&request_timeout=`,
+			const org:any = await axios.get(`https://iiko.biz:9900/api/0/organization/list?access_token=${token.data}`)
+			const getorgId = org.data.find((el:any) =>{
+				return el.phone === query.orgid
+			})
+			console.log('qqq',getorgId);
+			const {data} = await axios.post(`https://iiko.biz:9900/api/0/olaps/olapByPreset?access_token=${token.data}&organizationId=${getorgId.id}&request_timeout=`,
 				{
 					"dateTo":String(query.time), 
 					"dateFrom":"2018-01-02",
-					"presetId":"62435de7-7032-4089-91db-504badb500ad"
+					"presetId":"9f99fda4-604a-428a-aecc-9563ec53b8e0"
 				}
 			)
 
+
 			const w:string = data.data.split(',')[1] as string
 			const numEl:any = w.match(/(-?\d+(\.\d+)?)/g)
-			console.log(numEl);
 			const count = Math.trunc(Number(numEl[0]))
 
 			return count
