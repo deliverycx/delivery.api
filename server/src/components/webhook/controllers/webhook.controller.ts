@@ -231,21 +231,25 @@ export class WebhookController {
 		}
 
 
-		@Get("flipcount")
+		@Post("flipcount")
     //@UseGuards(YooWebhookGuard)
     async flipcount(
-			@Query() query:any
+			@Body() body:any
 		){
 
 			const token = await axios.get('https://iiko.biz:9900/api/0/auth/access_token?user_id=CX_Apikey_all&user_secret=CX_Apikey_all759')
 			const org:any = await axios.get(`https://iiko.biz:9900/api/0/organization/list?access_token=${token.data}`)
 			const getorgId = org.data.find((el:any) =>{
-				return el.phone === query.orgid
+				if(el.phone){
+					//console.log('qqq',el.phone.replace(/ /g,''),body.phone.replace(/ /g,''));
+					return el.phone.replace(/ /g,'') === body.phone.replace(/ /g,'')
+				}
+				
 			})
-			console.log('qqq',getorgId);
+			
 			const {data} = await axios.post(`https://iiko.biz:9900/api/0/olaps/olapByPreset?access_token=${token.data}&organizationId=${getorgId.id}&request_timeout=`,
 				{
-					"dateTo":String(query.time), 
+					"dateTo":String(body.time), 
 					"dateFrom":"2018-01-02",
 					"presetId":"9f99fda4-604a-428a-aecc-9563ec53b8e0"
 				}
