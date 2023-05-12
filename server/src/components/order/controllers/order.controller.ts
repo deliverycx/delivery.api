@@ -118,4 +118,15 @@ export class OrderController {
     }
 
 
+		@Get("getorder/:hash")
+    async getOrder(
+				@Res() response: Response,
+        @Param("hash") hash: string
+    ) {
+				
+        const result = await this.orderService.getOrderHash(hash)
+				response.status(200).json(result);
+    }
+
+
 }

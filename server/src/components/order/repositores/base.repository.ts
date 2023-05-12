@@ -32,7 +32,10 @@ export class OrderRepository implements IOrderRepository {
     }
 
 		async createOrder(entiti:OrderCreateEntity){
-			console.log(entiti);
 			 await this.orderModel.create(entiti)
 		}
+
+		async getOrderBYhash(hash:string){
+			return await this.orderModel.findOne({orderHash:hash})
+	 }
 }

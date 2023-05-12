@@ -33,7 +33,9 @@ export class OrderService{
 			organization:orderbody.organization,
 			orderHash:orderbody.hash,
 			orderItems:cart,
-			orderParams:orderbody
+			orderParams:orderbody,
+			orderStatus:"CREATED",
+			orderNumber:null
 		}
 
 		await this.orderRepository.createOrder(entity)
@@ -46,5 +48,9 @@ export class OrderService{
       'order_created',
       body,
     )
+	}
+
+	getOrderHash(hash:string){
+		return this.orderRepository.getOrderBYhash(hash)
 	}
 }

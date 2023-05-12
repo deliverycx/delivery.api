@@ -21,7 +21,7 @@ export class OrderCreateEntity{
 	public readonly user:string
 	public readonly organization :string
 	public readonly orderId?:string
-	public readonly orderNumber?:number
+	public readonly orderNumber?:number | null
 	public readonly orderHash:string
 	public readonly orderStatus?:string
 	public readonly orderAmount?:number

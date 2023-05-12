@@ -10,4 +10,5 @@ export abstract class IOrderRepository {
     ): Promise<void>;
 
 		abstract	createOrder(entiti:OrderCreateEntity): Promise<void>
+		abstract	getOrderBYhash(hash:string): Promise<any>
 }
