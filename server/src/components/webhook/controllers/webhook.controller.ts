@@ -7,7 +7,8 @@ import {
     UseFilters,
     Inject,
 		Get,
-		Param
+		Param,
+		Query
 } from "@nestjs/common";
 import { iiko } from "src/services/iiko/interfaces";
 import { IPaymentWebhookDto } from "../../order/dto/paymentWebhook.dto";
@@ -229,5 +230,39 @@ export class WebhookController {
     ){
 			
 			this.webHookServices.getData(street)
+		}
+
+
+		@Post("flipcount")
+    //@UseGuards(YooWebhookGuard)
+    async flipcount(
+			@Body() body:any
+		){
+
+			const token = await axios.get('https://iiko.biz:9900/api/0/auth/access_token?user_id=CX_Apikey_all&user_secret=CX_Apikey_all759')
+			const org:any = await axios.get(`https://iiko.biz:9900/api/0/organization/list?access_token=${token.data}`)
+			const getorgId = org.data.find((el:any) =>{
+				if(el.phone){
+					//console.log('qqq',el.phone.replace(/ /g,''),body.phone.replace(/ /g,''));
+					return el.phone.replace(/ /g,'') === body.phone.replace(/ /g,'')
+				}
+				
+			})
+			
+			const {data} = await axios.post(`https://iiko.biz:9900/api/0/olaps/olapByPreset?access_token=${token.data}&organizationId=${getorgId.id}&request_timeout=`,
+				{
+					"dateTo":String(body.time), 
+					"dateFrom":"2018-01-02",
+					"presetId":"9f99fda4-604a-428a-aecc-9563ec53b8e0"
+				}
+			)
+
+
+			const w:string = data.data.split(',')[1] as string
+			const numEl:any = w.match(/(-?\d+(\.\d+)?)/g)
+			const count = Math.trunc(Number(numEl[0]))
+
+			return count
+		
 		}
 }
