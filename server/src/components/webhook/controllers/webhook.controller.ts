@@ -205,7 +205,7 @@ export class WebhookController {
     }
 		@Post("push")	
 		async push(@Body() body:any){
-			//console.log('пуш с терминала',body);
+			console.log('пуш с терминала',body);
 			const result = await this.PaymentService.checkPymentOrderStatus(body)
 			if(result){
 				console.log('возврат для бота',result);
