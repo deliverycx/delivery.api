@@ -98,12 +98,16 @@ export class OrderCreateBuilder {
         const user = this._state.user;
         const orderInfo = this._state.orderInfo;
 
+				console.log(orderInfo);
+
         const cart = await this.CartRepository.getAll(user);
 
         const deliveryPrices = await this.DeliveryService.calculatingPrices(
             this._state.user,
             orderInfo.orderType
         );
+
+				
 
         const orderInfoPross = await this.orderService.create(
             cart,

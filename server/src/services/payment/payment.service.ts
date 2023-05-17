@@ -223,8 +223,9 @@ export class PaymentService extends IPaymentService {
         // checking bank card support
 				
 				const organizationID = await this.organizationRepository.getOne(body.organization)
-        const organizationPaymentInfo = await this.organizationRepository.getPaymentsInfo(organizationID.getGuid,'ip')
 				
+        const organizationPaymentInfo = await this.organizationRepository.getPaymentsInfo(organizationID.getGuid,'ip')
+
 
         const { totalPrice } = await this.DeliveryService.calculatingPrices(
             userId,
@@ -235,7 +236,7 @@ export class PaymentService extends IPaymentService {
 				
 
         const cart = await this.cartRepository.getAll(userId);
-
+/*
 				const payMasterBody =  this.Paymaster.paymasterBody({
 					orderBody:body,
 					organizationPaymentInfo,
@@ -246,14 +247,14 @@ export class PaymentService extends IPaymentService {
 				})	
 				console.log('payMasterBody',cart);
 
-				/*
+				*/
         const orderHash = createOrderHash();
 
 				
-
         const payMasterBody = {
             merchantId: organizationPaymentInfo.merchantId,
             testMode: true,
+						dualMode: true,
             amount: {
                 currency: "RUB",
                 value: intToDecimal(totalPrice)
@@ -268,7 +269,7 @@ export class PaymentService extends IPaymentService {
                 }
             },
             protocol: {
-                callbackUrl: `${body.localhost}/api/webhook/paymentCallback`, //'https://b3b1-89-107-138-252.ngrok.io/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
+                callbackUrl: `${body.localhost}/api/webhook/paymentCallback`, //'https://b9ab-2-63-176-232.ngrok-free.app/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
                 returnUrl: `${body.localhost}/success/${orderHash}`
             },
             reciept: {
@@ -292,7 +293,7 @@ export class PaymentService extends IPaymentService {
         };
 
 				console.log('тело оплаты',payMasterBody);
-				*/
+				
         const paymentResult = await this.Paymaster.paymentUrl(
             payMasterBody,
             organizationPaymentInfo.token

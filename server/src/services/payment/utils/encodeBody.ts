@@ -20,10 +20,10 @@ export function encodeBody(b: object, key = "") {
     for (let key in b) {
         if (typeof b[key] === "object") {
             for (let neskey of keys(b[key])) {
-                result[`${key}_${neskey}`] = b[key][neskey].toString();
+                result[`${key}_${neskey}`] = b[key][neskey] //.toString();
             }
         } else {
-            result[`${key}`] = b[key].toString();
+            result[`${key}`] = b[key] //.toString();
         }
     }
 

@@ -9,7 +9,7 @@ import { IPayMasterBody } from "../types/paymaster.type";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 
 console.log(process.env);
-const paycalback = (localhost?:any) => `${localhost}/api/webhook/paymentCallback`  //'https://6f19-89-107-138-213.ngrok.io/webhook/paymentCallback' // `${body.localhost}/api/webhook/paymentCallback`
+const paycalback = (localhost?:any) => 'https://b9ab-2-63-176-232.ngrok-free.app/webhook/paymentCallback' //`${localhost}/api/webhook/paymentCallback`  //'https://b9ab-2-63-176-232.ngrok-free.app/webhook/paymentCallback' // `${body.localhost}/api/webhook/paymentCallback`
 const paycalbackBar = (localhost?:any) => `${localhost}/api/webhook/paymentCallbackBar`  //'https://6f19-89-107-138-213.ngrok.io/webhook/paymentCallbackBar' // `${body.localhost}/api/webhook/paymentCallbackBar`
 
 export class Paymaster {
@@ -19,7 +19,7 @@ export class Paymaster {
         this.requester = new PaymasterRequests();
     }
 
-    public async paymentUrl(body: PaymasterRequest.IInvoice, token: string) {
+    public async paymentUrl(body: any, token: string) {
         return this.requester.invoices(body, token);
     }
 
@@ -121,9 +121,8 @@ export class Paymaster {
 			userId
 		}:IPayMasterBody){
 			const orderHash = createOrderHash();
-
 			const checkCartBar = this.paymasterChechBar(cart)
-			
+			console.log('qqq',checkCartBar);
 			if(checkCartBar){
 
 
@@ -141,7 +140,7 @@ export class Paymaster {
 								params: {
 										user: userId,
 										hash: orderHash,
-										dualpayments:String(checkCartBar),
+										dualpayments:checkCartBar ? String(checkCartBar) : null,
 										orgguid:organizationID.getGuid, //organizationID.getGuid,
 										...encodeBody(orderBody)
 								}
