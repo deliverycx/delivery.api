@@ -221,7 +221,7 @@ export class IikoService implements IIiko {
 												
 												}
 										] :
-									 orderInfo.paymentMethod === constOrderPaymentTypes.PAY 
+									 orderInfo.paymentMethod === constOrderPaymentTypes.CARD 
 									? [
 												{
 												"paymentTypeKind": "Card",
