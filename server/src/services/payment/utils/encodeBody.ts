@@ -23,7 +23,7 @@ export function encodeBody(b: object, key = "") {
                 result[`${key}_${neskey}`] = b[key][neskey] //.toString();
             }
         } else {
-            result[`${key}`] = b[key] //.toString();
+            result[`${key}`] = b[key] ? b[key].toString() : b[key] //.toString();
         }
     }
 
