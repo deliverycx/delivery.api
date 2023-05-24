@@ -168,9 +168,7 @@ export class IikoService implements IIiko {
 											"paymentTypeKind": "Card",
 											"sum": orderInfo.paymentsum,
 											"paymentTypeId": "1032a471-be2c-434f-b8c0-9bd686d8b2b5",
-											"isProcessedExternally": true,
-			                "isFiscalizedExternally": true,
-			                "isPrepay": false
+											"isProcessedExternally": true
 											}
 									]
 									: null
