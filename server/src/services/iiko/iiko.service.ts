@@ -299,10 +299,12 @@ export class IikoService implements IIiko {
       const orderResponseInfo = orderInfo.orderType ===  OrderTypesEnum.ONSPOT
 				? await this.axios.orderCreate(orderBody) 
 				: await this.axios.orderCreateDelivery(orderBody);
+
+				/*
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );
-					
+					*/
 				
 			/*
         return {
