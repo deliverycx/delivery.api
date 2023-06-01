@@ -5,7 +5,7 @@ import { IFavoriteRepository } from "../repositories/interface.repository";
 export class FavoriteUsecase {
     constructor(private readonly FavoriteRepository: IFavoriteRepository) {}
 
-    async click(productId: UniqueId, userId: UniqueId) {
+    async click(productId: any, userId: UniqueId) {
         const result = await this.FavoriteRepository.add_remove(
             productId,
             userId

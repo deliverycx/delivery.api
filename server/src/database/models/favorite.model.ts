@@ -16,8 +16,8 @@ export class FavoriteClass {
     @prop({ ref: "User" })
     user!: Ref<UserClass>;
 
-    @prop({ ref: "Product", default: [] })
-    products: Ref<ProductClass>[];
+    @prop()
+    products:[];
 }
 
 export const FavoriteSchema = buildSchema(FavoriteClass);
