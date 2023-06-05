@@ -37,7 +37,7 @@ export class FavoriteController {
     })
     @Put("click")
     async add_remove(
-        @Body() body: AddRemoveDTO,
+        @Body() body: any,
         @Session() session: Record<string, string>,
         @Res() response: Response
     ) {

@@ -22,15 +22,15 @@ export class CartRepository
         super(CartModel, cartMapper, "user", "product");
     }
 
-    async add(userId: UniqueId, productId: UniqueId) {
+    async add(userId: UniqueId, producte: any) {
         const result = await this.CartModel.findOneAndUpdate(
             {
                 user: userId,
-                product: productId
+                product: producte
             },
             {
                 $setOnInsert: {
-                    product: productId
+                    product: producte
                 },
                 $inc: {
                     amount: 1
@@ -103,32 +103,19 @@ export class CartRepository
                     user: new Types.ObjectId(userId)
                 }
             },
-            {
-                $lookup: {
-                    from: "products",
-                    localField: "product",
-                    foreignField: "_id",
-                    as: "product"
-                }
-            },
-            {
-                $addFields: {
-                    firstProduct: {
-                        $first: "$product"
-                    }
-                }
-            },
+           
             {
                 $group: {
                     _id: null,
                     totalPrice: {
                         $sum: {
-                            $multiply: ["$firstProduct.price", "$amount"]
+                            $multiply: ["$product.price", "$amount"]
                         }
                     }
                 }
             }
         ]);
+				
 
         return calcResult[0] ? calcResult[0].totalPrice : 0;
     }

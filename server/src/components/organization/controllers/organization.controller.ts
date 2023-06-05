@@ -36,7 +36,7 @@ export class OrganizationController {
     })
     @Get("recvisites")
     async getRecvisites(
-        @Query() query: RecvisitesDTO,
+        @Query() query: any, 
         @Res() response: Response
     ) {
         const result = await this.organizationUsecase.getRecvisites(

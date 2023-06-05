@@ -36,6 +36,7 @@ export class DeliveryService implements IDeliveryService {
 				discount?:number
     ): Promise<IDeliveryPrices> {
 				const carts = await this.cartRepository.getAllDisc(userId)
+				
 				const {count,min} = validationHIdiscount(carts)
 
         const totalPrice = await this.cartPriceCalculating(userId,min);

@@ -249,6 +249,25 @@ export class IIkoAxios extends Axios {
 			return id ? data.organizations[0] : data.organizations
 	}
 
+	public async getNomenClature(id:string):Promise<any>{
+		const token = await this.token();
+		console.log(id);
+
+		const { data } = await this._axios.post(
+			`/nomenclature`,
+					{
+						"organizationId": id
+					},
+					{
+						headers: { Authorization: `Bearer ${token}` }
+					}
+			);
+
+			
+			
+			return data
+	}
+
 }
 
 export const iikoAxiosProviders = [
