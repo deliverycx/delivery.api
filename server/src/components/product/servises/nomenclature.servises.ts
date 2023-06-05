@@ -31,7 +31,6 @@ export class NomenclatureServises {
 				? imageLinks[imageLinks.length - 1]
 				: "";
 
-			if (description !== 'HIDDEN') {
 				const category = {
 					_id: new Types.ObjectId(),
 					organization: organization,
@@ -43,9 +42,8 @@ export class NomenclatureServises {
 
 				};
 				return category
-			}
 
-		}).sort((a: any, b: any) => (a.order - b.order))
+		}).filter(item => item.description !== 'HIDDEN').sort((a: any, b: any) => (a.order - b.order))
 
 		cat.push({
 			_id: new Types.ObjectId(),
