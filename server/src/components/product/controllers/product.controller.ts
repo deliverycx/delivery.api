@@ -1,4 +1,5 @@
 import {
+	Body,
     Controller,
     Get,
     HttpStatus,
@@ -65,6 +66,17 @@ export class ProductController {
         response.status(HttpStatus.OK).json(products);
     }
 
+
+		@Get("nomenclature")
+    async getAllNomenClature(
+        @Query()
+        query: GetAllDTO,
+    ) {
+        const result = await this.productUsecase.getAllNomenClature(query.organization)
+				
+				return result
+    }
+
     @ApiResponse({
         status: 200,
         type: [ProductEntity]
@@ -109,4 +121,6 @@ export class ProductController {
 
         response.status(200).json(product);
     }
+
+
 }

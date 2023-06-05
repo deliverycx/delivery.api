@@ -5,17 +5,21 @@ import { ProductUsecase } from "../components/product/usecases/product.usecase";
 import { ProductController } from "../components/product/controllers/product.controller";
 import { productProviders } from "../components/product/providers/product.provider";
 import { favoriteProviders } from "src/components/favorites/providers/favorite.provider";
+import { iikoAxiosProviders } from "src/services/iiko/iiko.axios";
+import { NomenclatureServises } from "src/components/product/servises/nomenclature.servises";
 
 @Module({
     controllers: [ProductController],
     providers: [
         ProductUsecase,
+				NomenclatureServises,
         {
             provide: IProductRepository,
             useClass: ProductRepository
         },
         ...favoriteProviders,
-        ...productProviders
+        ...productProviders,
+				...iikoAxiosProviders,
     ]
 })
 export class ProductModule {}
