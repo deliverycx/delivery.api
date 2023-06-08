@@ -84,7 +84,7 @@ export class Paymaster {
 							console.log('catch');
 								reject(
 									new Error(
-											"Возникла не предвиденная ошибка"
+											"Возникла непредвиденная ошибка"
 									)
 								);
 								

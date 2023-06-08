@@ -73,6 +73,7 @@ export class NomenclatureServises {
 				measureUnit,
 				weight
 			} = prod;
+			console.log(prod);
 
 			const price = Math.trunc(prod.sizePrices[0].price.currentPrice)
 

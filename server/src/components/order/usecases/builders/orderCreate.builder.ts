@@ -62,7 +62,7 @@ export class OrderCreateBuilder {
 											
 											resolve({
 												result:null,
-												problem:"Возникла не предвиденная ошибка"
+												problem:"Возникла непредвиденная ошибка"
 											});
 
 											
