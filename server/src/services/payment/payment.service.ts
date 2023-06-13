@@ -164,7 +164,7 @@ export class PaymentService extends IPaymentService {
 		// статус заказа
 		async checkPymentOrderStatus(order:any){
 			const orderfomAdmin = await this.paymentRepository.findOrderPayment({orderId:order.orderId})
-			console.log('статус заказа нашел',orderfomAdmin);
+			
 			
 			if(orderfomAdmin){
 				console.log('отмена - ответ из териминала',order);
