@@ -58,7 +58,7 @@ export class OrderCreateBuilder {
                 if (result.errorInfo || result.creationStatus === 'InProgress') {
 										console.log(result.errorInfo);
                     
-										if (counter >= 3) {
+										if (counter >= 15) {
 											
 											resolve({
 												result:null,
