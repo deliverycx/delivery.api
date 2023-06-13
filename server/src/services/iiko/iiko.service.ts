@@ -97,7 +97,7 @@ export class IikoService implements IIiko {
             //deliveryProductObject
         ].filter(Boolean);
 
-				console.log(orderInfo);
+				
 
 				/**
 				 * coordinates: orderInfo.address.cordAdress.length !== 0 
@@ -294,7 +294,7 @@ export class IikoService implements IIiko {
             prices.totalPrice
         );
 
-					console.log('bofyyyyyyyyyyyyyyor',orderBody);
+					console.log('create - body',orderBody);
 			/* */
       const orderResponseInfo = orderInfo.orderType ===  OrderTypesEnum.ONSPOT
 				? await this.axios.orderCreate(orderBody) 
@@ -402,7 +402,6 @@ export class IikoService implements IIiko {
 
 		async getStreetCityIkko({organizationId}){
 			const result = await this.axios.getOrganization(organizationId)
-			console.log(result);
 			return this.axios.getStreetCity(organizationId,result.defaultDeliveryCityId)
 		}
 	
