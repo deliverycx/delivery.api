@@ -251,7 +251,7 @@ export class IIkoAxios extends Axios {
 
 	public async getNomenClature(id:string):Promise<any>{
 		const token = await this.token();
-		console.log(id);
+		
 
 		const { data } = await this._axios.post(
 			`/nomenclature`,
