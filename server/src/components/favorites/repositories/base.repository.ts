@@ -36,7 +36,7 @@ export class FavoriteRepository implements IFavoriteRepository {
 								} } }
             ]
         });
-				console.log(productId); 
+				
 
         if (isFind) {
             action.$pull = {

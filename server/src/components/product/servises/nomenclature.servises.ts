@@ -14,38 +14,36 @@ export class NomenclatureServises {
 	async getNomenClature(organization: string) {
 		const nomenclature = await this.axios.getNomenClature(organization)
 
-		const categoryes = this.NomenClatureCategory(nomenclature.groups,organization)
+		const categoryes = this.NomenClatureCategory(nomenclature.groups, organization)
 		const products = this.NomenClatureProducts(nomenclature.products)
-		
+
 		return {
-			categoryes:categoryes.length !== 0 ? categoryes : null,
-			products:products.length !== 0 ? products : null
+			categoryes: categoryes.length !== 0 ? categoryes : null,
+			products: products.length !== 0 ? products : null
 		}
 	}
 
 
-	NomenClatureCategory(category: any[],organization:string) {
+	NomenClatureCategory(category: any[], organization: string) {
 		const cat = category.map((value) => {
 			const { name, order, images, imageLinks, id, description } = value;
 			const image = imageLinks
 				? imageLinks[imageLinks.length - 1]
 				: "";
 
-			const category = {
-				_id:new Types.ObjectId(),
-				organization:organization,
-				id,
-				name,
-				order,
-				description,
-				image: image,
-				
-			};
+				const category = {
+					_id: new Types.ObjectId(),
+					organization: organization,
+					id,
+					name,
+					order,
+					description,
+					image: image,
 
+				};
+				return category
 
-
-			return category
-		}).sort((a:any,b:any) => (a.order - b.order))
+		}).filter(item => item.description !== 'HIDDEN').sort((a: any, b: any) => (a.order - b.order))
 
 		cat.push({
 			_id: new Types.ObjectId(),
@@ -53,7 +51,7 @@ export class NomenclatureServises {
 			organization: organization,
 			name: "Избранное",
 			order: cat.length,
-			description:'',
+			description: '',
 			image: "/static/shop/favorite.png"
 		});
 		return cat
@@ -75,6 +73,7 @@ export class NomenclatureServises {
 				measureUnit,
 				weight
 			} = prod;
+			
 
 			const price = Math.trunc(prod.sizePrices[0].price.currentPrice)
 
@@ -82,14 +81,14 @@ export class NomenclatureServises {
 			const image = imageLinks
 				? imageLinks[imageLinks.length - 1]
 				: "";
-			
+
 			const product = {
 				category: parentGroup,
 				name,
 				description,
 				order,
 				id,
-				productId:id,
+				productId: id,
 				image: image,
 				additionalInfo,
 				tags,
@@ -99,7 +98,7 @@ export class NomenclatureServises {
 				weight
 			};
 
-			
+
 			return product
 		})
 		return prods

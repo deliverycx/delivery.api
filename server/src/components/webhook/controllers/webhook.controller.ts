@@ -216,6 +216,13 @@ export class WebhookController {
 			return 'ok'
 		}
 
+		@Post("test")	
+		async test(@Body() body:any){
+			
+			console.log('ответ с терминала разработка',body);
+			return 'ok'
+		}
+
 		@Post("getstreet")	
 		async getStreet(@Body() body:any){
 			 return await this.IikoService.getStreetCityIkko(body)

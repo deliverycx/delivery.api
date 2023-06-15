@@ -165,6 +165,7 @@ export class PaymentService extends IPaymentService {
 		async checkPymentOrderStatus(order:any){
 			const orderfomAdmin = await this.paymentRepository.findOrderPayment({orderId:order.orderId})
 			
+			
 			if(orderfomAdmin){
 				console.log('отмена - ответ из териминала',order);
 				const statuses = order.text.split(':')[2].replace(/[^a-zа-яё]/gi, '')
@@ -222,9 +223,10 @@ export class PaymentService extends IPaymentService {
     async _byCard(body: OrderDTO, userId: UniqueId): Promise<any> {
         // checking bank card support
 				
+				const organizationID = await this.organizationRepository.getOne(body.organization)
 				
-        const organizationPaymentInfo = await this.organizationRepository.getPaymentsInfo(body.organization,'ip')
-				
+        const organizationPaymentInfo = await this.organizationRepository.getPaymentsInfo(organizationID.getGuid,'ip')
+
 
         const { totalPrice } = await this.DeliveryService.calculatingPrices(
             userId,
@@ -235,22 +237,70 @@ export class PaymentService extends IPaymentService {
 				
 
         const cart = await this.cartRepository.getAll(userId);
-
+/*
 				const payMasterBody =  this.Paymaster.paymasterBody({
 					orderBody:body,
 					organizationPaymentInfo,
 					totalPrice,
-					organizationID:body.organization,
+					organizationID,
 					cart,
 					userId
 				})	
 				console.log('payMasterBody',cart);
 
+				*/
+        const orderHash = createOrderHash();
+
+				
+        const payMasterBody = {
+            merchantId: organizationPaymentInfo.merchantId,
+            //testMode: true,
+						dualMode: true,
+            amount: {
+                currency: "RUB",
+                value: intToDecimal(totalPrice)
+            },
+            invoice: {
+                description: 'Оплата заказа в Старик Хинкалыч',
+                params: {
+                    user: userId,
+                    hash: orderHash,
+										orgguid:organizationID.getGuid, //organizationID.getGuid,
+                    ...encodeBody(body)
+                }
+            },
+            protocol: {
+                callbackUrl: `${body.localhost}/api/webhook/paymentCallback`, //'https://b9ab-2-63-176-232.ngrok-free.app/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
+                returnUrl: `${body.localhost}/success/${orderHash}`
+            },
+            reciept: {
+                client: {
+                    email: body.email,
+                    phone: body.phone
+                },
+                items: [
+                    cart.map((el) => {
+                        return {
+                            name: el.getProductName,
+                            quantity: el.getAmount,
+                            price: el.getPrice,
+                            vatType: "None",
+                            paymentSubject: "Commodity",
+                            paymentMethod: "FullPayment"
+                        };
+                    })
+                ]
+            }
+        };
+
+				console.log('тело оплаты',payMasterBody);
+				
         const paymentResult = await this.Paymaster.paymentUrl(
             payMasterBody,
             organizationPaymentInfo.token
         );
 
+				await this.orderUsecase.checkOrder(userId, body)	
 
         return new RedirectEntity(
             paymentResult.url.replace("payments", "cpay")

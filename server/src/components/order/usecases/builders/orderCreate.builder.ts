@@ -58,11 +58,11 @@ export class OrderCreateBuilder {
                 if (result.errorInfo || result.creationStatus === 'InProgress') {
 										console.log(result.errorInfo);
                     
-										if (counter >= 3) {
+										if (counter >= 15) {
 											
 											resolve({
 												result:null,
-												problem:"Возникла не предвиденная ошибка"
+												problem:"Возникла непредвиденная ошибка"
 											});
 
 											
@@ -98,7 +98,7 @@ export class OrderCreateBuilder {
         const user = this._state.user;
         const orderInfo = this._state.orderInfo;
 
-				console.log(orderInfo);
+				
 
         const cart = await this.CartRepository.getAll(user);
 
@@ -114,7 +114,7 @@ export class OrderCreateBuilder {
             orderInfo,
             deliveryPrices
         );
-				console.log('orderInfoPross',orderInfoPross);
+				//console.log('orderInfoPross',orderInfoPross);
 				this._state.organizationId = orderInfoPross.organizationId	
 				this._state.orderID = orderInfoPross.id
 
@@ -172,7 +172,7 @@ export class OrderCreateBuilder {
             orderType
       );
 
-      console.log('к боту orderinfo', this._state);
+      //console.log('к боту orderinfo', this._state);
       
 
         this.botService.sendDuplicate(
