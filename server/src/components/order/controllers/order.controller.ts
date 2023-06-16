@@ -111,10 +111,15 @@ export class OrderController {
     async createOrderMicro(
         @Body() body: OrderDTO,
 				@Session() session: Record<string, string>,
+				@Res() response: Response,
     ) {
-				const orderbody = await this.orderService.orderBody(session.user, body)
-				await this.orderService.createOrderModel(orderbody,session.user)
-				const result = await this.orderService.orderSubmitRabbit(orderbody)
+			try {
+				await this.orderService.createOrderToRabbit(session.user, body)
+				response.status(200).json(true);
+			} catch (error) {
+				response.status(408).json(false);
+			}
+				
     }
 
 

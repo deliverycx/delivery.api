@@ -17,6 +17,11 @@ export class OrderService{
 		this.communicationClient.connect();
 	}
 
+	async createOrderToRabbit(user:string,body:OrderDTO,paymentbody?:any){
+		const orderbody = await this.orderBody(user, body)
+		await this.createOrderModel(orderbody,user,paymentbody)
+		await this.orderSubmitRabbit(orderbody)
+	}
 
 	async orderBody(user:string,body:OrderDTO){
 		const cart = await this.CartRepository.getAll(user);
@@ -26,7 +31,7 @@ export class OrderService{
 		}
 	}
 
-	async createOrderModel({orderbody,cart}:IorderCreateBody,user:string){
+	async createOrderModel({orderbody,cart}:IorderCreateBody,user:string,paymentbody?:any){
 		/**/
 		const entity:OrderCreateEntity = {
 			user:user,
@@ -35,7 +40,8 @@ export class OrderService{
 			orderItems:cart,
 			orderParams:orderbody,
 			orderStatus:"CREATED",
-			orderNumber:null
+			orderNumber:null,
+			payment:paymentbody
 		}
 
 		await this.orderRepository.createOrder(entity)
@@ -43,7 +49,7 @@ export class OrderService{
 	}
 
 	async orderSubmitRabbit(body:IorderCreateBody){
-		console.log('rabiit');
+		console.log('rabiit',body);
 		const q = this.communicationClient.emit(
       'order_created',
       body,

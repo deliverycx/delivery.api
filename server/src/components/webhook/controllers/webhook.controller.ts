@@ -60,9 +60,9 @@ export class WebhookController {
 							try {
 								
 								await this.PaymentService.captrurePayment(body);
-								await this.BotService.PaymentOrder(body.invoice.params.orgguid,{...body,statusOrder:'В обработке'})
+								await this.BotService.PaymentOrder(body.invoice.params.organization,{...body,statusOrder:'В обработке'})
 							} catch (error) {
-								await this.BotService.PaymentOrder(body.invoice.params.orgguid,{...body,statusOrder:'Ошибка при заказе'})
+								await this.BotService.PaymentOrder(body.invoice.params.organization,{...body,statusOrder:'Ошибка при заказе'})
 								console.log(error);
 							}
 							

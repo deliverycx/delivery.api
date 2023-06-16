@@ -27,4 +27,5 @@ export class OrderCreateEntity{
 	public readonly orderAmount?:number
 	public readonly orderItems:any[]
 	public readonly orderParams:OrderDTO
+	public readonly payment:any | null
 }

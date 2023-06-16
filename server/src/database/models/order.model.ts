@@ -8,6 +8,7 @@ import {
 import { warnMixed } from "@typegoose/typegoose/lib/internal/utils";
 import { Types } from "mongoose";
 import { UserClass } from "./user.model";
+import { OrderPaymentClass } from "./orderPayment.model";
 
 class NestedOrderClass {
     @prop({ type: Number })
@@ -51,6 +52,9 @@ export class OrderClass {
 
 		@prop({default: null })
 		public orderError:any
+
+		@prop({default: null })
+		public payment:OrderPaymentClass
 }
 
 export const OrderSchema = buildSchema(OrderClass);

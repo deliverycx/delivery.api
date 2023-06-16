@@ -7,13 +7,15 @@ import { OrderCheckDto } from "../dto/orderCheck.dto";
 import { REDIS } from "src/modules/redis/redis.constants";
 import { RedisClient } from "redis";
 
+
 @Injectable()
 export class OrderUsecase {
     constructor(
         private readonly OrderUtilsService: IOrderUtilsService,
 				@Inject(REDIS) private readonly redis: RedisClient,
         private readonly orderCreateBuilder: OrderCreateBuilder,
-        private readonly orderCheckBuilder: OrderCheckBuilder
+        private readonly orderCheckBuilder: OrderCheckBuilder,
+
     ) {}
 
     async create(userId: UniqueId, orderInfo: OrderDTO) {
@@ -48,6 +50,8 @@ export class OrderUsecase {
 
         return orderNumber;
     }
+
+		
 
 		async getStatusOrder(){
 			return await this.orderCreateBuilder.getOrderStatus()
