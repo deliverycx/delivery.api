@@ -55,7 +55,7 @@ export class WebhookController {
 
 			console.log('ответ из пумастера тело',body);
         if (body.status === PaymasterResponse.PaymentStatuses.AUTHORIZED || body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
-						const check:any = await this.PaymentService.checkPymentOrder({paymentid:body.id})
+						const check:any = await this.PaymentService.checkPymentOrder(body.invoice.params.hash)
 						if(!check){
 							try {
 								
@@ -72,6 +72,7 @@ export class WebhookController {
         response.status(200).json({});
     }
 
+		/*
 		@Post("paymentCallbackBar")
     //@UseGuards(YooWebhookGuard)
     async yowebhookBar(
@@ -97,6 +98,7 @@ export class WebhookController {
 
         response.status(200).json({});
     }
+	
 
 		@Get("dualPayment/:hash")
     //@UseGuards(YooWebhookGuard)
@@ -133,7 +135,7 @@ export class WebhookController {
 			}
 			
 		}
-
+	*/
 
     @ApiResponse({
         description:

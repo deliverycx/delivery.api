@@ -16,6 +16,8 @@ import {
 import { ValidationCount } from "../../services/validationCount/validationCount.service";
 import { OrderCheckDto } from "../../dto/orderCheck.dto";
 import { createOrderHash } from "src/services/payment/utils/hash";
+import { RedisClient } from "redis";
+import { REDIS } from "src/modules/redis/redis.constants";
 
 interface IState {
     user: UniqueId;
@@ -36,7 +38,8 @@ export class OrderCheckBuilder {
 
         private readonly OrganizationRepository: IOrganizationRepository,
 
-        private readonly CartRepository: ICartRepository
+        private readonly CartRepository: ICartRepository,
+				@Inject(REDIS) private readonly redis: RedisClient,
     ) {}
 
     async initialize(userId: UniqueId, orderInfo: OrderCheckDto) {
@@ -127,6 +130,12 @@ export class OrderCheckBuilder {
             throw error;
         });
 				const orderHash = createOrderHash();	
+				this.redis.set(
+					orderHash,
+					orderHash,
+					"EX",
+					60 * 10
+			);
 				return orderHash
     }
 }

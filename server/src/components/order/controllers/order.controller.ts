@@ -133,5 +133,15 @@ export class OrderController {
 				response.status(200).json(result);
     }
 
+		@Get("gethash/:hash")
+    async getHash(
+				@Res() response: Response,
+        @Param("hash") hash: string
+    ) {
+				
+        const result = await this.orderService.getOrderRedisHash(hash)
+				response.status(200).json(result);
+    }
+
 
 }

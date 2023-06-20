@@ -6,6 +6,8 @@ import { OrderCreateEntity } from "../../entities/order.entity";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 import { IorderCreateBody } from "./interface.service";
 import { ClientProxy } from "@nestjs/microservices";
+import { RedisClient } from "redis";
+import { REDIS } from "src/modules/redis/redis.constants";
 
 @Injectable()
 export class OrderService{
@@ -13,6 +15,7 @@ export class OrderService{
 		private readonly orderRepository: IOrderRepository,
 		private readonly CartRepository: ICartRepository,
 		@Inject('COMMUNICATION') private readonly communicationClient: ClientProxy,
+		@Inject(REDIS) private readonly redis: RedisClient,
 	){
 		this.communicationClient.connect();
 	}
@@ -58,5 +61,13 @@ export class OrderService{
 
 	getOrderHash(hash:string){
 		return this.orderRepository.getOrderBYhash(hash)
+	}
+
+	getOrderRedisHash(hash:string){
+		return new Promise((resolve, reject) => {
+			this.redis.get(hash, (err, number) => {
+					resolve(number);  
+			});
+	});
 	}
 }

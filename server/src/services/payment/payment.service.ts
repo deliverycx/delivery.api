@@ -20,6 +20,7 @@ import { Model } from "mongoose";
 import { OrderPaymentClass } from "src/database/models/orderPayment.model";
 import { PaymentRepository } from "./sdk/repositories/payment.repositories";
 import { OrderService } from "src/components/order/services/order/order.service";
+import { IOrderRepository } from "src/components/order/repositores/interface.repository";
 
 @Injectable()
 export class PaymentService extends IPaymentService {
@@ -34,6 +35,7 @@ export class PaymentService extends IPaymentService {
         private readonly orderUsecase: OrderUsecase,
         private readonly DeliveryService: IDeliveryService,
 				private readonly paymentRepository:PaymentRepository,
+				private readonly orderRepository: IOrderRepository,
 				private readonly orderService:OrderService
     ) {
         super();
@@ -79,8 +81,8 @@ export class PaymentService extends IPaymentService {
     }
 
 		//поиск заказа в админке
-		async checkPymentOrder(body:any){
-			const result = await this.paymentRepository.findOrderPayment(body)
+		async checkPymentOrder(hash:string){
+			const result = await this.orderRepository.getOrderBYhash(hash)
 			return result
 		}
 
@@ -156,6 +158,7 @@ export class PaymentService extends IPaymentService {
             body.orderType
         );
 
+
 				
 
         const cart = await this.cartRepository.getAll(userId);
@@ -177,7 +180,7 @@ export class PaymentService extends IPaymentService {
         const payMasterBody = {
             merchantId: organizationPaymentInfo.merchantId,
             testMode: true,
-						//dualMode: true,
+						dualMode: true,
             amount: {
                 currency: "RUB",
                 value: intToDecimal(totalPrice)
@@ -191,8 +194,8 @@ export class PaymentService extends IPaymentService {
                 }
             },
             protocol: {
-                callbackUrl: 'https://cec1-89-107-138-20.ngrok-free.app/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
-                returnUrl: `${body.localhost}/ordercreate/${body.hash}`
+                callbackUrl: 'https://a1b9-89-107-138-20.ngrok-free.app/webhook/paymentCallback', //`${body.localhost}/api/webhook/paymentCallback`, //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
+                returnUrl: `${body.localhost}/success/${body.hash}`
             },
             reciept: {
                 client: {
