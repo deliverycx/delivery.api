@@ -59,6 +59,11 @@ export abstract class IIiko {
 			cart: Array<CartEntity>,
 		) => any;
 
+		abstract getTerminalLive: (
+			organizationId: UniqueId,
+		) => any
+		
+
 		abstract getStreetCityIkko: (
 			body:{
 				organizationId:string

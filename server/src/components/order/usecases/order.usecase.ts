@@ -38,6 +38,8 @@ export class OrderUsecase {
 
         await this.orderCheckBuilder.validateCount();
 
+				await this.orderCheckBuilder.terminalIsAlive()
+
         //await this.orderCheckBuilder.serviceValidate();
 
 				//await this.orderCheckBuilder.checkStopList()

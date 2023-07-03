@@ -400,6 +400,14 @@ export class IikoService implements IIiko {
 			*/
 		}
 
+		async getTerminalLive(
+			organizationId: UniqueId,
+		){
+
+			return this.axios.termiralAlive(organizationId)
+		}
+
+
 		async getStreetCityIkko({organizationId}){
 			const result = await this.axios.getOrganization(organizationId)
 			return this.axios.getStreetCity(organizationId,result.defaultDeliveryCityId)

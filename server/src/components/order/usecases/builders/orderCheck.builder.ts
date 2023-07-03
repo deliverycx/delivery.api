@@ -66,6 +66,17 @@ export class OrderCheckBuilder {
         }
     }
 
+		async terminalIsAlive() {
+			const isAlive = await this.orderService.getTerminalLive(this._state.orderInfo.organizationid)
+			if(!isAlive){
+				this._state.errors.push(
+					new CannotDeliveryError(
+						`Доставка не может быть совершена по причине: нет связи с заведением`
+					)
+				);
+			}
+		}	
+
 		/*
     async checkCardPaymentAviables() {
         if (this._state.orderInfo.paymentMethod !== PaymentMethods.CARD) {

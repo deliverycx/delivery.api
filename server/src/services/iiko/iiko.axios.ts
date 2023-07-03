@@ -87,6 +87,32 @@ export class IIkoAxios extends Axios {
 			return data.terminalGroups[0].items[0].id;
 		}
 
+
+		public async termiralAlive(organization:string) {
+			const token = await this.token();
+			const temitalid = await this.termiralGroops(organization)
+			const { data } = await this._axios.post<any>(
+					`/terminal_groups/is_alive`,
+					{
+						"organizationIds": [
+							organization
+						],
+						"terminalGroupIds": [
+							temitalid
+						]
+					},
+					{
+						headers: { Authorization: `Bearer ${token}` }
+					}
+			);
+
+			if(data.isAliveStatus.length !== 0){
+				return data.isAliveStatus[0].isAlive
+			}else{
+				throw Error()
+			}
+		}
+
     public async orderCreateDelivery(orderData: any) {
         const token = await this.token();
 
