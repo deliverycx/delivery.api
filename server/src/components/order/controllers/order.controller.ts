@@ -25,6 +25,7 @@ import { PaymentException } from "src/filters/payment.filter";
 import { RedirectEntity } from "../entities/redirect.entity";
 import { OrderCheckDto } from "../dto/orderCheck.dto";
 import { OrderService } from "../services/order/order.service";
+import axios from "axios";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
@@ -143,5 +144,24 @@ export class OrderController {
 				response.status(200).json(result);
     }
 
+		@Post("smstable")
+    async smstable(
+			@Body() body: any,
+			@Res() response: Response,
+    ) {
+			try {
+				const {data} = await axios.get('https://cxcrimea@yandex.ru:zx4dUbwFtA319jZ3P90q7L2dyjtzD70M@gate.smsaero.ru/v2/auth')
+				if(data && data.success){
+					const urls = encodeURI(`https://cxcrimea@yandex.ru:zx4dUbwFtA319jZ3P90q7L2dyjtzD70M@gate.smsaero.ru/v2/sms/send?number=${body.phone}&text=${body.textsms}&sign=Khinkalich`)
+					const smsresult = await axios.get(urls)
+					response.status(200).json(smsresult);
+				}
+			} catch (error) {
+				console.log(error);
+				response.status(501).json(null);
+			}
+			
+				
+    }
 
 }
