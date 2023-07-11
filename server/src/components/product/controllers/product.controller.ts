@@ -72,6 +72,7 @@ export class ProductController {
         @Query()
         query: GetAllDTO,
     ) {
+				console.log('org',query.organization);
         const result = await this.productUsecase.getAllNomenClature(query.organization)
 				
 				return result
