@@ -154,6 +154,7 @@ export class OrderController {
 				if(data && data.success){
 					const urls = encodeURI(`https://cxcrimea@yandex.ru:zx4dUbwFtA319jZ3P90q7L2dyjtzD70M@gate.smsaero.ru/v2/sms/send?number=${body.phone}&text=${body.textsms}&sign=Khinkalich`)
 					const smsresult = await axios.get(urls)
+					console.log('sms',smsresult);
 					response.status(200).json(smsresult);
 				}
 			} catch (error) {
