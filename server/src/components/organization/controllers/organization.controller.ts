@@ -63,6 +63,7 @@ export class OrganizationController {
         const result = await this.organizationUsecase.getPaymentsInfoForClient(
             query.organizationId
         );
+				console.log('org',result);
 
         response.status(HttpStatus.OK).json(result);
     }
