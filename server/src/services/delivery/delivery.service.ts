@@ -22,7 +22,7 @@ export class DeliveryService implements IDeliveryService {
             return 0;
         }
 
-        return price < 700 ? 150 : 0;
+        return price < 850 ? 150 : 0;
     }
     private async cartPriceCalculating(userId: UniqueId,discount?:number): Promise<number> {
         let totalPrice = await this.cartRepository.calc(userId);
@@ -52,7 +52,7 @@ export class DeliveryService implements IDeliveryService {
         let deltaPrice = 0;
 
         if (orderType === OrderTypesEnum.COURIER) {
-            deltaPrice = 700 - totalPrice < 0 ? 0 : 700 - totalPrice;
+            deltaPrice = 850 - totalPrice < 0 ? 0 : 850 - totalPrice;
         }
 
 				if(count !== 0){
