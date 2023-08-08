@@ -261,7 +261,7 @@ export class WebhookController {
 			const {data} = await axios.post(`https://iiko.biz:9900/api/0/olaps/olapByPreset?access_token=${token.data}&organizationId=${getorgId.id}&request_timeout=`,
 				{
 					"dateTo":String(body.time), 
-					"dateFrom":"2018-01-02",
+					"dateFrom":body.oldtime,
 					"presetId":"9f99fda4-604a-428a-aecc-9563ec53b8e0"
 				}
 			)
