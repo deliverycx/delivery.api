@@ -34,7 +34,7 @@ import { OrderService } from "src/components/order/services/order/order.service"
 					name: 'COMMUNICATION',
 					transport: Transport.RMQ,
 					options: {
-						urls: [`amqp://${process.env.RABBITMQ_HOST}`],
+						urls: [`amqp://${process.env.RABBITMQ_HOST}?heartbeat=180`],
 						queue: 'cats_queue',
 						noAck: false,
 						queueOptions: {
