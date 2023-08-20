@@ -35,6 +35,7 @@ export class StopListRepository implements IStopListRepository {
 									};
 							})
 					).then((mass) =>{
+						console.log(mass);
 						return mass.filter((el) => el !== null)
 					})
 				

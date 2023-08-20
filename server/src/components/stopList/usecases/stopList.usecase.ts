@@ -25,6 +25,7 @@ export class StopListUsecase {
 			try {
 				if(organizationGUID){
 					const data = await this.axios.stopList(organizationGUID);
+					
 					if(data.length === 0){
 						return []
 					}
@@ -32,10 +33,10 @@ export class StopListUsecase {
 					const stopList = data
 							.map((stopListArrayItem) => stopListArrayItem.items)
 							.flat();
-					
-					const result = await this.stopListRepository.getAll(organizationGUID,stopList)
+							
+					//const result = await this.stopListRepository.getAll(organizationGUID,stopList)
 
-					return result
+					return stopList
 				}else{
 					return []
 				}
