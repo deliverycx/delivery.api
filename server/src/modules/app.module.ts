@@ -60,7 +60,7 @@ try {
                 },
                 fs.createWriteStream("./pinologs/info.log", {
                     encoding: "utf-8",
-                    flags: "a+"
+                    flags: "a"
                 })
             ]
         }),
