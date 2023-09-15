@@ -152,9 +152,10 @@ export class OrderController {
 			try {
 				const {data} = await axios.get('https://cxcrimea@yandex.ru:zx4dUbwFtA319jZ3P90q7L2dyjtzD70M@gate.smsaero.ru/v2/auth')
 				if(data && data.success){
+					console.log('sms body',body);
 					const urls = encodeURI(`https://cxcrimea@yandex.ru:zx4dUbwFtA319jZ3P90q7L2dyjtzD70M@gate.smsaero.ru/v2/sms/send?number=${body.phone}&text=${body.textsms}&sign=Khinkalich`)
 					const smsresult = await axios.get(urls)
-					console.log('sms',smsresult);
+					console.log('sms result',smsresult);
 					response.status(200).json(smsresult);
 				}
 			} catch (error) {
