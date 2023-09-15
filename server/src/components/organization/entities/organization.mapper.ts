@@ -23,7 +23,9 @@ export const organizationMapper: Mapper<
 						organization.reservetable,
 						organization.city as string,
 						organization.redirect,
-						organization.redirectON
+						organization.redirectON,
+						organization.gallery,
+						organization.filters
         );
     });
 };

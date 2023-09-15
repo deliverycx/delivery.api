@@ -52,6 +52,10 @@ export class OrganizationEntity {
 		@ApiProperty()
 		public readonly redirectON:boolean
 
+		public readonly gallery:string[]
+
+		public readonly filters:any
+
     constructor(
         id: Types.ObjectId,
         address?: string,
@@ -65,7 +69,9 @@ export class OrganizationEntity {
 				reservetable?:boolean,
 				cityid?:string,
 				redirect?:string,
-				redirectON?:boolean
+				redirectON?:boolean,
+				gallery?:string[],
+				filters?:any
     ) {
         this.id = id;
         this.address = address;
@@ -79,7 +85,9 @@ export class OrganizationEntity {
 				this.reservetable = reservetable,
 				this.cityid = cityid,
 				this.redirect = redirect,
-				this.redirectON = redirectON
+				this.redirectON = redirectON,
+				this.gallery = gallery,
+				this.filters = filters
     }
 
     public get getGuid() {

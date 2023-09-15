@@ -32,5 +32,12 @@ export class OrganizationUsecase {
 		async getBuID(orgid: UniqueId) {
 			const result = await this.organizationRepository.getOneByGUID(orgid);
 			return result;
-	}
+		}
+		async fliters(data:any[],cityid:string){
+			return this.organizationRepository.filtersMetod(data,cityid)
+		}
+
+		async pointSerchs(data:string,cityid:string){
+			return this.organizationRepository.pointSerchMetod(data,cityid)
+		}
 }

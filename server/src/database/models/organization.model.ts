@@ -8,6 +8,7 @@ import {
 } from "@typegoose/typegoose";
 import { Types } from "mongoose";
 import { CityClass } from "./city.model";
+import { OrganizationfilterClass } from "./organizationFilter.model";
 
 @ModelOptions({
     options: { customName: "Organization", allowMixed: Severity.ALLOW },
@@ -53,6 +54,12 @@ export class OrganizationClass {
 
 		@prop({ default: false })
     public reservetable:boolean
+
+		@prop()
+		gallery:string[]
+
+		@prop({ ref: () => OrganizationfilterClass })
+    public filters!: Ref<OrganizationfilterClass>[];
 
 }
 
