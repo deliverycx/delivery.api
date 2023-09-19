@@ -45,6 +45,7 @@ export class NomenclatureServises {
 
 		}).filter(item => item.description !== 'HIDDEN').sort((a: any, b: any) => (a.order - b.order))
 
+		/*
 		cat.push({
 			_id: new Types.ObjectId(),
 			id: 'favorite',
@@ -54,6 +55,7 @@ export class NomenclatureServises {
 			description: '',
 			image: "/static/shop/favorite.png"
 		});
+		*/
 		return cat
 	}
 
