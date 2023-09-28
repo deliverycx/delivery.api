@@ -19,10 +19,10 @@ export class CartRepository
 				@Inject("Organizationtables")
         private readonly OrganizationTablesModel: Model<OrganizationTablesClass>
     ) {
-        super(CartModel, cartMapper, "user", "product");
+        super(CartModel, cartMapper, "user");
     }
 
-    async add(userId: UniqueId, producte: any) {
+    async add(userId: UniqueId, producte: any,amounte = 1) {
         const result = await this.CartModel.findOneAndUpdate(
             {
                 user: userId,
@@ -33,11 +33,11 @@ export class CartRepository
                     product: producte
                 },
                 $inc: {
-                    amount: 1
+                    amount: amounte
                 }
             },
             { upsert: true, new: true }
-        ).populate("product");
+        )//.populate("product");
 
         const product = result.product as ProductClass;
 
@@ -81,7 +81,7 @@ export class CartRepository
                 }
             },
             { new: true }
-        ).populate("product");
+        )//.populate("product");
 
         const product = result.product as ProductClass;
 

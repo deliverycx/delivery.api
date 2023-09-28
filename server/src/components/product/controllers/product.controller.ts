@@ -77,6 +77,17 @@ export class ProductController {
 				return result
     }
 
+
+		@Get("additionProducts")
+    async getAdditionProducts(
+        @Query()
+        query: {organization:string},
+    ) {
+        const result = await this.productUsecase.getadditionProductsClature(query.organization)
+				console.log(result);
+				return result
+    }
+
     @ApiResponse({
         status: 200,
         type: [ProductEntity]
@@ -122,5 +133,7 @@ export class ProductController {
         response.status(200).json(product);
     }
 
+
+		
 
 }

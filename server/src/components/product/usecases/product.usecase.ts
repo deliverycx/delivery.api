@@ -45,6 +45,11 @@ export class ProductUsecase {
 			return result
 		}
 
+		async getadditionProductsClature(organization: string) {
+		  const result = await this.nomenclatureServises.AdditionProducts(organization)
+			return result
+		}
+
     async search(
         searchString: string,
         organizationId: UniqueId,

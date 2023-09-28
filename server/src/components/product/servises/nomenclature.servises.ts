@@ -26,7 +26,7 @@ export class NomenclatureServises {
 
 	NomenClatureCategory(category: any[], organization: string) {
 		const cat = category.map((value) => {
-			const { name, order, images, imageLinks, id, description } = value;
+			const { name, order, images, imageLinks, id, description,tags } = value;
 			const image = imageLinks
 				? imageLinks[imageLinks.length - 1]
 				: "";
@@ -39,6 +39,7 @@ export class NomenclatureServises {
 					order,
 					description,
 					image: image,
+					tags
 
 				};
 				return category
@@ -104,5 +105,46 @@ export class NomenclatureServises {
 			return product
 		})
 		return prods
+	}
+
+	async AdditionProducts(organization:string){
+		const nomenclature = await this.getNomenClature(organization)
+		if(nomenclature){
+			const randomProduct = []
+			const randomSous = []
+
+			// ищем категорию соусы
+			const catsosus = nomenclature.categoryes.find((val) =>{
+				if(val.tags && Array.isArray(val.tags)){
+					if(val.tags[0] === "sous"){
+						return val
+					}
+				}
+			})
+			// находим товары по соусам
+			const sosusProducts = nomenclature.products.filter((product) =>{
+				return product.category === catsosus.id
+			})
+			// все короме соусов
+			const products = nomenclature.products.filter((val) =>{
+				if(val.tags && Array.isArray(val.tags)){
+					if(val.tags[0] !== "sous"){
+						return val
+					}
+				}
+			})
+
+			const randoms = (arr,r,n) =>{
+				for (let i = 0; i < n; i += 1) {
+					arr.push(r.splice(Math.floor(Math.random() * r.length), 1)[0]);
+				}
+			}
+
+			randoms(randomSous,sosusProducts,3)
+			randoms(randomProduct,products,6)
+			
+		
+			return randomSous.concat(randomProduct)
+		}
 	}
 }

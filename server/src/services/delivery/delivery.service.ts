@@ -44,7 +44,7 @@ export class DeliveryService implements IDeliveryService {
             totalPrice,
             orderType
         );
-
+				
 				
         let deltaPrice = 0;
 
@@ -56,14 +56,18 @@ export class DeliveryService implements IDeliveryService {
 					return {
             deliveryPrice,
             totalPrice: totalPrice + deliveryPrice,
-            deltaPrice:deltaPrice !== 0 ? deltaPrice : 0
+            deltaPrice:deltaPrice !== 0 ? deltaPrice : 0,
+						fullPrice:totalPrice
         	};
 				}
+
+				
 
         return {
             deliveryPrice,
             totalPrice: totalPrice + deliveryPrice,
-            deltaPrice
+            deltaPrice,
+						fullPrice:totalPrice
         };
     }
 

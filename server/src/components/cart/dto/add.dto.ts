@@ -17,4 +17,6 @@ export class AddCartDTO {
         enum: ["COURIER", "PICKUP"]
     })
     public orderType: OrderTypesEnum;
+
+		anmount?:number
 }
