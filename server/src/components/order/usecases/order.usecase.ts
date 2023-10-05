@@ -47,6 +47,12 @@ export class OrderUsecase {
         return this.orderCheckBuilder.getResult();
     }
 
+		async checkOrderCart(userId: UniqueId,orderInfo:any = {}){
+			await this.orderCheckBuilder.initialize(userId, orderInfo);
+			await this.orderCheckBuilder.validateCount();
+			return this.orderCheckBuilder.getResult();
+		}
+
     async getOrderNumber(hash: string) {
         const orderNumber = await this.OrderUtilsService.getOrderNumber(hash);
 

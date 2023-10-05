@@ -93,6 +93,19 @@ export class OrderController {
         return hash
     }
 
+
+
+		@Get("checkcart")
+    async checkOrderCart(
+        @Session() session: Record<string, string>,
+       
+    ) {
+				
+        const result = await this.OrderUsecase.checkOrderCart(session.user);
+				console.log('чек cart');
+        return result
+    }
+
     @ApiResponse({
         status: 200,
         type: OrderEntity,
