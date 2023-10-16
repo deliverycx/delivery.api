@@ -25,8 +25,6 @@ class Address {
     schemaOptions: { versionKey: false, timestamps: true }
 })
 export class UserClass {
-    @prop()
-    public name!: string;
 
     @prop({ unique: true })
     public username!: string;
@@ -34,14 +32,14 @@ export class UserClass {
     @prop()
     public phone!: string;
 
-    @prop({ type: Types.ObjectId })
-    public selectedOrganization: Types.ObjectId;
-
-    @prop({ type: Address })
-    public address!: Address;
-
     @prop({ ref: () => CartClass })
     public cart!: Ref<CartClass>;
+
+		@prop()
+		refreshToken!:string
+
+		@prop()
+		personal!:any
 }
 
 export const UserSchema = buildSchema(UserClass);
