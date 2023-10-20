@@ -14,4 +14,13 @@ export class ProfileUseCase {
 
 		return this.profileRepository.undatePersonal(userid, body)
 	}
+
+	adress(userid: string, body: any) {
+
+		return this.profileRepository.undateAdressDelivery(userid, body)
+	}
+	adressDelite(userid: string, body: any) {
+
+		return this.profileRepository.deliteAdressDelivery(userid, body)
+	}
 }

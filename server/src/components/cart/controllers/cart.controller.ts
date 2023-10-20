@@ -24,6 +24,7 @@ import { ValidationException } from "src/filters/validation.filter";
 import { Response } from "express";
 import { GetAllCartDTO } from "../dto/getAll.dto";
 import { DiscountDTO } from "../dto/discount.dto";
+import { JwtAuthGuard } from "src/guards/jwt.guard";
 
 @ApiTags("Cart endpoints")
 @ApiResponse({
@@ -39,7 +40,7 @@ import { DiscountDTO } from "../dto/discount.dto";
     })
 )
 @UseFilters(new UnauthorizedFilter())
-@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard)
 export class CartController {
     constructor(private readonly cartUsecase: CartUsecase) {}
 
@@ -190,8 +191,11 @@ export class CartController {
         @Res() response: Response,
         @Query() query: GetAllCartDTO
     ) {
-				
-        const result = await this.cartUsecase.getAll(session.user, query);
+				console.log(session.user);
+				if(!session.user){
+					session.user = query.userid
+				}
+        const result = await this.cartUsecase.getAll(session.user || query.userid, query);
 
         response.status(200).json(result);
     }

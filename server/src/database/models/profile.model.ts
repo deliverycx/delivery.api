@@ -21,6 +21,9 @@ export class ProfileClass{
 
 	@prop()
   public personal!: any;
+
+	@prop()
+  public adressdelivery!: any;
 }
 
 export const ProfileSchema = buildSchema(ProfileClass);

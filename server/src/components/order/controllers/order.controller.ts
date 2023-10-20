@@ -26,6 +26,7 @@ import { RedirectEntity } from "../entities/redirect.entity";
 import { OrderCheckDto } from "../dto/orderCheck.dto";
 import { OrderService } from "../services/order/order.service";
 import axios from "axios";
+import { JwtAuthGuard } from "src/guards/jwt.guard";
 
 @ApiTags("Order endpoints")
 @ApiResponse({
@@ -42,7 +43,7 @@ import axios from "axios";
     })
 )
 @UseFilters(new UnauthorizedFilter())
-@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard)
 export class OrderController {
     constructor(
         private readonly OrderUsecase: OrderUsecase,

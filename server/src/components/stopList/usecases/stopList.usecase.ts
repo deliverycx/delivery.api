@@ -32,10 +32,9 @@ export class StopListUsecase {
 					const stopList = data
 							.map((stopListArrayItem) => stopListArrayItem.items)
 							.flat();
-					
-					const result = await this.stopListRepository.getAll(organizationGUID,stopList)
 
-					return result
+
+					return stopList
 				}else{
 					return []
 				}

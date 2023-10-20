@@ -13,4 +13,5 @@ export class RemoveOneDTO {
         enum: ["COURIER", "PICKUP"]
     })
     public orderType: OrderTypesEnum;
+		userid:string
 }

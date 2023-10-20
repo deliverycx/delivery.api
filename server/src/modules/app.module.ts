@@ -105,6 +105,15 @@ export class AppModule implements NestModule {
     async configure(consumer: MiddlewareConsumer) {
         consumer
             .apply(
+							session({
+
+								secret: process.env.SESSION_SECRET,
+								resave: false,
+
+								saveUninitialized: false,
+
+						})
+								/*
                 session({
                     store: new (RedisStore(session))({
                         client: this.redis,
@@ -119,6 +128,7 @@ export class AppModule implements NestModule {
                         httpOnly: true
                     }
                 })
+								*/
             )
             .forRoutes("*");
     }

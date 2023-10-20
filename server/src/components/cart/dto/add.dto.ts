@@ -19,4 +19,6 @@ export class AddCartDTO {
     public orderType: OrderTypesEnum;
 
 		anmount?:number
+
+		userid:string
 }

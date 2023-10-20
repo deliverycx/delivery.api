@@ -108,7 +108,9 @@ export class NomenclatureServises {
 	}
 
 	async AdditionProducts(organization:string){
+		
 		const nomenclature = await this.getNomenClature(organization)
+
 		if(nomenclature){
 			const randomProduct = []
 			const randomSous = []
@@ -122,6 +124,7 @@ export class NomenclatureServises {
 				}
 			})
 			// находим товары по соусам
+			
 			const sosusProducts = nomenclature.products.filter((product) =>{
 				return product.category === catsosus.id
 			})

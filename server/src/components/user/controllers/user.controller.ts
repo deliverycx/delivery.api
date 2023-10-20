@@ -53,13 +53,12 @@ export class UserController {
 			sameSite: 'lax',
 			expires: new Date(Date.now() + 20 * 24 * 60 * 5000), //new Date(Date.now() + 20 * 24 * 60 * 5000)
 		});
-		//session.user = user.getId;
+		session.user = user.getId;
 
 		return user;
 	}
 
 	@Post("check_guest")
-	@UseGuards(JwtAuthGuard)
 	@UseGuards(AuthGuard('refresh'))
 	async checkauth(
 		@Session() session: Record<string, string>,
@@ -80,7 +79,7 @@ export class UserController {
 			sameSite: 'lax',
 			expires: new Date(Date.now() + 20 * 24 * 60 * 5000), //new Date(Date.now() + 20 * 24 * 60 * 5000)
 		});
-		//session.user = null //req.body.id;
+		session.user = req.body.id;
 
 		return req.body;
 	}

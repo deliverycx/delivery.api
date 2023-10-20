@@ -10,4 +10,5 @@ export class GetAllCartDTO {
     })
     @IsOptional()
     public orderType: OrderTypesEnum = OrderTypesEnum.COURIER;
+		userid:string
 }
