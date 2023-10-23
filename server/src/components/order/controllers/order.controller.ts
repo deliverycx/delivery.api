@@ -96,14 +96,14 @@ export class OrderController {
 
 
 
-		@Get("checkcart")
+		@Post("checkcart")
     async checkOrderCart(
         @Session() session: Record<string, string>,
-       
+        @Body() body: {userid:string},
     ) {
 				
-        const result = await this.OrderUsecase.checkOrderCart(session.user);
-				console.log('чек cart');
+        const result = await this.OrderUsecase.checkOrderCart(body.userid);
+				console.log('чек cart',body.userid);
         return result
     }
 

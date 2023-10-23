@@ -57,6 +57,7 @@ export class OrderCheckBuilder {
     }
 
     async validateCount() {
+			console.log(this._state);
         const validationResult = this.validationCountService.validate(
             this._state.cart
         );
