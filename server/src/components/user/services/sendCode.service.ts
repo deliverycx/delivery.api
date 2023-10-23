@@ -9,7 +9,7 @@ export class SendCodeService {
     constructor(@Inject(REDIS) private readonly redis: RedisClient) {}
 
     async sendSMSCode(phone: string) {
-        const code = generateString(9, -4);
+        const code = "1234" //generateString(9, -4);
 
         const isFind = await new Promise((resolve, reject) => {
             this.redis.get(code, (err, value) => {
