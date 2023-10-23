@@ -28,7 +28,7 @@ export class ProfileRepository {
 
 	async undateAdressDelivery(userid: UniqueId, adressbody: any) {
 		const user = await this.Model.findOne({ userid })
-		const findAdress = user.adressdelivery.find((value) => value.address === adressbody.address)
+		const findAdress = user.adressdelivery && user.adressdelivery.find((value) => value.address === adressbody.address)
 
 		if (findAdress) {
 			const result = await this.Model.findOneAndUpdate({
