@@ -72,8 +72,7 @@ export class CartController {
         @Res() response: Response
     ) {
 
-				console.log('session.user',session.user);
-        const result = await this.cartUsecase.add(session.user, addBody);
+        const result = await this.cartUsecase.add(addBody.userid, addBody);
         response.status(200).json(result);
     }
 
@@ -109,7 +108,7 @@ export class CartController {
         @Res() response: Response
     ) {
         const result = await this.cartUsecase.removeOne(
-            session.user,
+						removeBody.userid,
             removeBody
         );
 
@@ -125,9 +124,11 @@ export class CartController {
     async deleteAll(
         @Session()
         session: Record<string, string>,
-        @Res() response: Response
+        @Res() response: Response,
+				@Body()
+        Body: {userid:string},
     ) {
-        const result = await this.cartUsecase.removeAll(session.user);
+        const result = await this.cartUsecase.removeAll(Body.userid);
 
         response.status(200).json(result);
     }
@@ -160,7 +161,7 @@ export class CartController {
         @Res() response: Response
     ) {
         const result = await this.cartUsecase.changeAmount(
-            session.user,
+						changeAmountBody.userid,
             changeAmountBody
         );
 
@@ -193,11 +194,11 @@ export class CartController {
         @Res() response: Response,
         @Query() query: GetAllCartDTO
     ) {
-				console.log(session.user);
+
 				if(!session.user){
 					session.user = query.userid
 				}
-        const result = await this.cartUsecase.getAll(session.user || query.userid, query);
+        const result = await this.cartUsecase.getAll(query.userid, query);
 
         response.status(200).json(result);
     }
