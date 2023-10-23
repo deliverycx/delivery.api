@@ -71,6 +71,8 @@ export class CartController {
         session: Record<string, string>,
         @Res() response: Response
     ) {
+
+				console.log('session.user',session.user);
         const result = await this.cartUsecase.add(session.user, addBody);
         response.status(200).json(result);
     }
