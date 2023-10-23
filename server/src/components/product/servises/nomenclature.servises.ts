@@ -124,10 +124,11 @@ export class NomenclatureServises {
 				}
 			})
 			// находим товары по соусам
-			
-			const sosusProducts = nomenclature.products.filter((product) =>{
+
+			const sosusProducts = catsosus && nomenclature.products.filter((product) =>{
 				return product.category === catsosus.id
 			})
+			
 			// все короме соусов
 			const products = nomenclature.products.filter((val) =>{
 				if(val.tags && Array.isArray(val.tags)){
@@ -143,8 +144,8 @@ export class NomenclatureServises {
 				}
 			}
 
-			randoms(randomSous,sosusProducts,3)
-			randoms(randomProduct,products,6)
+			catsosus && randoms(randomSous,sosusProducts,3)
+			products && randoms(randomProduct,products,6)
 			
 		
 			return randomSous.concat(randomProduct)
