@@ -8,6 +8,7 @@ import { IorderCreateBody } from "./interface.service";
 import { ClientProxy } from "@nestjs/microservices";
 import { RedisClient } from "redis";
 import { REDIS } from "src/modules/redis/redis.constants";
+import { OrderRepository } from "../../repositores/base.repository";
 
 @Injectable()
 export class OrderService{
@@ -28,6 +29,7 @@ export class OrderService{
 
 	async orderBody(user:string,body:OrderDTO){
 		const cart = await this.CartRepository.getAll(user);
+		console.log('cart',cart);
 		return {
 			orderbody:body,
 			cart:cart
@@ -61,6 +63,10 @@ export class OrderService{
 
 	getOrderHash(hash:string){
 		return this.orderRepository.getOrderBYhash(hash)
+	}
+
+	getOrderUser(user:string){
+		return this.orderRepository.metodOrderBYUser(user)
 	}
 
 	getOrderRedisHash(hash:string){

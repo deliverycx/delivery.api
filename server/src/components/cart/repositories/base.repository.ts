@@ -46,7 +46,7 @@ export class CartRepository
             product?.name,
             product?.image,
             product?.tags,
-            product?.id,
+            product?.productId,
             result?.amount,
             product?.price
         );
@@ -90,7 +90,7 @@ export class CartRepository
             product.name,
             product.image,
             product.tags,
-            product.id,
+            product.productId,
             result.amount,
             product.price
         );

@@ -7,7 +7,7 @@ import { IOrderRepository } from "./interface.repository";
 import { OrderCreateEntity } from "../entities/order.entity";
 
 @Injectable()
-export class OrderRepository implements IOrderRepository {
+export class OrderRepository {
     constructor(
         @Inject("Order")
         private readonly orderModel: Model<OrderClass>
@@ -38,4 +38,9 @@ export class OrderRepository implements IOrderRepository {
 		async getOrderBYhash(hash:string){
 			return await this.orderModel.findOne({orderHash:hash})
 	 }
+
+	 async metodOrderBYUser(userid:string){
+		const result = await this.orderModel.find({user:userid})
+		return result
+ 	}
 }

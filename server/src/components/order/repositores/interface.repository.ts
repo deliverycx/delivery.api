@@ -11,4 +11,5 @@ export abstract class IOrderRepository {
 
 		abstract	createOrder(entiti:OrderCreateEntity): Promise<void>
 		abstract	getOrderBYhash(hash:string): Promise<any>
+		abstract metodOrderBYUser(userid:string): Promise<any>
 }

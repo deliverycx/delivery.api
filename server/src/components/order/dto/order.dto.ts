@@ -31,6 +31,7 @@ export class OrderDTO {
     date:string
     
     @IsObject()
+		@IsOptional()
     address: {
         city: string;
         street: string;
@@ -53,7 +54,7 @@ export class OrderDTO {
 			id: string
 			numb: number
 		}
-
+		userid:string
     @ApiProperty()
     @IsPhoneNumber("RU", {
         message: () => {

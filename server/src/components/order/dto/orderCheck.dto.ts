@@ -1,11 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsObject, isString } from "class-validator";
+import { IsObject, IsOptional, isString } from "class-validator";
 
 export class OrderCheckDto{
 	
 	organizationid:string
 
 	@IsObject()
+	@IsOptional()
     address: {
         city: string;
         street: string;

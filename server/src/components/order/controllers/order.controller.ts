@@ -33,7 +33,7 @@ import { JwtAuthGuard } from "src/guards/jwt.guard";
     status: 401,
     description: "в случае если пользователь без сессионных кук"
 })
-@ApiCookieAuth()
+
 @Controller("order")
 @UseFilters(new ValidationException())
 @UseFilters(new PaymentException())
@@ -129,7 +129,7 @@ export class OrderController {
 				@Res() response: Response,
     ) {
 			try {
-				await this.orderService.createOrderToRabbit(session.user, body)
+				await this.orderService.createOrderToRabbit(body.userid, body)
 				response.status(200).json(true);
 			} catch (error) {
 				response.status(408).json(false);
@@ -155,6 +155,16 @@ export class OrderController {
     ) {
 				
         const result = await this.orderService.getOrderRedisHash(hash)
+				response.status(200).json(result);
+    }
+
+		@Get("orderuser/:user")
+    async getOrderByUser(
+				@Res() response: Response,
+        @Param("user") user: string
+    ) {
+				
+        const result = await this.orderService.getOrderUser(user)
 				response.status(200).json(result);
     }
 
