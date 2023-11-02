@@ -39,8 +39,8 @@ import { JwtAuthGuard } from "src/guards/jwt.guard";
         transform: true
     })
 )
-@UseFilters(new UnauthorizedFilter())
-@UseGuards(JwtAuthGuard)
+//@UseFilters(new UnauthorizedFilter())
+//@UseGuards(JwtAuthGuard)
 export class CartController {
     constructor(private readonly cartUsecase: CartUsecase) {}
 
