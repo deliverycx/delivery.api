@@ -4,7 +4,7 @@ import { IsObject, IsOptional, isString } from "class-validator";
 export class OrderCheckDto{
 	
 	organizationid:string
-
+	userid:string
 	@IsObject()
 	@IsOptional()
     address: {

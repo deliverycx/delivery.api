@@ -89,7 +89,7 @@ export class OrderController {
        
     ) {
 				console.log('чек заказа',body);
-        const hash = await this.OrderUsecase.checkOrder(session.user, body);
+        const hash = await this.OrderUsecase.checkOrder(body.userid, body);
 
         return hash
     }
