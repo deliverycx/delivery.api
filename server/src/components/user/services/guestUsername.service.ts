@@ -18,7 +18,7 @@ export class GenerateUsernameService implements IGuestGenerateService {
         const isFind = await this.UserModel.findOne({ username });
 
         if (isFind) {
-            return this.generate();
+            //return this.generate();
         }
 				//const usernamehash = await hash(username, salt)
         return username;
