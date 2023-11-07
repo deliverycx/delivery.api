@@ -24,7 +24,7 @@ export class SendCodeService {
         });
 
         if (isFind) {
-            await this.sendSMSCode(phone);
+            //await this.sendSMSCode(phone);
         } else {
             this.redis.set(code, phone, "EX", 60 * 1);
         }

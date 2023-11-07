@@ -100,7 +100,7 @@ export class UserUsecase {
 			if(phone && typeof phone === 'string'){
 				const code = await this.sendCodeService.sendSMSCode(phone)
 				if(code && typeof code === 'string'){
-					await this.sMSAeroServices.smsAutrorization(phone,code)
+					//await this.sMSAeroServices.smsAutrorization(phone,code)
 				}
 			}else{
 				throw new InternalException();
