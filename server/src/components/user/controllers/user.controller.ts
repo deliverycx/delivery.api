@@ -68,12 +68,8 @@ export class UserController {
 		@Req() req, @Res({ passthrough: true }) res: Response
 
 	) {
-		const user = await this.userUsecase.getUser(req.body.id)
-		if(!user){
-			throw new UnauthorizedException();
-		}
-		session.user = user.getId;
-		return user;
+		session.user = req.body.id;
+		return req.body;
 	}
 
 	//@UseGuards(JwtAuthGuard)
