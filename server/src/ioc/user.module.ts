@@ -28,7 +28,7 @@ import { ProfileUseCase } from "src/components/user/usecases/profile.useCase";
 			JwtModule.register({
       secret: process.env.SESSION_SECRET,
 			signOptions: {	
-        expiresIn: '7d',
+        expiresIn: '30d',
       },
     }),
     PassportModule,],

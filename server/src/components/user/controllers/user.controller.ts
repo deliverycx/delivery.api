@@ -8,6 +8,7 @@ import {
 	Req,
 	Res,
 	Session,
+	UnauthorizedException,
 	UseGuards
 } from "@nestjs/common";
 import { Request, response, Response } from "express";
@@ -19,6 +20,7 @@ import { AuthGuard } from "@nestjs/passport";
 import { JwtAuthGuard } from "src/guards/jwt.guard";
 import { RefreshStrategy } from "../strategy/refreshToken.strategy";
 import { RefreshTokenGuard } from "src/guards/refreshToken.guard";
+import { AuthJWTGuard } from "src/guards/auth.guard";
 
 @ApiTags("User endpoints")
 @Controller("user")
@@ -59,29 +61,19 @@ export class UserController {
 	}
 
 	@Post("check_guest")
-	@UseGuards(AuthGuard('refresh'))
+	//@UseGuards(AuthGuard('refresh'))
+	@UseGuards(AuthJWTGuard)
 	async checkauth(
 		@Session() session: Record<string, string>,
 		@Req() req, @Res({ passthrough: true }) res: Response
 
 	) {
-
-		const token = await this.userUsecase.getJwtToken(req.body.username)
-		await this.userUsecase.updateRefreshToken(req.body.id, token.refreshToken);
-		const secretData = {
-			token: token.accessToken,
-			refreshToken: token.refreshToken
-		};
-
-		res.cookie('auth-cookie', secretData, {
-			httpOnly: true,
-			secure: true,
-			sameSite: 'lax',
-			expires: new Date(Date.now() + 40 * 24 * 60 * 5000), //new Date(Date.now() + 20 * 24 * 60 * 5000)
-		});
-		session.user = req.body.id;
-
-		return req.body;
+		const user = await this.userUsecase.getUser(req.body.id)
+		if(!user){
+			throw new UnauthorizedException();
+		}
+		session.user = user.getId;
+		return user;
 	}
 
 	//@UseGuards(JwtAuthGuard)
@@ -115,7 +107,7 @@ export class UserController {
 				httpOnly: true,
 				secure: true,
 				sameSite: 'lax',
-				expires: new Date(Date.now() + 40 * 24 * 60 * 5000), //new Date(Date.now() + 20 * 24 * 60 * 5000)
+				expires: new Date(Date.now() + 40 * 24 * 60 * 60000), //new Date(Date.now() + 20 * 24 * 60 * 5000)
 			});
 		}
 

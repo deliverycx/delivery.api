@@ -76,7 +76,6 @@ export class UserUsecase {
 					},
 					{
 						secret: process.env.SESSION_SECRET,
-						expiresIn: '7d',
 					},
 				),
 				this.jwtService.signAsync(
@@ -85,7 +84,6 @@ export class UserUsecase {
 					},
 					{
 						secret: process.env.REFRESH_SECRET,
-						expiresIn: '7d',
 					},
 				),
 			]);
