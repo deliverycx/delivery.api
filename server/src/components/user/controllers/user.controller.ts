@@ -53,7 +53,7 @@ export class UserController {
 			httpOnly: true,
 			secure: true,
 			sameSite: 'lax',
-			expires: new Date(Date.now() + 40 * 24 * 60 * 5000), //new Date(Date.now() + 20 * 24 * 60 * 5000)
+			expires: new Date(Date.now() + 40 * 24 * 60 * 90000), //new Date(Date.now() + 20 * 24 * 60 * 5000)
 		});
 		session.user = user.getId;
 
@@ -107,7 +107,7 @@ export class UserController {
 				httpOnly: true,
 				secure: true,
 				sameSite: 'lax',
-				expires: new Date(Date.now() + 40 * 24 * 60 * 60000), //new Date(Date.now() + 20 * 24 * 60 * 5000)
+				expires: new Date(Date.now() + 40 * 24 * 60 * 90000), //new Date(Date.now() + 20 * 24 * 60 * 5000)
 			});
 		}
 
