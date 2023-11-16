@@ -33,7 +33,7 @@ export class OrganizationRepository
 	}
 
 	public async filtersMetod(data: any, cityid: string) {
-		console.log(data);
+	
 		const result = await this.OrganizationModel.find({ 
 			filters: { $in: data },
 			 city: cityid 
@@ -43,7 +43,7 @@ export class OrganizationRepository
 	}
 
 	public async pointSerchMetod(searchString: string, cityid: string) {
-		console.log(searchString);
+
 		const result = await this.OrganizationModel.find({ 
 				"address.street":{
 					$regex: searchString,

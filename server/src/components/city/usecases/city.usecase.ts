@@ -28,7 +28,7 @@ export class CityUsecase {
       'user_created',
       'test microooo',
     )
-		console.log(q);
+
 	}
 
 	async togetHello(){

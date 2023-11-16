@@ -8,7 +8,7 @@ import { createOrderHash } from "../../utils/hash";
 import { IPayMasterBody } from "../types/paymaster.type";
 import { CartEntity } from "src/components/cart/entities/cart.entity";
 
-console.log(process.env);
+
 const paycalback = (localhost?:any) => `${localhost}/api/webhook/paymentCallback`  //'https://6f19-89-107-138-213.ngrok.io/webhook/paymentCallback' // `${body.localhost}/api/webhook/paymentCallback`
 const paycalbackBar = (localhost?:any) => `${localhost}/api/webhook/paymentCallbackBar`  //'https://6f19-89-107-138-213.ngrok.io/webhook/paymentCallbackBar' // `${body.localhost}/api/webhook/paymentCallbackBar`
 

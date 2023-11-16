@@ -35,6 +35,15 @@ export class OrderRepository {
 			 await this.orderModel.create(entiti)
 		}
 
+		async updateOrder(hash:string,bodyPay:any){
+			await this.orderModel.findOneAndUpdate({
+				orderHash:hash
+			},{
+				payment:bodyPay
+
+			})
+	 }
+
 		async getOrderBYhash(hash:string){
 			return await this.orderModel.findOne({orderHash:hash})
 	 }

@@ -29,7 +29,7 @@ export class OrderService{
 
 	async orderBody(user:string,body:OrderDTO){
 		const cart = await this.CartRepository.getAll(user);
-		console.log('cart',cart);
+
 		return {
 			orderbody:body,
 			cart:cart
@@ -53,8 +53,20 @@ export class OrderService{
 		
 	}
 
+	async updatePaymentOrder(hash,paybody,bodyorder){
+		if(bodyorder){
+			await this.orderRepository.updateOrder(hash,paybody)
+			const orderbody = await this.orderBody(bodyorder.user,{...bodyorder.orderParams,paymentsum:paybody.paymentAmount})
+			await this.orderSubmitRabbit(orderbody)
+		}
+
+		
+		
+	}
+
+
 	async orderSubmitRabbit(body:IorderCreateBody){
-		console.log('rabiit',body);
+
 		const q = this.communicationClient.emit(
       'order_created',
       body,

@@ -294,7 +294,7 @@ export class IikoService implements IIiko {
             prices.totalPrice
         );
 
-					console.log('create - body',orderBody);
+					
 			/* */
       const orderResponseInfo = orderInfo.orderType ===  OrderTypesEnum.ONSPOT
 				? await this.axios.orderCreate(orderBody) 

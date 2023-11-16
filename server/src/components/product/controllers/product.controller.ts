@@ -84,7 +84,7 @@ export class ProductController {
         query: {organization:string},
     ) {
         const result = await this.productUsecase.getadditionProductsClature(query.organization)
-				console.log(result);
+			
 				return result
     }
 

@@ -11,7 +11,7 @@ export class JwtStrategy extends PassportStrategy(Strategy,'jwt') {
 				secretOrKey:process.env.SESSION_SECRET,
 				jwtFromRequest:ExtractJwt.fromExtractors([(request:Request) => {
 						let data = request?.cookies["auth-cookie"];
-						console.log('cocie',data);
+						
 						
 						if(!data){
 								return null;
@@ -24,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy,'jwt') {
 		
 
     async validate(payload:any){
-				console.log('payload',payload);
+				
         if(payload === null){
            //throw new UnauthorizedException();
         }

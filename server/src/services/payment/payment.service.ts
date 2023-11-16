@@ -42,23 +42,26 @@ export class PaymentService extends IPaymentService {
     }
 
     async captrurePayment(body: any) {
-        const preparedBody = decodeBody<OrderDTO & { user: string }>({...body.invoice.params,paymentsum:body.amount.value});
-				const paymentbody = {
-					idorganization:body.organization,
-					paymentid:body.id,
-					merchantId:body.merchantId,
-					paymentStatus:body.status,
-					paymentAmount:body.amount.value,
-					dyalPayment:{
-						BarPaymentAmount:body.invoice.params.dualpayments,
-						BarPaymentid:''
-					},
-					
-					paymentTime:body.created,
-					paymentparams:body.invoice.params,
-					paymentData:body.paymentData,
-					
+				const orderHashBody = await this.orderService.getOrderHash(body.invoice.params.hash)
+				
+				if(orderHashBody){
+					//const preparedBody = decodeBody<OrderDTO & { user: string }>({...body.invoice.params,paymentsum:body.amount.value});
+					const paymentbody = {
+						idorganization:orderHashBody.organization,
+						paymentid:body.id,
+						merchantId:body.merchantId,
+						paymentStatus:body.status,
+						paymentAmount:body.amount.value,					
+						paymentTime:body.created,
+						paymentparams:body.invoice.params,
+						paymentData:body.paymentData,
+						
+					}
+
+					//console.log('тело в ребитт',paymentbody);
+					await this.orderService.updatePaymentOrder(body.invoice.params.hash,paymentbody,orderHashBody)
 				}
+        
 				
 				/*
 				const orderResult = await this.orderUsecase.create(
@@ -66,8 +69,8 @@ export class PaymentService extends IPaymentService {
 					preparedBody
 				);
 				*/
-					console.log('тело в ребитт',preparedBody);
-				await this.orderService.createOrderToRabbit(preparedBody.user, preparedBody,paymentbody)
+					
+				//await this.orderService.createOrderToRabbit(preparedBody.user, preparedBody,paymentbody)
 
 
 			
@@ -81,9 +84,12 @@ export class PaymentService extends IPaymentService {
     }
 
 		//поиск заказа в админке
-		async checkPymentOrder(hash:string){
+		async checkPymentOrder(hash:string,id:number){
 			const result = await this.orderRepository.getOrderBYhash(hash)
-			return result
+			if(result && result.payment && result.paymentid === id){
+				return false
+			}
+			return true
 		}
 
 		// статус заказа
@@ -183,18 +189,23 @@ export class PaymentService extends IPaymentService {
 						dualMode: true,
             amount: {
                 currency: "RUB",
-                value: intToDecimal(totalPrice)
+                value: "10"//intToDecimal(totalPrice)
             },
             invoice: {
                 description: 'Оплата заказа в Старик Хинкалыч',
                 params: {
                     user: userId,
-                    ...encodeBody(body)
+										hash:body.hash,
+										organization:body.organization,
+										date:body.date,
+										name:body.name,
+										phone:body.phone
+                    //...encodeBody(body)
 										
                 }
             },
             protocol: {
-                callbackUrl: `${body.localhost}/api/webhook/paymentCallback`, //`${body.localhost}/api/webhook/paymentCallback`, //`${body.localhost}/api/webhook/paymentCallback`, //process.env.PAYMENT_SERVICE_CALLBACK_URL,
+                callbackUrl: `https://e228-89-107-139-16.ngrok-free.app/webhook/paymentCallback`, //https://f1b6-89-107-139-16.ngrok-free.app //${body.localhost}/api/webhook/paymentCallback
                 returnUrl: `${body.localhost}/success/${body.hash}`
             },
             reciept: {
@@ -225,6 +236,11 @@ export class PaymentService extends IPaymentService {
         );
 
 				await this.orderUsecase.checkOrder(userId, body)	
+
+				await this.orderService.createOrderModel({
+					orderbody:body,
+					cart:cart
+				},userId)
 
         return new RedirectEntity(
             paymentResult.url.replace("payments", "cpay")

@@ -52,11 +52,11 @@ export class WebhookController {
         @Body() body: IPaymentWebhookDto,
         @Res() response: Response
     ) {
-
+ 
 			console.log('ответ из пумастера тело',body);
         if (body.status === PaymasterResponse.PaymentStatuses.AUTHORIZED || body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
-						const check:any = await this.PaymentService.checkPymentOrder(body.invoice.params.hash)
-						if(!check){
+						const check:any = await this.PaymentService.checkPymentOrder(body.invoice.params.hash,body.id)
+						if(check){
 							try {
 								
 								await this.PaymentService.captrurePayment(body);

@@ -49,14 +49,14 @@ export class OrderCreateBuilder {
 
     private repeatOrderUntilSuccess(organizationId:string, orderId:string,counter?:number):any {
         counter = counter || 0;
-				console.log('count',counter);
+				
         return new Promise(async (resolve, reject) => {
             try {
                 
                 const result = await this.orderService.statusOrder(organizationId,orderId,this._state.orderInfo.orderType)
 
                 if (result.errorInfo || result.creationStatus === 'InProgress') {
-										console.log(result.errorInfo);
+									
                     
 										if (counter >= 15) {
 											

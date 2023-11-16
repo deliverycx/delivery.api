@@ -63,7 +63,7 @@ export class OrderController {
         @Session() session: Record<string, string>,
         @Res() response: Response
     ) {
-				console.log('создание заказа заказа',body);
+		
         const paymentResult = await this.PaymentService._byCard(
             body,
             session.user
@@ -89,7 +89,7 @@ export class OrderController {
         @Session() session: Record<string, string>,
        
     ) {
-				console.log('чек заказа',body);
+
         const hash = await this.OrderUsecase.checkOrder(body.userid, body);
 
         return hash
@@ -104,7 +104,7 @@ export class OrderController {
     ) {
 				
         const result = await this.OrderUsecase.checkOrderCart(body.userid);
-				console.log('чек cart',body.userid);
+	
         return result
     }
 

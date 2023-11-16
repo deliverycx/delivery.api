@@ -227,7 +227,7 @@ export class CartController {
 
 				
 				const result = await this.cartUsecase.getDeliveryZones(body)
-console.log('zone',result);
+
 				response.status(200).json(result);
 		}
 

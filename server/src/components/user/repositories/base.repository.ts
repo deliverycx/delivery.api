@@ -36,7 +36,7 @@ export class UserRepository{
 
 		async findUser(query:any) {
 			const result = await this.userModel.findOne(query);
-			console.log(result);
+	
 			return result && new UserEntity(result?._id, result?.username, result.refreshToken,result.phone);
 	}
 
@@ -49,7 +49,7 @@ export class UserRepository{
         const result = await this.userModel.findByIdAndUpdate(userId, {
 						phone: updateProps.phone,
         },{ upsert: true, new: true });
-				console.log('result',result);
+		
         return new UserEntity(result?._id, result?.username, result.refreshToken,result.phone);
     }
 

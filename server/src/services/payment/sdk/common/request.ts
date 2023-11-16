@@ -21,8 +21,10 @@ export class PaymasterRequests extends Axios {
             requestBody,
             {
                 headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+										'Content-Type': 'application/json'
+                },
+								
             }
         );
 
