@@ -29,6 +29,7 @@ export class OrderService{
 
 	async orderBody(user:string,body:OrderDTO){
 		const cart = await this.CartRepository.getAll(user);
+		console.log(cart);
 
 		return {
 			orderbody:body,
