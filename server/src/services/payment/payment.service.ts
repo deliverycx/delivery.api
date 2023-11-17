@@ -235,7 +235,7 @@ export class PaymentService extends IPaymentService {
             organizationPaymentInfo.token
         );
 
-				await this.orderUsecase.checkOrderCart(userId, body)	
+				//await this.orderUsecase.checkOrderCart(userId, body)	
 
 				await this.orderService.createOrderModel({
 					orderbody:body,
