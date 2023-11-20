@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common"
 import { SmsAeroAxios } from "./smsaero.request"
+import { InternalException } from "src/filters/internal.filter";
 
 @Injectable()
 export class SMSAeroServices{
@@ -10,6 +11,17 @@ export class SMSAeroServices{
 	}
 
 	async smsAutrorization(phone:string,code:string){
-		await this.smsAeroAxios.smsautorization({})
+		console.log(phone,code);
+		const auth = this.smsAeroAxios.smsauth()
+		if(auth){
+			const result = await this.smsAeroAxios.smsautorization({
+				phone:phone,
+				textsms:code
+			})
+			if(result && !result.success){
+				throw new InternalException();
+			}
+		}
+		
 	}
 }
