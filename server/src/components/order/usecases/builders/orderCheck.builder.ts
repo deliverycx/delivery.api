@@ -48,7 +48,7 @@ export class OrderCheckBuilder {
         this._state.errors = [];
 
         this._state.cart = await this.CartRepository.getAll(userId);
-				console.log('state',this._state);
+			
     }
 
     async validateCart() {

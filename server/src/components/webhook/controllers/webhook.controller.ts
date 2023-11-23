@@ -212,7 +212,7 @@ export class WebhookController {
 			
 			const result = await this.PaymentService.checkPymentOrderStatus(body)
 			if(result){
-				console.log('возврат для бота',result);
+				
 				await this.BotService.canselPaymentOrder(result.organizationid,result) //result.organizationid
 			}
 			return 'ok'
@@ -221,7 +221,7 @@ export class WebhookController {
 		@Post("test")	
 		async test(@Body() body:any){
 			
-			console.log('ответ с терминала разработка',body);
+			
 			return 'ok'
 		}
 

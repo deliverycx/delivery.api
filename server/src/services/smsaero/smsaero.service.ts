@@ -11,7 +11,7 @@ export class SMSAeroServices{
 	}
 
 	async smsAutrorization(phone:string,code:string){
-		console.log(phone,code);
+		
 		const auth = this.smsAeroAxios.smsauth()
 		if(auth){
 			const result = await this.smsAeroAxios.smsautorization({
