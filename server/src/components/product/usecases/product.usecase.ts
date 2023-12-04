@@ -50,6 +50,11 @@ export class ProductUsecase {
 			return result
 		}
 
+		async getSousesClature(organization: string) {
+		  const result = await this.nomenclatureServises.getSouses(organization)
+			return result
+		}
+
     async search(
         searchString: string,
         organizationId: UniqueId,

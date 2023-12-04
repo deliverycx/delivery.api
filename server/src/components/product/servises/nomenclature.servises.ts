@@ -26,23 +26,23 @@ export class NomenclatureServises {
 
 	NomenClatureCategory(category: any[], organization: string) {
 		const cat = category.map((value) => {
-			const { name, order, images, imageLinks, id, description,tags } = value;
+			const { name, order, images, imageLinks, id, description, tags } = value;
 			const image = imageLinks
 				? imageLinks[imageLinks.length - 1]
 				: "";
 
-				const category = {
-					_id: new Types.ObjectId(),
-					organization: organization,
-					id,
-					name,
-					order,
-					description,
-					image: image,
-					tags
+			const category = {
+				_id: new Types.ObjectId(),
+				organization: organization,
+				id,
+				name,
+				order,
+				description,
+				image: image,
+				tags
 
-				};
-				return category
+			};
+			return category
 
 		}).filter(item => item.description !== 'HIDDEN').sort((a: any, b: any) => (a.order - b.order))
 
@@ -76,7 +76,7 @@ export class NomenclatureServises {
 				measureUnit,
 				weight
 			} = prod;
-			
+
 
 			const price = Math.trunc(prod.sizePrices[0].price.currentPrice)
 
@@ -107,47 +107,78 @@ export class NomenclatureServises {
 		return prods
 	}
 
-	async AdditionProducts(organization:string){
-		
+	async getSouses(organization: string) {
 		const nomenclature = await this.getNomenClature(organization)
 
-		if(nomenclature){
-			const randomProduct = []
+		if (nomenclature) {
+			
 			const randomSous = []
 
 			// ищем категорию соусы
-			const catsosus = nomenclature.categoryes.find((val) =>{
-				if(val.tags && Array.isArray(val.tags)){
-					if(val.tags[0] === "sous"){
+			const catsosus = nomenclature.categoryes.find((val) => {
+				if (val.tags && Array.isArray(val.tags)) {
+					if (val.tags[0] === "sous") {
 						return val
 					}
 				}
 			})
 			// находим товары по соусам
 
-			const sosusProducts = catsosus && nomenclature.products.filter((product) =>{
+			const sosusProducts = catsosus && nomenclature.products.filter((product) => {
 				return product.category === catsosus.id
 			})
-			
-			// все короме соусов
-			const products = nomenclature.products.filter((val) =>{
-				if(val.tags && Array.isArray(val.tags)){
-					if(val.tags[0] !== "sous"){
-						return val
-					}
-				}
-			})
-
-			const randoms = (arr,r,n) =>{
+			const randoms = (arr, r, n) => {
 				for (let i = 0; i < n; i += 1) {
 					arr.push(r.splice(Math.floor(Math.random() * r.length), 1)[0]);
 				}
 			}
 
-			catsosus && randoms(randomSous,sosusProducts,3)
-			products && randoms(randomProduct,products,6)
-			
-		
+			catsosus && randoms(randomSous, sosusProducts, 4)
+			return randomSous
+		}
+	}
+
+	async AdditionProducts(organization: string) {
+
+		const nomenclature = await this.getNomenClature(organization)
+
+		if (nomenclature) {
+			const randomProduct = []
+			const randomSous = []
+
+			// ищем категорию соусы
+			const catsosus = nomenclature.categoryes.find((val) => {
+				if (val.tags && Array.isArray(val.tags)) {
+					if (val.tags[0] === "sous") {
+						return val
+					}
+				}
+			})
+			// находим товары по соусам
+
+			const sosusProducts = catsosus && nomenclature.products.filter((product) => {
+				return product.category === catsosus.id
+			})
+
+			// все короме соусов
+			const products = nomenclature.products.filter((val) => {
+				if (val.tags && Array.isArray(val.tags)) {
+					if (val.tags[0] !== "sous") {
+						return val
+					}
+				}
+			})
+
+			const randoms = (arr, r, n) => {
+				for (let i = 0; i < n; i += 1) {
+					arr.push(r.splice(Math.floor(Math.random() * r.length), 1)[0]);
+				}
+			}
+
+			catsosus && randoms(randomSous, sosusProducts, 3)
+			products && randoms(randomProduct, products, 6)
+
+
 			return randomSous.concat(randomProduct)
 		}
 	}

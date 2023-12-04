@@ -77,6 +77,15 @@ export class ProductController {
 				return result
     }
 
+		@Get("getsous")
+    async getSosus(
+        @Query()
+        query: {organization:string},
+    ) {
+        const result = await this.productUsecase.getSousesClature(query.organization)
+			
+				return result
+    }
 
 		@Get("additionProducts")
     async getAdditionProducts(
