@@ -28,7 +28,7 @@ export class SendCodeService {
         } else {
             this.redis.set(code, phone, "EX", 300 * 1);
         }
-				console.log('code',code);
+				
 				return code
     }
 
