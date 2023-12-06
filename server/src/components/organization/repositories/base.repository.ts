@@ -37,7 +37,7 @@ export class OrganizationRepository
 		const result = await this.OrganizationModel.find({ 
 			filters: { $in: data },
 			 city: cityid 
-			})
+			}).populate("city filters")
 
 		return organizationMapper(result)
 	}
