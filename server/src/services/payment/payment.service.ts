@@ -160,14 +160,14 @@ export class PaymentService extends IPaymentService {
 
 
         const { totalPrice } = await this.DeliveryService.calculatingPrices(
-            userId,
+					body.userid,
             body.orderType
         );
 
 
 				
 
-        const cart = await this.cartRepository.getAll(userId);
+        const cart = await this.cartRepository.getAll(body.userid);
 /*
 				const payMasterBody =  this.Paymaster.paymasterBody({
 					orderBody:body,
