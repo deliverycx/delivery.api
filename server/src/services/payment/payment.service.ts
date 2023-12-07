@@ -240,7 +240,7 @@ export class PaymentService extends IPaymentService {
 				await this.orderService.createOrderModel({
 					orderbody:body,
 					cart:cart
-				},userId)
+				},body.userid)
 
         return new RedirectEntity(
             paymentResult.url.replace("payments", "cpay")
