@@ -57,8 +57,23 @@ export class OrderService{
 	async updatePaymentOrder(hash,paybody,bodyorder){
 		if(bodyorder){
 			await this.orderRepository.updateOrder(hash,paybody)
-			const orderbody = await this.orderBody(bodyorder.user,{...bodyorder.orderParams,paymentsum:paybody.paymentAmount})
-			await this.orderSubmitRabbit(orderbody)
+			const cartbody = bodyorder.orderItems ? bodyorder.orderItems.map((value:any)=>{
+				return {
+					"type": "Product",
+					"productId": value.productId,
+					"modifiers": [],
+					"amount": value.amount
+				}
+			}) : []
+
+			
+			const orderbodyRabbit = {
+				orderbody:{...bodyorder.orderParams,paymentsum:paybody.paymentAmount},
+				cart:cartbody
+			} 
+			//const orderbody = await this.orderBody(bodyorder.user,{...bodyorder.orderParams,paymentsum:paybody.paymentAmount})
+			console.log('orderpay to rabbit',orderbodyRabbit);
+			await this.orderSubmitRabbit(orderbodyRabbit)
 		}
 
 		
