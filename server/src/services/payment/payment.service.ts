@@ -185,8 +185,8 @@ export class PaymentService extends IPaymentService {
 				
         const payMasterBody = {
             merchantId: organizationPaymentInfo.merchantId,
-            //testMode: true,
-						dualMode: true,
+            testMode: true,
+						//dualMode: true,
             amount: {
                 currency: "RUB",
                 value: intToDecimal(totalPrice)
@@ -194,7 +194,7 @@ export class PaymentService extends IPaymentService {
             invoice: {
                 description: 'Оплата заказа в Старик Хинкалыч',
                 params: {
-                    user: userId,
+                    user: body.userid,
 										hash:body.hash,
 										organization:body.organization,
 										date:body.date,
@@ -205,7 +205,7 @@ export class PaymentService extends IPaymentService {
                 }
             },
             protocol: {
-                callbackUrl: `${body.localhost}/api/webhook/paymentCallback`, //https://f1b6-89-107-139-16.ngrok-free.app //${body.localhost}/api/webhook/paymentCallback
+                callbackUrl: `https://ff3f-89-107-139-16.ngrok-free.app/webhook/paymentCallback`, //https://f1b6-89-107-139-16.ngrok-free.app //${body.localhost}/api/webhook/paymentCallback
                 returnUrl: `${body.localhost}/success/${body.hash}`
             },
             reciept: {
