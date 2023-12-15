@@ -210,11 +210,14 @@ export class WebhookController {
 		@Post("push")	
 		async push(@Body() body:any){
 			console.log('терминал',body);
+
+			/*
 			const result = await this.PaymentService.checkPymentOrderStatus(body)
 			if(result){
 				
 				await this.BotService.canselPaymentOrder(result.organizationid,result) //result.organizationid
 			}
+			*/
 			return 'ok'
 		}
 
