@@ -209,7 +209,7 @@ export class WebhookController {
     }
 		@Post("push")	
 		async push(@Body() body:any){
-			console.log('терминал',body);
+			//console.log('терминал',body);
 
 			/*
 			const result = await this.PaymentService.checkPymentOrderStatus(body)
