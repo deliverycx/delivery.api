@@ -223,7 +223,7 @@ export class WebhookController {
 
 		@Post("test")	
 		async test(@Body() body:any){
-			
+			console.log('test push',body);
 			
 			return 'ok'
 		}
