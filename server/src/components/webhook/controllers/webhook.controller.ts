@@ -60,9 +60,9 @@ export class WebhookController {
 							try {
 								
 								await this.PaymentService.captrurePayment(body);
-								await this.BotService.PaymentOrder(body.invoice.params.organization,{...body,statusOrder:'В обработке'})
+								await this.BotService.PaymentOrder(body.invoice.params.organization,{...body,statusOrder:"Обработан"})
 							} catch (error) {
-								await this.BotService.PaymentOrder(body.invoice.params.organization,{...body,statusOrder:'Ошибка при заказе'})
+								await this.BotService.PaymentOrder(body.invoice.params.organization,{...body,statusOrder:"Ошибка"})
 								console.log(error);
 							}
 							
@@ -71,6 +71,15 @@ export class WebhookController {
 
         response.status(200).json({});
     }
+
+		@Post("paymentCreate")
+    async paymasterPayCreate(
+        @Body() body: any,
+      
+    ) {
+			const url = await this.PaymentService.createPayMasterPayment(body)
+			return url
+		}
 
 		/*
 		@Post("paymentCallbackBar")

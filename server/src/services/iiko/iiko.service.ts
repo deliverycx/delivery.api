@@ -412,5 +412,28 @@ export class IikoService implements IIiko {
 			const result = await this.axios.getOrganization(organizationId)
 			return this.axios.getStreetCity(organizationId,result.defaultDeliveryCityId)
 		}
+
+		async updatePayment(body:any){
+
+			const paybody = {
+				"organizationId": body.organization,
+				"orderId": body.orderId,
+				"payments": [
+					{
+						"paymentTypeKind": "Card",
+						"sum": body.orderAmount,
+						"paymentTypeId": "f2cc4be8-e7cb-405c-a4d8-c2712b5dc740",
+						"isProcessedExternally": true
+						
+					}
+				]
+			}
+
+			await this.axios.updatePaymentIIkko(paybody)
+		}
+
+		async updateOrderProblem(body:any,problems:any){
+			await this.axios.orderProblem(body,problems)
+		}
 	
 }

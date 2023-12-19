@@ -294,6 +294,45 @@ export class IIkoAxios extends Axios {
 			return data
 	}
 
+	public async updatePaymentIIkko(body):Promise<any>{
+		const token = await this.token();
+		
+
+		const { data } = await this._axios.post(
+			`/deliveries/change_payments`,
+					body,
+					{
+						headers: { Authorization: `Bearer ${token}` }
+					}
+			);
+
+			console.log(data);
+			
+			return data
+	}
+
+	public async orderProblem(body:any,problem:{hasProblem:boolean,problem:string}):Promise<any>{
+		const token = await this.token();
+		console.log(body,problem);
+
+		const { data } = await this._axios.post(
+			`/deliveries/update_order_problem`,
+					{
+						"organizationId": body.organization,
+						"orderId": body.orderId,
+						"hasProblem": problem.hasProblem,
+						"problem": problem.problem
+					},
+					{
+						headers: { Authorization: `Bearer ${token}` }
+					}
+			);
+
+		
+			
+			return data
+	}
+
 }
 
 export const iikoAxiosProviders = [

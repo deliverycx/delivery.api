@@ -70,5 +70,14 @@ export abstract class IIiko {
 				cityId:string
 			}
 		) => any;
+
+		abstract updatePayment: (
+			body:any
+		) => any;
+
+		abstract updateOrderProblem: (
+			body:any,
+			problems:any
+		) => any;
 		
 }
