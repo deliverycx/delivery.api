@@ -31,7 +31,7 @@ services:
           - mynetwork
     mongodb:
         container_name: development_mongodb
-        image: mongo:4.0 
+        image: mongo:5.0 
         volumes:
             - ./mongo/data:/data/db   
         networks:
