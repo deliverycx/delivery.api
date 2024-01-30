@@ -37,7 +37,7 @@ export class UserRepository{
 		async findUser(query:any) {
 			const result = await this.userModel.findOne(query);
 	
-			return result && new UserEntity(result?._id, result?.username, result.refreshToken,result.phone);
+			return result && new UserEntity(result?._id, result?.username, result.refreshToken,result.phone,result?.password);
 	}
 
 		async updateUserRefresh(userId: UniqueId,refreshToken:any){
@@ -45,9 +45,11 @@ export class UserRepository{
 		}
 
     async updateUser(userId: UniqueId, updateProps: IUpdateProps) {
-				const phoneHash = await argon2.hash(updateProps.phone)
+				
+				const passHash = await argon2.hash(updateProps.password)
         const result = await this.userModel.findByIdAndUpdate(userId, {
 						phone: updateProps.phone,
+						password:passHash
         },{ upsert: true, new: true });
 		
         return new UserEntity(result?._id, result?.username, result.refreshToken,result.phone);

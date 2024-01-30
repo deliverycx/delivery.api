@@ -80,6 +80,35 @@ export class UserController {
 	}
 
 
+	@Post('login')
+	async login(
+		@Body() body: UpdateDTO,
+		@Res({ passthrough: true }) res: Response,
+		@Session() session: Record<string, string>,
+	){
+		const user = await this.userUsecase.loginUser(body)
+		if(user){
+			const token = await this.userUsecase.getJwtToken(user.getName)
+			await this.userUsecase.updateRefreshToken(user.getId, token.refreshToken);
+			const secretData = {
+				token: token.accessToken,
+				refreshToken: token.refreshToken
+			};
+
+
+
+			res.cookie('auth-cookie', secretData, {
+				httpOnly: true,
+				secure: true,
+				sameSite: 'lax',
+				expires: new Date(Date.now() + 40 * 24 * 60 * 90000), //new Date(Date.now() + 20 * 24 * 60 * 5000)
+			});
+			session.user = user.getId;
+			res.status(201).json(user);
+		}else{
+			res.status(401).json();
+		}
+	}
 
 
 	@UseGuards(JwtAuthGuard)

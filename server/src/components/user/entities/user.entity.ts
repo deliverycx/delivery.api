@@ -15,6 +15,8 @@ export class UserEntity {
 
     private readonly name?: string;
 
+		private readonly password?: string;
+
     @ApiProperty({
         required: false
     })
@@ -34,13 +36,13 @@ export class UserEntity {
         username: string,
 				refreshToken:string,
         phone?: string,
-				
+				password?:string
     ) {
         this.id = id;
         this.username = username;
 				this.refreshToken = refreshToken
         this.phone = phone;
-				
+				this.password = password
     }
 
     public check() {
@@ -68,4 +70,8 @@ export class UserEntity {
     public get getOrganization() {
         return this.organization;
     }
+
+		public get getPassword() {
+			return this.password;
+	}
 }

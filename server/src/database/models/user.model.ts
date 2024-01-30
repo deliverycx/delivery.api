@@ -36,6 +36,9 @@ export class UserClass {
     public cart!: Ref<CartClass>;
 
 		@prop()
+		password!:string
+
+		@prop()
 		refreshToken!:string
 
 		@prop()

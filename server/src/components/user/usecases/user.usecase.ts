@@ -60,6 +60,17 @@ export class UserUsecase {
         
     }
 
+		async loginUser(bodylogin:{phone:string,password:string}){
+			console.log(bodylogin);
+			const user = await this.userRepository.findUser({phone:bodylogin.phone})
+			if(user){
+				const pass = await argon2.verify(user.getPassword,bodylogin.password)
+				if(pass){
+					return user
+				}
+			}
+			return false
+		}
 
 
 		async updateRefreshToken(userName: string,refreshToken:string){
@@ -99,6 +110,7 @@ export class UserUsecase {
 				const code = await this.sendCodeService.sendSMSCode(phone)
 				if(code && typeof code === 'string'){
 					const textsms = `Ваш код:${code}`
+					
 					await this.sMSAeroServices.smsAutrorization(phone,textsms)
 				}
 			}else{

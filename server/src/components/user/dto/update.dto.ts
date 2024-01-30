@@ -5,5 +5,6 @@ export class UpdateDTO {
   id:string  
 	username:string
 	phone:string
+	password:string
 	code?:string
 }
