@@ -311,7 +311,7 @@ export class PaymentService extends IPaymentService {
 				}
 			},
 			protocol: {
-				callbackUrl: `${body.localhost}/api/webhook/paymentCallback`, //https://f1b6-89-107-139-16.ngrok-free.app //${body.localhost}/api/webhook/paymentCallback
+				callbackUrl: `${body.orderParams.localhost}/api/webhook/paymentCallback`, //https://f1b6-89-107-139-16.ngrok-free.app //${body.localhost}/api/webhook/paymentCallback
 				returnUrl: `${body.orderParams.localhost}/success/${body.orderParams.hash}`
 			},
 			reciept: {
