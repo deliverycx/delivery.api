@@ -365,25 +365,8 @@ export class IikoService implements IIiko {
         save stop-list to the stopList collection
     */
     async getStopList(organizationId:string) {
-			const stoplist = await this.StopListUsecase.getAll(organizationId)
-				/*	
-        const stopListArray = stopList.map((el) => {
-            return {
-                ...el,
-                product: el.productId
-            };
-        });
-	
-				
-        const stopListEntity = await this.StopListUsecase.stopListEventAction(
-            body.organizationId,
-            stopListArray
-        );
-				
-
-        return stopListArray;
-				*/
-				return stoplist
+			const stoplist = await this.StopListUsecase.stopListEventAction(organizationId)
+			return stoplist
     }
 		async getDiscount(
 			organizationId: UniqueId,

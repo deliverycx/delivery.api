@@ -240,6 +240,14 @@ export class WebhookController {
 		@Post("webhooks")	
 		async webhooks(@Body() body:any){
 			console.log('test push',body);
+
+			if(Array.isArray(body)){
+				body.forEach((value:any)=>{
+					if(value.eventType === 'StopListUpdate'){
+						this.IikoService.getStopList(value.organizationId)
+					}
+				})
+			}
 			
 			return 'ok'
 		}

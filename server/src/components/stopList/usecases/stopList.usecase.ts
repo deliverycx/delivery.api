@@ -47,14 +47,34 @@ export class StopListUsecase {
 
 
 
-		async deleteStopList(organizationGUID:string,stopList:Array<iiko.IStopListItem>){
-			return await this.stopListEventAction(organizationGUID,stopList)
-		}
+		
 
     async stopListEventAction(
         organizationGUID: UniqueId,
-        stopList: Array<iiko.IStopListItem>
+       
     ) {
+			try {
+				if(organizationGUID && organizationGUID !== "undefined"){
+					const data = await this.axios.stopList(organizationGUID);
+					
+						
+					const stopList =
+					data.length === 0 ? 
+				 	[]	
+				  :	data
+							.map((stopListArrayItem) => stopListArrayItem.items)
+							.flat();
+
+							
+
+					await this.stopListRepository.update(organizationGUID, stopList);
+				}else{
+					return []
+				}
+				
+			} catch (error) {
+				//console.log(error.response.data);
+			}
 				/*
         const organization = await this.organizationRepository.getOneByGUID(
             organizationGUID
@@ -75,10 +95,7 @@ export class StopListUsecase {
 
         return stopListEntity;
 				*/
-				const result = await this.cartRepository.removeSome(
-					stopList.map((el) => el.product)
-				);
-				return result
+				
 				
     }
 }
