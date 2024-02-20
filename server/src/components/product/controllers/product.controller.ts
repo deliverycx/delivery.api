@@ -71,7 +71,7 @@ export class ProductController {
 		@Get("nomenclature")
     async getAllNomenClature(
         @Query() query: GetAllDTO,
-				@Headers('localhost') headers,
+				@Headers('localhost') headers, 
     ) {
 			console.log('AUTHH LOGG', headers)
         const result = await this.productUsecase.getAllNomenClature(query.organization)
