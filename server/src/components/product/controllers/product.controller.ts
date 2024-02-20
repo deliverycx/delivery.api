@@ -10,7 +10,8 @@ import {
     Session,
     UseFilters,
     UsePipes,
-    ValidationPipe
+    ValidationPipe,
+		Headers
 } from "@nestjs/common";
 import { Request, Response } from "express";
 import { ValidationException } from "src/filters/validation.filter";
@@ -69,9 +70,10 @@ export class ProductController {
 
 		@Get("nomenclature")
     async getAllNomenClature(
-        @Query()
-        query: GetAllDTO,
+        @Query() query: GetAllDTO,
+				@Headers() headers,
     ) {
+			console.log('AUTHH LOGG', headers.host)
         const result = await this.productUsecase.getAllNomenClature(query.organization)
 				
 				return result

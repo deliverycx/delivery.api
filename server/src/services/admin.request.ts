@@ -17,7 +17,7 @@ export class AdminAxiosRequest extends Axios {
 	public async getOrganizationList(organization:string) {
 		
 		const { data } = await this._axios.get(`/unload/getNomenclature?organization=${organization}`);
-		console.log(data);
+		
 		return data
 	}
 }
