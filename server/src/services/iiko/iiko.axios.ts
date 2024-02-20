@@ -1,14 +1,18 @@
 import { iiko } from "src/services/iiko/interfaces";
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { Axios } from "src/common/abstracts/request";
 import { AxiosInstance } from "axios";
 import { IikoError } from "./iiko.error";
+import { RedisClient } from "redis";
+import { REDIS } from "src/modules/redis/redis.constants";
 
 @Injectable()
 export class IIkoAxios extends Axios {
     public _axios: AxiosInstance;
 
-    constructor() {
+    constructor(
+			
+		) {
         super(
             process.env.TRANSFER_URL,
             (error) =>
@@ -339,5 +343,6 @@ export const iikoAxiosProviders = [
     {
         provide: "IIKO_AXIOS",
         useFactory: () => new IIkoAxios()
-    }
+    },
+		IIkoAxios
 ];

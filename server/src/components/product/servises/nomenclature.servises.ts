@@ -2,6 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { IIkoAxios } from "src/services/iiko/iiko.axios";
 import { IProductRepository } from "../repositories/interface.repository";
 import { Types, Document } from "mongoose";
+import { AdminAxiosRequest } from "src/services/admin.request";
 
 @Injectable()
 export class NomenclatureServises {
@@ -9,10 +10,13 @@ export class NomenclatureServises {
 		private readonly productRepository: IProductRepository,
 		@Inject("IIKO_AXIOS")
 		private readonly axios: IIkoAxios,
+		private readonly adminAxios:AdminAxiosRequest
 	) { }
 
 	async getNomenClature(organization: string) {
-		const nomenclature = await this.axios.getNomenClature(organization)
+	
+		
+		const nomenclature = await this.adminAxios.getOrganizationList(organization) //await this.axios.getNomenClature(organization)
 
 		const categoryes = this.NomenClatureCategory(nomenclature.groups, organization)
 		const products = this.NomenClatureProducts(nomenclature.products)

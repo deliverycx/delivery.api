@@ -25,7 +25,7 @@ export class IikoService implements IIiko {
         @Inject("Organization")
         private readonly organizationModel: Model<OrganizationClass>,
 
-        @Inject("IIKO_AXIOS")
+        
         private readonly axios: IIkoAxios,
 
         private readonly DeliveryService: IDeliveryService,

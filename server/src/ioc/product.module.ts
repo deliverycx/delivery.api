@@ -7,12 +7,14 @@ import { productProviders } from "../components/product/providers/product.provid
 import { favoriteProviders } from "src/components/favorites/providers/favorite.provider";
 import { iikoAxiosProviders } from "src/services/iiko/iiko.axios";
 import { NomenclatureServises } from "src/components/product/servises/nomenclature.servises";
+import { AdminAxiosRequest } from "src/services/admin.request";
 
 @Module({
     controllers: [ProductController],
     providers: [
         ProductUsecase,
 				NomenclatureServises,
+				AdminAxiosRequest,
         {
             provide: IProductRepository,
             useClass: ProductRepository
