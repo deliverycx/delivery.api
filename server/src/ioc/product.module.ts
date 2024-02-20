@@ -8,13 +8,16 @@ import { favoriteProviders } from "src/components/favorites/providers/favorite.p
 import { iikoAxiosProviders } from "src/services/iiko/iiko.axios";
 import { NomenclatureServises } from "src/components/product/servises/nomenclature.servises";
 import { AdminAxiosRequest } from "src/services/admin.request";
+import { RedisModule } from "src/modules/redis/redis.module";
 
 @Module({
+		imports:[RedisModule],
     controllers: [ProductController],
     providers: [
         ProductUsecase,
 				NomenclatureServises,
 				AdminAxiosRequest,
+				
         {
             provide: IProductRepository,
             useClass: ProductRepository

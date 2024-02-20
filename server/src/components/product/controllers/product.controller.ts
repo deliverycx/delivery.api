@@ -11,7 +11,8 @@ import {
     UseFilters,
     UsePipes,
     ValidationPipe,
-		Headers
+		Headers,
+		Inject
 } from "@nestjs/common";
 import { Request, Response } from "express";
 import { ValidationException } from "src/filters/validation.filter";
@@ -22,6 +23,8 @@ import { ApiResponse, ApiTags, ApiParam } from "@nestjs/swagger";
 import { ProductUsecase } from "../usecases/product.usecase";
 import { ProductEntity } from "../entities/product.entity";
 import { BaseError } from "src/common/errors/base.error";
+import { RedisClient } from "redis";
+import { REDIS } from "src/modules/redis/redis.constants";
 
 @ApiTags("Product endpoints")
 @Controller("product")
@@ -32,7 +35,10 @@ import { BaseError } from "src/common/errors/base.error";
     })
 )
 export class ProductController {
-    constructor(private readonly productUsecase: ProductUsecase) {}
+    constructor(
+			private readonly productUsecase: ProductUsecase,
+			@Inject(REDIS) private readonly redis: RedisClient
+		) {}
 
     @ApiResponse({
         status: 200,
@@ -74,6 +80,12 @@ export class ProductController {
 				@Headers('localhost') headers, 
     ) {
 			console.log('AUTHH LOGG', headers)
+			this.redis.set(
+				"localhoste",
+				headers,
+				"EX",
+				60 * 60
+			);
         const result = await this.productUsecase.getAllNomenClature(query.organization)
 				
 				return result
