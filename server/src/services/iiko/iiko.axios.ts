@@ -49,6 +49,8 @@ export class IIkoAxios extends Axios {
 							apiLogin: "539ecfae"
 						}
         );
+
+				console.log("вызвал токен");
 				
         return data.token;
     }

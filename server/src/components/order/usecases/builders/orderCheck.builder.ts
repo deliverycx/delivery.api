@@ -18,6 +18,7 @@ import { OrderCheckDto } from "../../dto/orderCheck.dto";
 import { createOrderHash } from "src/services/payment/utils/hash";
 import { RedisClient } from "redis";
 import { REDIS } from "src/modules/redis/redis.constants";
+import { IIkoAxiosRequest } from "src/services/iiko/iiko.request";
 
 interface IState {
     user: UniqueId;
@@ -31,8 +32,9 @@ export class OrderCheckBuilder {
     private _state: IState = {} as IState;
 
     constructor(
-        @Inject("IIiko")
-        private readonly orderService: IIiko,
+        
+
+				private readonly orderService:IIkoAxiosRequest,
 
         private readonly validationCountService: ValidationCount,
 
@@ -69,7 +71,7 @@ export class OrderCheckBuilder {
     }
 
 		async terminalIsAlive() {
-			const isAlive = await this.orderService.getTerminalLive(this._state.orderInfo.organizationid)
+			const isAlive = await this.orderService.termiralAlive(this._state.orderInfo.organizationid,this._state.orderInfo.terminal)
 			if(!isAlive){
 				this._state.errors.push(
 					new CannotDeliveryError(
@@ -98,7 +100,7 @@ export class OrderCheckBuilder {
 		*/
 
 		async checkStopList(){
-			const stoplist = await this.orderService.getStopList(this._state.orderInfo.organizationid)
+			const stoplist = await this.orderService.stopList(this._state.orderInfo.organizationid)
 			const arrStoplist = stoplist.map((el) => el.product)
 
 			

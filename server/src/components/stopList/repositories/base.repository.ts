@@ -20,25 +20,11 @@ export class StopListRepository implements IStopListRepository {
         private readonly ProductModel: Model<ProductClass>
     ) {}
 
-    async getAll(organizationId: UniqueId,stoplist:iiko.IStopListItem[]) {
+    async getAll(organizationId: string) {
 			
-        const result = await Promise.all(
-					stoplist.map(async (el) => {
-									const productInStopList = await this.ProductModel.findOne({
-											id: el.productId
-									});
-									
-									return productInStopList && {
-											balance: el.balance,
-											productId: el.productId,
-											product:productInStopList._id.toString()
-									};
-							})
-					).then((mass) =>{
-						return mass.filter((el) => el !== null)
-					})
-				
-				return result
+			return await this.StopListModel.findOne({
+				organization:organizationId
+			})
     }
 
     async update(

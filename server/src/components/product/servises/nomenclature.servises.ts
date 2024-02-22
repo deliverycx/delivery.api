@@ -15,7 +15,7 @@ export class NomenclatureServises {
 
 	async getNomenClature(organization: string) {
 	
-		
+		console.log(organization);
 		const nomenclature =  await this.adminAxios.getOrganizationList(organization)//await this.axios.getNomenClature(organization)
 
 		const categoryes = this.NomenClatureCategory(nomenclature.groups, organization)

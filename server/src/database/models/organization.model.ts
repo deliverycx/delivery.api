@@ -61,6 +61,9 @@ export class OrganizationClass {
 		@prop({ ref: () => OrganizationfilterClass })
     public filters!: Ref<OrganizationfilterClass>[];
 
+		@prop()
+		public terminal:string
+
 }
 
 export const OrganizationSchema = buildSchema(OrganizationClass);

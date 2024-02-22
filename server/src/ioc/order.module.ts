@@ -26,6 +26,7 @@ import { IBotService } from "src/services/duplicateBot/bot.abstract";
 import { ClientsModule, Transport } from "@nestjs/microservices";
 import { PaymentRepository } from "src/services/payment/sdk/repositories/payment.repositories";
 import { OrderService } from "src/components/order/services/order/order.service";
+import { IIkoAxiosRequest } from "src/services/iiko/iiko.request";
 
 @Module({
     imports: [
@@ -54,6 +55,7 @@ import { OrderService } from "src/components/order/services/order/order.service"
             provide: IDeliveryService,
             useClass: DeliveryService
         },
+				IIkoAxiosRequest,
         OrderUsecase,
 				OrderService,
         {

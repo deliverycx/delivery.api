@@ -31,6 +31,7 @@ import { IBotService } from "src/services/duplicateBot/bot.abstract";
 import { ClientProxy } from "@nestjs/microservices";
 import axios from 'axios';
 import { WebHookServices } from "../services/webhook.services";
+import { AdminAxiosRequest } from "src/services/admin.request";
 
 
 @Controller("webhook")
@@ -41,6 +42,7 @@ export class WebhookController {
 
         private readonly PaymentService: PaymentService,
         private readonly IikoStopListGateway: IikoWebsocketGateway,
+				private readonly adminAxiosRequest: AdminAxiosRequest,
         private readonly MailService: MailService,
         private readonly BotService: IBotService,
 				private readonly webHookServices: WebHookServices
@@ -254,7 +256,8 @@ export class WebhookController {
 
 		@Post("getstreet")	
 		async getStreet(@Body() body:any){
-			 return await this.IikoService.getStreetCityIkko(body)
+			 //return await this.IikoService.getStreetCityIkko(body)
+			 return await this.adminAxiosRequest.getStreets(body.organizationId)
 		}
 
 

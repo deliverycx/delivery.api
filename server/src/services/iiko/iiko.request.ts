@@ -99,6 +99,34 @@ export class IIkoAxiosRequest extends Axios {
 		return data
 	}
 
+	public async termiralAlive(organization:string,terminal:string) {
+		const token = await this.token();
+		
+		const { data } = await this._axios.post<any>(
+				`/terminal_groups/is_alive`,
+				{
+					"organizationIds": [
+						organization
+					],
+					"terminalGroupIds": [
+						terminal
+					]
+				},
+				{
+					headers: { Authorization: `Bearer ${token}` }
+				}
+		);
+
+		if(data.isAliveStatus.length !== 0){
+			return data.isAliveStatus[0].isAlive
+		}else{
+			throw Error()
+		}
+	}
+
+
+	
+
 	public async organizationTables(termital: string) {
 		const token = await this.token();
 		const { data } = await this._axios.post<{ restaurantSections: any[] }>(
@@ -193,6 +221,30 @@ export class IIkoAxiosRequest extends Axios {
 			
 
 		return data
+	}
+
+
+	public async stopList(organization: UniqueId) {
+		const token = await this.token();
+		const { data } = await this._axios.post(
+			`/stop_lists`,
+			{
+				"organizationIds": [
+					organization
+				]
+			},
+			{
+				headers: { Authorization: `Bearer ${token}` }
+			}
+	);
+
+		if(data.terminalGroupStopLists.length === 0){
+			return []
+		}
+
+		return data.terminalGroupStopLists.map((val:any) =>{
+			return val.organizationId === organization &&  val.items
+		})[0];
 	}
 
 

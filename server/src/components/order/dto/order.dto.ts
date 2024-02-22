@@ -63,6 +63,8 @@ export class OrderDTO {
     })
     phone: string;
 
+		terminal:string
+
     @ApiProperty()
     comment: string;
 		localhost:string

@@ -56,6 +56,8 @@ export class OrganizationEntity {
 
 		public readonly filters:any
 
+		public readonly terminal:string
+
     constructor(
         id: Types.ObjectId,
         address?: string,
@@ -71,7 +73,8 @@ export class OrganizationEntity {
 				redirect?:string,
 				redirectON?:boolean,
 				gallery?:string[],
-				filters?:any
+				filters?:any,
+				terminal?:string
     ) {
         this.id = id;
         this.address = address;
@@ -88,6 +91,7 @@ export class OrganizationEntity {
 				this.redirectON = redirectON,
 				this.gallery = gallery,
 				this.filters = filters
+				this.terminal = terminal
     }
 
     public get getGuid() {

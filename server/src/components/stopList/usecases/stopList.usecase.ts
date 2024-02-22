@@ -7,6 +7,7 @@ import { IStopListRepository } from "../repositories/interface.repository";
 import { IProductRepository } from "src/components/product/repositories/interface.repository";
 import { IIiko } from "src/services/iiko/iiko.abstract";
 import { IIkoAxios } from "src/services/iiko/iiko.axios";
+import { IIkoAxiosRequest } from "src/services/iiko/iiko.request";
 
 
 @Injectable()
@@ -14,7 +15,7 @@ export class StopListUsecase {
     constructor(
 				@Inject("IIKO_AXIOS")
 				private readonly axios: IIkoAxios,
-
+				private readonly iikoAxiosRequest: IIkoAxiosRequest,
         private readonly organizationRepository: IOrganizationRepository,
         private readonly stopListRepository: IStopListRepository,
         private readonly cartRepository: ICartRepository,
@@ -23,22 +24,10 @@ export class StopListUsecase {
 
 		async getAll(organizationGUID:string){
 			try {
-				if(organizationGUID && organizationGUID !== "undefined"){
-					const data = await this.axios.stopList(organizationGUID);
-					if(data.length === 0){
-						return []
-					}
-						
-					const stopList = data
-							.map((stopListArrayItem) => stopListArrayItem.items)
-							.flat();
-
-
-					return stopList
-				}else{
-					return []
+				const resultstoplist = await this.stopListRepository.getAll(organizationGUID)
+				if(resultstoplist){
+					return resultstoplist.stoplist
 				}
-				
 			} catch (error) {
 				//console.log(error.response.data);
 			}
@@ -55,7 +44,7 @@ export class StopListUsecase {
     ) {
 			try {
 				if(organizationGUID && organizationGUID !== "undefined"){
-					const data = await this.axios.stopList(organizationGUID);
+					const data = await this.iikoAxiosRequest.stopList(organizationGUID);
 					
 						
 					const stopList =

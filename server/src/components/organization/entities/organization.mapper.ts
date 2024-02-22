@@ -25,7 +25,8 @@ export const organizationMapper: Mapper<
 						organization.redirect,
 						organization.redirectON,
 						organization.gallery,
-						organization.filters
+						organization.filters,
+						organization.terminal
         );
     });
 };

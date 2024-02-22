@@ -13,8 +13,10 @@ import { IStopListRepository } from "src/components/stopList/repositories/interf
 import { StopListUsecase } from "src/components/stopList/usecases/stopList.usecase";
 import { iikoAxiosProviders } from "src/services/iiko/iiko.axios";
 import { RedisModule } from "./redis/redis.module";
+import { IIkoAxiosRequest } from "src/services/iiko/iiko.request";
 
 @Module({
+		imports:[RedisModule],
     providers: [
 			RedisModule,
         ...iikoAxiosProviders,
@@ -24,6 +26,7 @@ import { RedisModule } from "./redis/redis.module";
         ...stopListProviders,
         ...productProviders,
         ...recvisitesProviders,
+				IIkoAxiosRequest,
         {
             provide: IStopListRepository,
             useClass: StopListRepository
@@ -45,6 +48,7 @@ import { RedisModule } from "./redis/redis.module";
         ...iikoAxiosProviders,
         ...stopListProviders,
         ...cartProviders,
+				IIkoAxiosRequest,
         ...organizationProviders,
         ...recvisitesProviders,
         ...stopListProviders,

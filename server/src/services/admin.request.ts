@@ -42,6 +42,15 @@ export class AdminAxiosRequest {
 		
 		return data
 		
-		return ""
+		
+	}
+
+	public async getStreets(organization:string){
+		const url = await this.getLocalhost() 
+		console.log(url); 
+		/**/
+		const { data } = await axios.get(`${url}/unload/getStreet?organization=${organization}`);
+		
+		return data
 	}
 }
