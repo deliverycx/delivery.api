@@ -42,7 +42,7 @@ export class NomenclatureServises {
 				name,
 				order,
 				description,
-				image: image,
+				image: imageLinks,
 				tags
 
 			};
@@ -78,11 +78,12 @@ export class NomenclatureServises {
 				images,
 				imageLinks,
 				measureUnit,
-				weight
+				weight,
+				price
 			} = prod;
 
 
-			const price = Math.trunc(prod.sizePrices[0].price.currentPrice)
+			//const price = Math.trunc(prod.sizePrices[0].price.currentPrice)
 
 
 			const image = imageLinks
@@ -96,7 +97,7 @@ export class NomenclatureServises {
 				order,
 				id,
 				productId: id,
-				image: image,
+				image: imageLinks,
 				additionalInfo,
 				tags,
 				code,
