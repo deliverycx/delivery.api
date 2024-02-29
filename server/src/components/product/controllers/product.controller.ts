@@ -79,7 +79,7 @@ export class ProductController {
         @Query() query: GetAllDTO,
 				@Headers('localhost') headers, 
     ) {
-			console.log('AUTHH LOGG', headers)
+			//console.log('AUTHH LOGG', headers)
 			this.redis.set(
 				"localhoste",
 				headers,
