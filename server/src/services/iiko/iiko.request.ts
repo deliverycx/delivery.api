@@ -29,7 +29,7 @@ export class IIkoAxiosRequest extends Axios {
 
 		const tokeninRedis = await redisToken
 		if (tokeninRedis) {
-			//console.log('token in redis', tokeninRedis);
+			console.log('token in redis', tokeninRedis);
 			return tokeninRedis
 		} else {
 			const { data } = await this._axios.post<{ token: string }>(
@@ -44,7 +44,7 @@ export class IIkoAxiosRequest extends Axios {
 				"EX",
 				10 * 60
 			);
-			//console.log('token in ikko', data.token);
+			console.log('token in ikko', data.token);
 			return data.token
 
 		}

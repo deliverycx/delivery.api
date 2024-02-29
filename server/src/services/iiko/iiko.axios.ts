@@ -319,7 +319,7 @@ export class IIkoAxios extends Axios {
 
 	public async orderProblem(body:any,problem:{hasProblem:boolean,problem:string}):Promise<any>{
 		const token = await this.token();
-		console.log(body,problem);
+		
 
 		const { data } = await this._axios.post(
 			`/deliveries/update_order_problem`,
