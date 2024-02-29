@@ -71,6 +71,7 @@ export class OrderCheckBuilder {
     }
 
 		async terminalIsAlive() {
+			console.log('на чеке',this._state.orderInfo.terminal);
 			const isAlive = await this.orderService.termiralAlive(this._state.orderInfo.organizationid,this._state.orderInfo.terminal)
 			if(!isAlive){
 				this._state.errors.push(

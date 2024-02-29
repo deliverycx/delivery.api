@@ -25,6 +25,7 @@ export class OrderService{
 		const orderbody = await this.orderBody(user, body)
 		await this.createOrderModel(orderbody,user,paymentbody)
 		await this.orderSubmitRabbit(orderbody)
+		console.log('заказ в ребит',orderbody.orderbody.hash);
 	}
 
 	async orderBody(user:string,body:OrderDTO){
