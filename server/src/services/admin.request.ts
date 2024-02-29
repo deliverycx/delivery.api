@@ -36,7 +36,7 @@ export class AdminAxiosRequest {
 
 	public async getOrganizationList(organization:string) {
 		const url = await this.getLocalhost() 
-		console.log(url); 
+		//console.log(url); 
 		/**/
 		const { data } = await axios.get(`${url}/unload/getNomenclature?organization=${organization}`);
 		
@@ -47,7 +47,7 @@ export class AdminAxiosRequest {
 
 	public async getStreets(organization:string){
 		const url = await this.getLocalhost() 
-		console.log(url); 
+		//console.log(url); 
 		/**/
 		const { data } = await axios.get(`${url}/unload/getStreet?organization=${organization}`);
 		
