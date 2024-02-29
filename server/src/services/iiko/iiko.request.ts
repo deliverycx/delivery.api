@@ -101,6 +101,8 @@ export class IIkoAxiosRequest extends Axios {
 
 	public async termiralAlive(organization:string,terminal:string) {
 		const token = await this.token();
+		const terminale = await this.termiralGroops(organization)
+		
 		
 		const { data } = await this._axios.post<any>(
 				`/terminal_groups/is_alive`,
@@ -109,7 +111,7 @@ export class IIkoAxiosRequest extends Axios {
 						organization
 					],
 					"terminalGroupIds": [
-						terminal
+						terminale.id
 					]
 				},
 				{
