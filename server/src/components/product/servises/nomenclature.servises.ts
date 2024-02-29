@@ -15,7 +15,7 @@ export class NomenclatureServises {
 
 	async getNomenClature(organization: string) {
 	
-		console.log(organization);
+		//console.log(organization);
 		const nomenclature =  await this.adminAxios.getOrganizationList(organization)//await this.axios.getNomenClature(organization)
 
 		const categoryes = this.NomenClatureCategory(nomenclature.groups, organization)
@@ -148,7 +148,7 @@ export class NomenclatureServises {
 		if (nomenclature) {
 			const randomProduct = []
 			const randomSous = []
-			console.log(nomenclature.categoryes);
+			//console.log(nomenclature.categoryes);
 			// ищем категорию соусы
 			const catsosus = nomenclature.categoryes.find((val) => {
 				if(val.name === 'Соусы'){
