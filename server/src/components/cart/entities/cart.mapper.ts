@@ -8,18 +8,23 @@ export const cartMapper: Mapper<Array<CartClass>, Array<CartEntity>> = (p) => {
     return p
         .map((cart) => {
             const product = cart.product as ProductClass;
+						
+						if(product){
             return new CartEntity(
                 cart?._id,
                 product?.name,
                 product?.image,
                 product?.tags,
-                product?.id,
+                product?.productId,
                 cart?.amount,
                 product?.price,
 								product._id
             );
+						}
         })
-        .filter((entity) => entity.getId !== undefined);
+        .filter((entity) => {
+					return entity && entity.getId !== undefined
+				});
 };
 export const cartMapperCust= (p:any[]) => {
 	return p

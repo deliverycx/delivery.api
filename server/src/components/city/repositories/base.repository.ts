@@ -24,6 +24,8 @@ export class CityRepository implements ICityRepository {
             .populate("organizations")
             .lean();
 
+						
+
         return cityMapper(result);
     }
 
@@ -33,6 +35,6 @@ export class CityRepository implements ICityRepository {
 					.populate("organizations")
 					.lean();
 
-			return new CityEntity(result._id, result.name,result.isHidden);
+			return new CityEntity(result._id, result.name,result.isHidden,result.organizations.length);
 	}
 }

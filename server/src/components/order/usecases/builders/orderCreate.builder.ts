@@ -49,20 +49,20 @@ export class OrderCreateBuilder {
 
     private repeatOrderUntilSuccess(organizationId:string, orderId:string,counter?:number):any {
         counter = counter || 0;
-				console.log('count',counter);
+				
         return new Promise(async (resolve, reject) => {
             try {
                 
                 const result = await this.orderService.statusOrder(organizationId,orderId,this._state.orderInfo.orderType)
 
                 if (result.errorInfo || result.creationStatus === 'InProgress') {
-										console.log(result.errorInfo);
+									
                     
-										if (counter >= 3) {
+										if (counter >= 15) {
 											
 											resolve({
 												result:null,
-												problem:"Возникла не предвиденная ошибка"
+												problem:"Возникла непредвиденная ошибка"
 											});
 
 											
@@ -98,6 +98,8 @@ export class OrderCreateBuilder {
         const user = this._state.user;
         const orderInfo = this._state.orderInfo;
 
+				
+
         const cart = await this.CartRepository.getAll(user);
 
         const deliveryPrices = await this.DeliveryService.calculatingPrices(
@@ -105,12 +107,14 @@ export class OrderCreateBuilder {
             orderInfo.orderType
         );
 
+				
+
         const orderInfoPross = await this.orderService.create(
             cart,
             orderInfo,
             deliveryPrices
         );
-				console.log('orderInfoPross',orderInfoPross);
+				//console.log('orderInfoPross',orderInfoPross);
 				this._state.organizationId = orderInfoPross.organizationId	
 				this._state.orderID = orderInfoPross.id
 
@@ -168,7 +172,7 @@ export class OrderCreateBuilder {
             orderType
       );
 
-      console.log('к боту orderinfo', this._state);
+      //console.log('к боту orderinfo', this._state);
       
 
         this.botService.sendDuplicate(

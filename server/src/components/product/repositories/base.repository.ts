@@ -22,89 +22,17 @@ export class ProductRepository implements IProductRepository {
     ) {}
 
     async getFavorites(userId: UniqueId) {
-        const result = (
-            await this.favoriteModel.aggregate([
-                {
-                    $match: { user: new Types.ObjectId(userId) }
-                },
-                {
-                    $lookup: {
-                        from: "products",
-                        as: "products",
-                        let: { favoriteProducts: "$products" },
-                        pipeline: [
-                            {
-                                $match: {
-                                    $expr: {
-                                        $in: ["$_id", "$$favoriteProducts"]
-                                    }
-                                }
-                            },
-                            {
-                                $lookup: {
-                                    from: "stoplists",
-                                    as: "stoplist",
-                                    let: {
-                                        productGUID: "$id",
-                                        organization: "$organization"
-                                    },
-                                    pipeline: [
-                                        {
-                                            $addFields: {
-                                                isInStopList: {
-                                                    $cond: [
-                                                        {
-                                                            $in: [
-                                                                "$$productGUID",
-                                                                "$stoplist.product"
-                                                            ]
-                                                        },
-                                                        true,
-                                                        false
-                                                    ]
-                                                }
-                                            }
-                                        },
-                                        {
-                                            $replaceRoot: {
-                                                newRoot: {
-                                                    isInStopList:
-                                                        "$isInStopList"
-                                                }
-                                            }
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                $set: {
-                                    stoplist: "$stoplist.isInStopList"
-                                }
-                            },
-                            {
-                                $match: {
-                                    $or: [
-                                        {
-                                            stoplist: false
-                                        },
-                                        {
-                                            stoplist: { $size: 0 }
-                                        }
-                                    ]
-                                }
-                            }
-                        ]
-                    }
-                }
-            ])
-        )[0] || { products: [] };
-
-        return productMapper(
-            result.products.map((product: any) => ({
-                ...product,
-                isFav: true
-            })) as (ProductClass & { isFav: boolean })[]
-        );
+        const result:any = await this.favoriteModel.findOne({
+					user:userId
+				})
+				
+				return result ? result.products : null
+				/*
+        return result ? result.products.map((product: any) => ({
+					...product,
+					isFav: true
+			})) : null
+			*/
     }
 
     async getAll(categoryId: UniqueId, userId: UniqueId): Promise<any> {

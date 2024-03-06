@@ -16,8 +16,8 @@ export class CartUsecase {
     ) {}
 
     async getAll(userId: UniqueId, data: GetAllCartDTO) {
+			
         const result = await this.CartRepository.getAll(userId);
-
         const prices = await this.DeliveryService.calculatingPrices(
             userId,
             data.orderType,
@@ -30,7 +30,7 @@ export class CartUsecase {
     }
 
     async add(userId: UniqueId, data: AddCartDTO) {
-        const result = await this.CartRepository.add(userId, data.productId);
+        const result = await this.CartRepository.add(userId, data.product,data.anmount);
         const prices = await this.DeliveryService.calculatingPrices(
             userId,
             data.orderType,

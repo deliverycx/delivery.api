@@ -9,9 +9,11 @@ export abstract class IUserRepository {
     ): Promise<UserEntity>;
 
     abstract getUser(userId: UniqueId): Promise<UserEntity>;
-
+		abstract updateUserRefresh(userId: UniqueId,refreshToken:string)
     abstract updateUser(
         userId: UniqueId,
         updateProps: IUpdateProps
     ): Promise<UserEntity>;
+		abstract findUser(query: any): Promise<UserEntity>;
+
 }

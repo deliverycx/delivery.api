@@ -20,8 +20,8 @@ export class CartClass {
     @prop({ ref: "User" })
     public user!: Ref<UserClass>;
 
-    @prop({ ref: "Product" })
-    public product!: Ref<ProductClass>;
+    @prop()
+    public product!: any;
 
     @prop({
         type: () => Number,

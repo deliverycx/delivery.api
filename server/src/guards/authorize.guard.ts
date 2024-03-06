@@ -7,7 +7,9 @@ import {
 import { Request } from "express";
 
 function authValidate(req: Request) {
-    if (!req.session.user) {
+	let data = req.cookies["auth-cookie"];
+	console.log(data);
+    if (!data) {
         throw new UnauthorizedException();
     }
 
@@ -18,7 +20,7 @@ function authValidate(req: Request) {
 export class AuthGuard implements CanActivate {
     canActivate(context: ExecutionContext): boolean | Promise<boolean> {
         const request = context.switchToHttp().getRequest<Request>();
-
+				
         return authValidate(request);
     }
 }

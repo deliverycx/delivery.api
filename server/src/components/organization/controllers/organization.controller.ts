@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Query, Req, Res } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Post, Query, Req, Res } from "@nestjs/common";
 import { OrganizationUsecase } from "../usecases/organization.usecase";
 import { Request, Response } from "express";
 import { GetAllDTO } from "../interfaces/getAll.dto";
@@ -30,13 +30,35 @@ export class OrganizationController {
         response.status(HttpStatus.OK).json(result);
     }
 
+		@Post("filter")
+    async getFilters(
+        @Body() body: {data:any[],cityid:string},
+        @Res() response: Response,
+    ) {
+
+        const result = await this.organizationUsecase.fliters(body.data,body.cityid);
+				
+        response.status(HttpStatus.OK).json(result);
+    }
+
+		@Post("serch")
+    async pointSerch(
+        @Body() body: {data:string,cityid:string},
+        @Res() response: Response,
+    ) {
+
+        const result = await this.organizationUsecase.pointSerchs(body.data,body.cityid);
+				
+        response.status(HttpStatus.OK).json(result);
+    }
+
     @ApiResponse({
         status: 200,
         type: [RecvisitesEntity]
     })
     @Get("recvisites")
     async getRecvisites(
-        @Query() query: RecvisitesDTO,
+        @Query() query: any, 
         @Res() response: Response
     ) {
         const result = await this.organizationUsecase.getRecvisites(
@@ -63,6 +85,7 @@ export class OrganizationController {
         const result = await this.organizationUsecase.getPaymentsInfoForClient(
             query.organizationId
         );
+			
 
         response.status(HttpStatus.OK).json(result);
     }

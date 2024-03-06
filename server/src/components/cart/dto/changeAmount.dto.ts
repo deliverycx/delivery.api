@@ -19,4 +19,5 @@ export class ChangeAmountDTO {
         enum: ["COURIER", "PICKUP"]
     })
     public orderType: OrderTypesEnum;
+		userid:string
 }

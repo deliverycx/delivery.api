@@ -25,7 +25,7 @@ export class IikoService implements IIiko {
         @Inject("Organization")
         private readonly organizationModel: Model<OrganizationClass>,
 
-        @Inject("IIKO_AXIOS")
+        
         private readonly axios: IIkoAxios,
 
         private readonly DeliveryService: IDeliveryService,
@@ -97,7 +97,15 @@ export class IikoService implements IIiko {
             //deliveryProductObject
         ].filter(Boolean);
 
-				console.log(orderInfo);
+				
+
+				/**
+				 * coordinates: orderInfo.address.cordAdress.length !== 0 
+									? {
+										latitude: orderInfo.address.cordAdress[0],
+										longitude: orderInfo.address.cordAdress[1]			
+									} : null,
+				 */
 
 				const terminal = await this.axios.termiralGroops(organization.id)
 
@@ -181,11 +189,7 @@ export class IikoService implements IIiko {
 									comment: orderInfo.phone
 								},
 								deliveryPoint:{
-									coordinates: orderInfo.address.cordAdress.length !== 0 
-									? {
-										latitude: orderInfo.address.cordAdress[0],
-										longitude: orderInfo.address.cordAdress[1]			
-									} : null,
+									
 									address:{
 										street:{
 											classifierId: orderInfo.address.kladrid, //orderInfo.address.street
@@ -217,7 +221,7 @@ export class IikoService implements IIiko {
 												
 												}
 										] :
-									 orderInfo.paymentMethod === constOrderPaymentTypes.PAY 
+									 orderInfo.paymentMethod === constOrderPaymentTypes.CARD 
 									? [
 												{
 												"paymentTypeKind": "Card",
@@ -290,15 +294,17 @@ export class IikoService implements IIiko {
             prices.totalPrice
         );
 
-					console.log('bofyyyyyyyyyyyyyyor',orderBody);
+					
 			/* */
       const orderResponseInfo = orderInfo.orderType ===  OrderTypesEnum.ONSPOT
 				? await this.axios.orderCreate(orderBody) 
 				: await this.axios.orderCreateDelivery(orderBody);
+
+				/*
         this.logger.info(
             `${orderInfo.phone} ${JSON.stringify(orderResponseInfo)}`
         );
-					
+					*/
 				
 			/*
         return {
@@ -359,25 +365,8 @@ export class IikoService implements IIiko {
         save stop-list to the stopList collection
     */
     async getStopList(organizationId:string) {
-			const stoplist = await this.StopListUsecase.getAll(organizationId)
-				/*	
-        const stopListArray = stopList.map((el) => {
-            return {
-                ...el,
-                product: el.productId
-            };
-        });
-	
-				
-        const stopListEntity = await this.StopListUsecase.stopListEventAction(
-            body.organizationId,
-            stopListArray
-        );
-				
-
-        return stopListArray;
-				*/
-				return stoplist
+			const stoplist = await this.StopListUsecase.stopListEventAction(organizationId)
+			return stoplist
     }
 		async getDiscount(
 			organizationId: UniqueId,
@@ -394,10 +383,40 @@ export class IikoService implements IIiko {
 			*/
 		}
 
+		async getTerminalLive(
+			organizationId: UniqueId,
+		){
+
+			return this.axios.termiralAlive(organizationId)
+		}
+
+
 		async getStreetCityIkko({organizationId}){
 			const result = await this.axios.getOrganization(organizationId)
-			console.log(result);
 			return this.axios.getStreetCity(organizationId,result.defaultDeliveryCityId)
+		}
+
+		async updatePayment(body:any){
+
+			const paybody = {
+				"organizationId": body.organization,
+				"orderId": body.orderId,
+				"payments": [
+					{
+						"paymentTypeKind": "Card",
+						"sum": body.orderAmount,
+						"paymentTypeId": "f2cc4be8-e7cb-405c-a4d8-c2712b5dc740",
+						"isProcessedExternally": true
+						
+					}
+				]
+			}
+
+			await this.axios.updatePaymentIIkko(paybody)
+		}
+
+		async updateOrderProblem(body:any,problems:any){
+			await this.axios.orderProblem(body,problems)
 		}
 	
 }

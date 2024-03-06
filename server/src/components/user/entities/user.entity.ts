@@ -10,6 +10,9 @@ export class UserEntity {
     @ApiProperty({
         required: false
     })
+
+		private readonly refreshToken:string
+
     private readonly name?: string;
 
     @ApiProperty({
@@ -29,23 +32,24 @@ export class UserEntity {
     constructor(
         id: UniqueId,
         username: string,
-        name?: string,
+				refreshToken:string,
         phone?: string,
-        address?: string,
-        organization?: UniqueId
+				
     ) {
         this.id = id;
         this.username = username;
-        this.name = name;
+				this.refreshToken = refreshToken
         this.phone = phone;
-        this.address = address;
-        this.organization = organization;
+				
     }
 
     public check() {
         return !!this.id;
     }
 
+		public get getToken() {
+			return this.refreshToken;
+	}
     public get getAddress() {
         return this.address;
     }

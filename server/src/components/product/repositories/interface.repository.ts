@@ -17,7 +17,7 @@ export abstract class IProductRepository {
         userId: UniqueId
     ): Promise<ProductEntity>;
 
-    abstract getFavorites(userId: UniqueId): Promise<Array<ProductEntity>>;
+    abstract getFavorites(userId: UniqueId): Promise<any>;
 
     abstract getAll: (
         categoryId: UniqueId,

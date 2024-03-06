@@ -17,15 +17,25 @@ function keys(o: object, first = "") {
 export function encodeBody(b: object, key = "") {
     let result = {};
 
-    for (let key in b) {
-        if (typeof b[key] === "object") {
-            for (let neskey of keys(b[key])) {
-                result[`${key}_${neskey}`] = b[key][neskey].toString();
-            }
-        } else {
-            result[`${key}`] = b[key].toString();
-        }
-    }
-
+	
+    function getFiniteValue(obj) {
+			getProp(obj);
+	
+			function getProp(o) {
+					for(var prop in o) {
+							if(typeof(o[prop]) === 'object') {
+									getProp(o[prop]);
+									//result[`${prop}`] = String(o[prop])
+									console.log(prop);
+							} else {
+									//console.log('Finite value: ',o[prop])
+									//result = {...result,[`${prop}`]:o[prop]}
+									//result[`${prop}`] = String(o[prop])
+							}
+					}
+			}
+		}
+		getFiniteValue(b)
+		console.log('result',result);
     return result;
 }

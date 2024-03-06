@@ -7,6 +7,8 @@ export abstract class IOrganizationRepository {
     abstract getOneByGUID(id: UniqueId): Promise<OrganizationEntity>;
     abstract getRecvisites(organizationId: UniqueId): Promise<RecvisitesEntity>;
     abstract getOne(id: UniqueId): Promise<OrganizationEntity>;
+		abstract filtersMetod(data: any,cityid:string): any;
+		abstract pointSerchMetod(data: string,cityid:string): any;
     abstract getPaymentsInfo(
         organizationId: UniqueId,
 				type?:string

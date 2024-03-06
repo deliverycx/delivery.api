@@ -24,6 +24,7 @@ import { ValidationException } from "src/filters/validation.filter";
 import { Response } from "express";
 import { GetAllCartDTO } from "../dto/getAll.dto";
 import { DiscountDTO } from "../dto/discount.dto";
+import { JwtAuthGuard } from "src/guards/jwt.guard";
 
 @ApiTags("Cart endpoints")
 @ApiResponse({
@@ -38,8 +39,8 @@ import { DiscountDTO } from "../dto/discount.dto";
         transform: true
     })
 )
-@UseFilters(new UnauthorizedFilter())
-@UseGuards(AuthGuard)
+//@UseFilters(new UnauthorizedFilter())
+//@UseGuards(JwtAuthGuard)
 export class CartController {
     constructor(private readonly cartUsecase: CartUsecase) {}
 
@@ -70,7 +71,8 @@ export class CartController {
         session: Record<string, string>,
         @Res() response: Response
     ) {
-        const result = await this.cartUsecase.add(session.user, addBody);
+
+        const result = await this.cartUsecase.add(addBody.userid, addBody);
         response.status(200).json(result);
     }
 
@@ -106,7 +108,7 @@ export class CartController {
         @Res() response: Response
     ) {
         const result = await this.cartUsecase.removeOne(
-            session.user,
+						removeBody.userid,
             removeBody
         );
 
@@ -122,9 +124,11 @@ export class CartController {
     async deleteAll(
         @Session()
         session: Record<string, string>,
-        @Res() response: Response
+        @Res() response: Response,
+				@Body()
+        Body: {userid:string},
     ) {
-        const result = await this.cartUsecase.removeAll(session.user);
+        const result = await this.cartUsecase.removeAll(Body.userid);
 
         response.status(200).json(result);
     }
@@ -157,7 +161,7 @@ export class CartController {
         @Res() response: Response
     ) {
         const result = await this.cartUsecase.changeAmount(
-            session.user,
+						changeAmountBody.userid,
             changeAmountBody
         );
 
@@ -190,7 +194,11 @@ export class CartController {
         @Res() response: Response,
         @Query() query: GetAllCartDTO
     ) {
-        const result = await this.cartUsecase.getAll(session.user, query);
+
+				if(!session.user){
+					session.user = query.userid
+				}
+        const result = await this.cartUsecase.getAll(query.userid, query);
 
         response.status(200).json(result);
     }
@@ -219,7 +227,7 @@ export class CartController {
 
 				
 				const result = await this.cartUsecase.getDeliveryZones(body)
-console.log('zone',result);
+
 				response.status(200).json(result);
 		}
 

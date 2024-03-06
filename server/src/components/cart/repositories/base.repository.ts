@@ -19,25 +19,25 @@ export class CartRepository
 				@Inject("Organizationtables")
         private readonly OrganizationTablesModel: Model<OrganizationTablesClass>
     ) {
-        super(CartModel, cartMapper, "user", "product");
+        super(CartModel, cartMapper, "user");
     }
 
-    async add(userId: UniqueId, productId: UniqueId) {
+    async add(userId: UniqueId, producte: any,amounte = 1) {
         const result = await this.CartModel.findOneAndUpdate(
             {
                 user: userId,
-                product: productId
+                product: producte
             },
             {
                 $setOnInsert: {
-                    product: productId
+                    product: producte
                 },
                 $inc: {
-                    amount: 1
+                    amount: amounte
                 }
             },
             { upsert: true, new: true }
-        ).populate("product");
+        )//.populate("product");
 
         const product = result.product as ProductClass;
 
@@ -46,7 +46,7 @@ export class CartRepository
             product?.name,
             product?.image,
             product?.tags,
-            product?.id,
+            product?.productId,
             result?.amount,
             product?.price
         );
@@ -81,7 +81,7 @@ export class CartRepository
                 }
             },
             { new: true }
-        ).populate("product");
+        )//.populate("product");
 
         const product = result.product as ProductClass;
 
@@ -90,7 +90,7 @@ export class CartRepository
             product.name,
             product.image,
             product.tags,
-            product.id,
+            product.productId,
             result.amount,
             product.price
         );
@@ -103,32 +103,19 @@ export class CartRepository
                     user: new Types.ObjectId(userId)
                 }
             },
-            {
-                $lookup: {
-                    from: "products",
-                    localField: "product",
-                    foreignField: "_id",
-                    as: "product"
-                }
-            },
-            {
-                $addFields: {
-                    firstProduct: {
-                        $first: "$product"
-                    }
-                }
-            },
+           
             {
                 $group: {
                     _id: null,
                     totalPrice: {
                         $sum: {
-                            $multiply: ["$firstProduct.price", "$amount"]
+                            $multiply: ["$product.price", "$amount"]
                         }
                     }
                 }
             }
         ]);
+				
 
         return calcResult[0] ? calcResult[0].totalPrice : 0;
     }

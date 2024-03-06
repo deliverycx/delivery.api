@@ -27,9 +27,29 @@ import { BotService } from "src/services/duplicateBot/bot.service";
 import { stopListProviders } from "src/components/stopList/providers/stopList.provider";
 import { PaymentRepository } from "src/services/payment/sdk/repositories/payment.repositories";
 import { WebHookServices } from "src/components/webhook/services/webhook.services";
+import { ClientsModule, Transport } from "@nestjs/microservices";
+import { OrderService } from "src/components/order/services/order/order.service";
+import { cartProviders } from "src/components/cart/providers/cart.provider";
+import { AdminAxiosRequest } from "src/services/admin.request";
 
 @Module({
-    imports: [IikoModule, RedisModule],
+    imports: [
+			ClientsModule.register([
+				{
+					name: 'COMMUNICATION',
+					transport: Transport.RMQ,
+					options: {
+						urls: [`amqp://${process.env.RABBITMQ_HOST}`],
+						queue: 'cats_queue',
+						noAck: false,
+						queueOptions: {
+							durable: false
+						},
+					},
+				},
+			]),
+			IikoModule, RedisModule
+		],
     controllers: [WebhookController],
     providers: [
         {
@@ -77,8 +97,11 @@ import { WebHookServices } from "src/components/webhook/services/webhook.service
         IikoWebsocketGateway,
         ...productProviders,
         ...orderProviders,
+				...cartProviders,
         ...stopListProviders,
 				PaymentRepository,
+				AdminAxiosRequest,
+				OrderService,
         OrderUsecase,
         MailService,
 				WebHookServices

@@ -23,13 +23,18 @@ import { UnauthorizedFilter } from "src/filters/unauthorized.filter";
 import { PaymentService } from "../../../services/payment/payment.service";
 import { PaymentException } from "src/filters/payment.filter";
 import { RedirectEntity } from "../entities/redirect.entity";
+import { OrderCheckDto } from "../dto/orderCheck.dto";
+import { OrderService } from "../services/order/order.service";
+import axios from "axios";
+import { JwtAuthGuard } from "src/guards/jwt.guard";
+
 
 @ApiTags("Order endpoints")
 @ApiResponse({
     status: 401,
     description: "в случае если пользователь без сессионных кук"
 })
-@ApiCookieAuth()
+
 @Controller("order")
 @UseFilters(new ValidationException())
 @UseFilters(new PaymentException())
@@ -39,11 +44,12 @@ import { RedirectEntity } from "../entities/redirect.entity";
     })
 )
 @UseFilters(new UnauthorizedFilter())
-@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard)
 export class OrderController {
     constructor(
         private readonly OrderUsecase: OrderUsecase,
-        private readonly PaymentService: PaymentService
+        private readonly PaymentService: PaymentService,
+				private readonly orderService: OrderService
     ) {}
 
     @ApiResponse({
@@ -51,14 +57,14 @@ export class OrderController {
         type: RedirectEntity,
         description: "Возращает урл для редиректа"
     })
-    @Post("create")
+    @Post("createPaymentOrder")
     async create(
         @Body() body: OrderDTO,
         @Session() session: Record<string, string>,
         @Res() response: Response
     ) {
-				console.log('создание заказа заказа',body);
-        const paymentResult = await this.PaymentService.route(
+		
+        const paymentResult = await this.PaymentService._byCard(
             body,
             session.user
         );
@@ -79,14 +85,27 @@ export class OrderController {
     })
     @Post("check")
     async checkOrder(
-        @Body() body: OrderDTO,
+        @Body() body: OrderCheckDto,
         @Session() session: Record<string, string>,
-        @Res() response: Response
+       
     ) {
-				console.log('чек заказа',body);
-        await this.OrderUsecase.checkOrder(session.user, body);
 
-        response.status(200).json({ message: "Order can be send" });
+        const hash = await this.OrderUsecase.checkOrder(body.userid, body);
+
+        return hash
+    }
+
+
+
+		@Post("checkcart")
+    async checkOrderCart(
+        @Session() session: Record<string, string>,
+        @Body() body: {userid:string},
+    ) {
+				
+        const result = await this.OrderUsecase.checkOrderCart(body.userid);
+	
+        return result
     }
 
     @ApiResponse({
@@ -103,4 +122,72 @@ export class OrderController {
 
         response.status(200).json(result);
     }
+ 
+		@Post("createOrderMicro")
+    async createOrderMicro(
+        @Body() body: OrderDTO,
+				@Session() session: Record<string, string>,
+				@Res() response: Response,
+    ) {
+			try {
+				await this.orderService.createOrderToRabbit(body.userid, body)
+				response.status(200).json(true);
+			} catch (error) {
+				response.status(408).json(false);
+			}
+				
+    }
+
+
+		@Get("getorder/:hash")
+    async getOrder(
+				@Res() response: Response,
+        @Param("hash") hash: string
+    ) {
+				
+        const result = await this.orderService.getOrderHash(hash)
+				response.status(200).json(result);
+    }
+
+		@Get("gethash/:hash")
+    async getHash(
+				@Res() response: Response,
+        @Param("hash") hash: string
+    ) {
+				
+        const result = await this.orderService.getOrderHash(hash)
+				response.status(200).json(result);
+    }
+
+		@Get("orderuser/:user")
+    async getOrderByUser(
+				@Res() response: Response,
+        @Param("user") user: string
+    ) {
+				
+        const result = await this.orderService.getOrderUser(user)
+				response.status(200).json(result);
+    }
+
+		@Post("smstable")
+    async smstable(
+			@Body() body: any,
+			@Res() response: Response,
+    ) {
+			try {
+				const {data} = await axios.get('https://cxcrimea@yandex.ru:zx4dUbwFtA319jZ3P90q7L2dyjtzD70M@gate.smsaero.ru/v2/auth')
+				if(data && data.success){
+					const urls = encodeURI(`https://cxcrimea@yandex.ru:zx4dUbwFtA319jZ3P90q7L2dyjtzD70M@gate.smsaero.ru/v2/sms/send?number=${body.phone}&text=${body.textsms}&sign=Khinkalich`)
+					const smsresult = await axios.get(urls)
+					console.log('sms',smsresult);
+					response.status(200).json(smsresult);
+				}
+			} catch (error) {
+				console.log(error);
+				response.status(501).json(null);
+			}
+			
+				
+    }
+
 }

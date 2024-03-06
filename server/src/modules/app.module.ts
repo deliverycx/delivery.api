@@ -25,6 +25,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { RedisModule } from "./redis/redis.module";
 import { REDIS } from "./redis/redis.constants";
 import { StopListModule } from "src/ioc/stoplist.module";
+import { ClientsModule, Transport } from "@nestjs/microservices";
 
 // КОСТЫЛЬ
 try {
@@ -63,6 +64,13 @@ try {
                 })
             ]
         }),
+				ClientsModule.register([
+					{
+						name: 'COMMUNICATION',
+						transport: Transport.TCP,
+					},
+					
+				]),
 
         ProductModule,
         CategoryModule,
@@ -97,6 +105,15 @@ export class AppModule implements NestModule {
     async configure(consumer: MiddlewareConsumer) {
         consumer
             .apply(
+							session({
+
+								secret: process.env.SESSION_SECRET,
+								resave: false,
+
+								saveUninitialized: false,
+
+						})
+								/*
                 session({
                     store: new (RedisStore(session))({
                         client: this.redis,
@@ -111,6 +128,7 @@ export class AppModule implements NestModule {
                         httpOnly: true
                     }
                 })
+								*/
             )
             .forRoutes("*");
     }

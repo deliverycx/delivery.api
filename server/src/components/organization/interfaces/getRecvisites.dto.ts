@@ -3,6 +3,5 @@ import { IsMongoId } from "class-validator";
 
 export class RecvisitesDTO {
     @ApiProperty()
-    @IsMongoId()
-    organizationId: UniqueId;
+    organizationId: string;
 }

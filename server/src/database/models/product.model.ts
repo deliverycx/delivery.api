@@ -45,6 +45,9 @@ export class ProductClass {
     @prop()
     public tags: string[];
 
+		@prop()		
+		productId:string
+
 		@prop()
     public code: string;
 

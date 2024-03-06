@@ -11,8 +11,7 @@ import { PaymentMethods } from "../../../services/payment/payment.abstract";
 
 export class OrderDTO {
     @ApiProperty()
-    @IsMongoIdObject()
-    organization: UniqueId;
+    organization: string;
 
     @ApiProperty()
     name: string;
@@ -32,6 +31,7 @@ export class OrderDTO {
     date:string
     
     @IsObject()
+		@IsOptional()
     address: {
         city: string;
         street: string;
@@ -41,7 +41,7 @@ export class OrderDTO {
         entrance: number;
         floor: number;
 				kladrid:string
-				cordAdress:number[]
+				cordAdress?:number[]
     };
 
     @ApiProperty({
@@ -54,7 +54,7 @@ export class OrderDTO {
 			id: string
 			numb: number
 		}
-
+		userid:string
     @ApiProperty()
     @IsPhoneNumber("RU", {
         message: () => {
@@ -62,6 +62,8 @@ export class OrderDTO {
         }
     })
     phone: string;
+
+		terminal:string
 
     @ApiProperty()
     comment: string;
@@ -72,9 +74,14 @@ export class OrderDTO {
     })
     paymentMethod: PaymentMethods;
 
+		@ApiProperty()
+		hash:string
+
     @ApiProperty({ required: false })
     @IsEmail({ message: "Не корректный e-mail" })
     @IsOptional()
     email?: string;
 		paymentsum:number
+		organizationid:string
+		
 }

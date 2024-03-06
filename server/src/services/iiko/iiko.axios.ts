@@ -1,14 +1,18 @@
 import { iiko } from "src/services/iiko/interfaces";
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { Axios } from "src/common/abstracts/request";
 import { AxiosInstance } from "axios";
 import { IikoError } from "./iiko.error";
+import { RedisClient } from "redis";
+import { REDIS } from "src/modules/redis/redis.constants";
 
 @Injectable()
 export class IIkoAxios extends Axios {
     public _axios: AxiosInstance;
 
-    constructor() {
+    constructor(
+			
+		) {
         super(
             process.env.TRANSFER_URL,
             (error) =>
@@ -45,6 +49,8 @@ export class IIkoAxios extends Axios {
 							apiLogin: "539ecfae"
 						}
         );
+
+				console.log("вызвал токен");
 				
         return data.token;
     }
@@ -85,6 +91,32 @@ export class IIkoAxios extends Axios {
 
 
 			return data.terminalGroups[0].items[0].id;
+		}
+
+
+		public async termiralAlive(organization:string) {
+			const token = await this.token();
+			const temitalid = await this.termiralGroops(organization)
+			const { data } = await this._axios.post<any>(
+					`/terminal_groups/is_alive`,
+					{
+						"organizationIds": [
+							organization
+						],
+						"terminalGroupIds": [
+							temitalid
+						]
+					},
+					{
+						headers: { Authorization: `Bearer ${token}` }
+					}
+			);
+
+			if(data.isAliveStatus.length !== 0){
+				return data.isAliveStatus[0].isAlive
+			}else{
+				throw Error()
+			}
 		}
 
     public async orderCreateDelivery(orderData: any) {
@@ -249,11 +281,70 @@ export class IIkoAxios extends Axios {
 			return id ? data.organizations[0] : data.organizations
 	}
 
+	public async getNomenClature(id:string):Promise<any>{
+		const token = await this.token();
+		
+
+		const { data } = await this._axios.post(
+			`/nomenclature`,
+					{
+						"organizationId": id
+					},
+					{
+						headers: { Authorization: `Bearer ${token}` }
+					}
+			);
+
+			
+			
+			return data
+	}
+
+	public async updatePaymentIIkko(body):Promise<any>{
+		const token = await this.token();
+		
+
+		const { data } = await this._axios.post(
+			`/deliveries/change_payments`,
+					body,
+					{
+						headers: { Authorization: `Bearer ${token}` }
+					}
+			);
+
+			console.log(data);
+			
+			return data
+	}
+
+	public async orderProblem(body:any,problem:{hasProblem:boolean,problem:string}):Promise<any>{
+		const token = await this.token();
+		
+
+		const { data } = await this._axios.post(
+			`/deliveries/update_order_problem`,
+					{
+						"organizationId": body.organization,
+						"orderId": body.orderId,
+						"hasProblem": problem.hasProblem,
+						"problem": problem.problem
+					},
+					{
+						headers: { Authorization: `Bearer ${token}` }
+					}
+			);
+
+		
+			
+			return data
+	}
+
 }
 
 export const iikoAxiosProviders = [
     {
         provide: "IIKO_AXIOS",
         useFactory: () => new IIkoAxios()
-    }
+    },
+		IIkoAxios
 ];

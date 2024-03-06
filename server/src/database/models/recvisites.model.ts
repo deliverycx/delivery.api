@@ -32,8 +32,8 @@ export class RecvisitesClass {
     @prop()
     postcode: string;
 
-    @prop({ ref: "Organization" })
-    organization: Ref<OrganizationClass>;
+    @prop()
+    organization: string;
 }
 
 export const recvisitesModel = getModelForClass(RecvisitesClass);

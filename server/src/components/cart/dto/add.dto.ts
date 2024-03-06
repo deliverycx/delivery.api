@@ -5,16 +5,20 @@ import { OrderTypesEnum } from "src/services/iiko/iiko.abstract";
 
 export class AddCartDTO {
 		@ApiProperty()
-		organization: UniqueId;
+		organization: string;
 
     @ApiProperty({
         description: "Mongo id object"
     })
-    @IsMongoIdObject()
-    public productId: UniqueId;
+
+    public product: any;
 
     @ApiProperty({
         enum: ["COURIER", "PICKUP"]
     })
     public orderType: OrderTypesEnum;
+
+		anmount?:number
+
+		userid:string
 }

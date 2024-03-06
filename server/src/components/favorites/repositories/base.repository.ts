@@ -25,15 +25,18 @@ export class FavoriteRepository implements IFavoriteRepository {
         );
     }
 
-    async add_remove(productId: UniqueId, userId: UniqueId) {
+    async add_remove(productId: any, userId: UniqueId) {
         let action: any = {};
 
         const isFind = await this.favoriteModel.findOne({
             $and: [
                 { user: userId },
-                { products: { $in: productId as Ref<any> } }
+                { products: { $elemMatch: {
+									id:productId.id
+								} } }
             ]
         });
+				
 
         if (isFind) {
             action.$pull = {

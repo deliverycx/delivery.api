@@ -5,7 +5,7 @@ export abstract class ICartRepository {
 
     abstract removeAll(userId: UniqueId): Promise<[]>;
 
-    abstract add(userId: UniqueId, productId: UniqueId): Promise<CartEntity>;
+    abstract add(userId: UniqueId, productId: UniqueId, amounte?:number): Promise<CartEntity>;
 
     abstract removeOne(userId: UniqueId, cartId: UniqueId): Promise<UniqueId>;
 

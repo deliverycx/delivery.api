@@ -14,10 +14,15 @@ import {
     ValidationCountError
 } from "../../errors/order.error";
 import { ValidationCount } from "../../services/validationCount/validationCount.service";
+import { OrderCheckDto } from "../../dto/orderCheck.dto";
+import { createOrderHash } from "src/services/payment/utils/hash";
+import { RedisClient } from "redis";
+import { REDIS } from "src/modules/redis/redis.constants";
+import { IIkoAxiosRequest } from "src/services/iiko/iiko.request";
 
 interface IState {
     user: UniqueId;
-    orderInfo: OrderDTO;
+    orderInfo: OrderCheckDto;
     cart: Array<CartEntity>;
     errors: Array<BaseError>;
 }
@@ -27,22 +32,25 @@ export class OrderCheckBuilder {
     private _state: IState = {} as IState;
 
     constructor(
-        @Inject("IIiko")
-        private readonly orderService: IIiko,
+        
+
+				private readonly orderService:IIkoAxiosRequest,
 
         private readonly validationCountService: ValidationCount,
 
         private readonly OrganizationRepository: IOrganizationRepository,
 
-        private readonly CartRepository: ICartRepository
+        private readonly CartRepository: ICartRepository,
+				@Inject(REDIS) private readonly redis: RedisClient,
     ) {}
 
-    async initialize(userId: UniqueId, orderInfo: OrderDTO) {
+    async initialize(userId: UniqueId, orderInfo: OrderCheckDto) {
         this._state.orderInfo = orderInfo;
         this._state.user = userId;
         this._state.errors = [];
 
         this._state.cart = await this.CartRepository.getAll(userId);
+			
     }
 
     async validateCart() {
@@ -52,6 +60,7 @@ export class OrderCheckBuilder {
     }
 
     async validateCount() {
+		
         const validationResult = this.validationCountService.validate(
             this._state.cart
         );
@@ -61,6 +70,19 @@ export class OrderCheckBuilder {
         }
     }
 
+		async terminalIsAlive() {
+			console.log('на чеке',this._state.orderInfo.terminal);
+			const isAlive = await this.orderService.termiralAlive(this._state.orderInfo.organizationid,this._state.orderInfo.terminal)
+			if(!isAlive){
+				this._state.errors.push(
+					new CannotDeliveryError(
+						`Доставка не может быть совершена по причине: нет связи с заведением`
+					)
+				);
+			}
+		}	
+
+		/*
     async checkCardPaymentAviables() {
         if (this._state.orderInfo.paymentMethod !== PaymentMethods.CARD) {
             return;
@@ -76,12 +98,10 @@ export class OrderCheckBuilder {
             );
         }
     }
+		*/
 
 		async checkStopList(){
-			
-			const organization = await this.OrganizationRepository.getOne(this._state.orderInfo.organization)
-			const organizationID = organization.getGuid.toString();
-			const stoplist = await this.orderService.getStopList(organizationID)
+			const stoplist = await this.orderService.stopList(this._state.orderInfo.organizationid)
 			const arrStoplist = stoplist.map((el) => el.product)
 
 			
@@ -94,7 +114,7 @@ export class OrderCheckBuilder {
 				this._state.errors.push(
 					new CannotDeliveryError(
 						result.map((el:any) =>{
-							return `в стоплисте - ${el.getProductName}`
+							return `в стоплисте - ${el.getProductName}` 
 						})
 					)
 					
@@ -104,6 +124,7 @@ export class OrderCheckBuilder {
 			
 		}
 
+		/*
     async serviceValidate() {
         const { cart, orderInfo, user } = this._state;
 
@@ -117,10 +138,20 @@ export class OrderCheckBuilder {
             );
         }
     }
+		*/
 
-    getResult(): void {
+    getResult(): string {
+			
         this._state.errors.forEach((error) => {
             throw error;
         });
+				const orderHash = createOrderHash();	
+				this.redis.set(
+					orderHash,
+					orderHash,
+					"EX",
+					60 * 10
+			);
+				return orderHash
     }
 }
