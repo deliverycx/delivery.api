@@ -24,11 +24,11 @@ class NestedStopListClass {
     schemaOptions: { versionKey: false, timestamps: true }
 })
 export class StopListClass {
-    @prop({ ref: "Organization" })
-    organization: Ref<OrganizationClass, UniqueId>;
+    @prop()
+    organization: string;
 
-    @prop({ type: NestedStopListClass })
-    stoplist: NestedStopListClass[];
+    @prop()
+    stoplist: any[];
 }
 
 export const StopListSchema = buildSchema(StopListClass);

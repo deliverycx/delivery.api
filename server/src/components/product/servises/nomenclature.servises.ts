@@ -2,6 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { IIkoAxios } from "src/services/iiko/iiko.axios";
 import { IProductRepository } from "../repositories/interface.repository";
 import { Types, Document } from "mongoose";
+import { AdminAxiosRequest } from "src/services/admin.request";
 
 @Injectable()
 export class NomenclatureServises {
@@ -9,10 +10,13 @@ export class NomenclatureServises {
 		private readonly productRepository: IProductRepository,
 		@Inject("IIKO_AXIOS")
 		private readonly axios: IIkoAxios,
+		private readonly adminAxios:AdminAxiosRequest
 	) { }
 
 	async getNomenClature(organization: string) {
-		const nomenclature = await this.axios.getNomenClature(organization)
+	
+		//console.log(organization);
+		const nomenclature =  await this.adminAxios.getOrganizationList(organization)//await this.axios.getNomenClature(organization)
 
 		const categoryes = this.NomenClatureCategory(nomenclature.groups, organization)
 		const products = this.NomenClatureProducts(nomenclature.products)
@@ -74,7 +78,8 @@ export class NomenclatureServises {
 				images,
 				imageLinks,
 				measureUnit,
-				weight
+				weight,
+				
 			} = prod;
 
 
@@ -109,17 +114,15 @@ export class NomenclatureServises {
 
 	async getSouses(organization: string) {
 		const nomenclature = await this.getNomenClature(organization)
-
+		
 		if (nomenclature) {
 			
 			const randomSous = []
 
 			// ищем категорию соусы
 			const catsosus = nomenclature.categoryes.find((val) => {
-				if (val.tags && Array.isArray(val.tags)) {
-					if (val.tags[0] === "sous") {
-						return val
-					}
+				if (val.name === 'Соусы') {
+					return val
 				}
 			})
 			// находим товары по соусам
@@ -145,14 +148,19 @@ export class NomenclatureServises {
 		if (nomenclature) {
 			const randomProduct = []
 			const randomSous = []
-
+			//console.log(nomenclature.categoryes);
 			// ищем категорию соусы
 			const catsosus = nomenclature.categoryes.find((val) => {
+				if(val.name === 'Соусы'){
+					return val
+				}
+				/*
 				if (val.tags && Array.isArray(val.tags)) {
 					if (val.tags[0] === "sous") {
 						return val
 					}
 				}
+				*/
 			})
 			// находим товары по соусам
 

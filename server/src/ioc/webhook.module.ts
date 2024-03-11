@@ -30,6 +30,7 @@ import { WebHookServices } from "src/components/webhook/services/webhook.service
 import { ClientsModule, Transport } from "@nestjs/microservices";
 import { OrderService } from "src/components/order/services/order/order.service";
 import { cartProviders } from "src/components/cart/providers/cart.provider";
+import { AdminAxiosRequest } from "src/services/admin.request";
 
 @Module({
     imports: [
@@ -99,6 +100,7 @@ import { cartProviders } from "src/components/cart/providers/cart.provider";
 				...cartProviders,
         ...stopListProviders,
 				PaymentRepository,
+				AdminAxiosRequest,
 				OrderService,
         OrderUsecase,
         MailService,

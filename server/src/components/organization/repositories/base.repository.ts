@@ -79,7 +79,8 @@ export class OrganizationRepository
 			organizationDoc.redirect,
 			organizationDoc.redirectON,
 			organizationDoc.gallery,
-			organizationDoc.filters
+			organizationDoc.filters,
+			organizationDoc.terminal
 		);
 
 		

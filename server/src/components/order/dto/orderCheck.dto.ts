@@ -5,6 +5,7 @@ export class OrderCheckDto{
 	
 	organizationid:string
 	userid:string
+	terminal:string
 	@IsObject()
 	@IsOptional()
     address: {
