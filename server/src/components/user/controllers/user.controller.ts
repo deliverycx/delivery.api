@@ -74,9 +74,8 @@ export class UserController {
 
 	//@UseGuards(JwtAuthGuard)
 	@Get('send_sms')
-	async sendsms(@Query() query: { phone: string }, @Res() response: Response) {
-		await this.userUsecase.sendSMSAreo(query.phone)
-		response.status(201).json();
+	async sendsms(@Query() query: { phone: string }) {
+		return await this.userUsecase.sendSMSAreo(query.phone)
 	}
 
 

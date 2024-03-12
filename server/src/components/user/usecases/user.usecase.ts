@@ -111,7 +111,10 @@ export class UserUsecase {
 				if(code && typeof code === 'string'){
 					const textsms = `Ваш код:${code}`
 					
-					await this.sMSAeroServices.smsAutrorization(phone,textsms)
+					const resultSmS = await this.sMSAeroServices.smsAutrorization(phone,textsms)
+					if(resultSmS.success){
+						return code
+					}
 				}
 			}else{
 				throw new InternalException();

@@ -21,6 +21,7 @@ export class SMSAeroServices{
 			if(result && !result.success){
 				throw new InternalException();
 			}
+			return result
 		}
 		
 	}
