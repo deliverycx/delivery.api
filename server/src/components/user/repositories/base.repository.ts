@@ -55,6 +55,19 @@ export class UserRepository{
         return new UserEntity(result?._id, result?.username, result.refreshToken,result.phone);
     }
 
+		async updateUserPass(phone: UniqueId, pass: string) {
+				
+			const passHash = await argon2.hash(pass)
+			console.log(phone,pass,passHash);
+			const result = await this.userModel.findOneAndUpdate({phone:phone}, {
+				$set:{
+					password:passHash
+				}
+			},{ upsert: true, new: true });
+	
+			return new UserEntity(result?._id, result?.username, result.refreshToken,result.phone);
+	}
+
 		async undatePersonal(userId: UniqueId,personalbody:any){
 			const result = await this.userModel.findByIdAndUpdate(userId, {
 				personal: personalbody,

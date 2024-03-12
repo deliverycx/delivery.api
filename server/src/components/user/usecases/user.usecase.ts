@@ -73,6 +73,18 @@ export class UserUsecase {
 		}
 
 
+		async resetPassord(body:any){
+			const result = await this.userRepository.updateUserPass(body.phone,body.password)
+			return result
+		}
+
+		async checkRegisterUser(phone:string){
+			const user = await this.userRepository.findUser({phone:phone})
+			console.log(user,phone);
+			return user
+		}
+
+
 		async updateRefreshToken(userName: string,refreshToken:string){
 			const hashtoken = await argon2.hash(refreshToken)
 			await this.userRepository.updateUserRefresh(userName,hashtoken)

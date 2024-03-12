@@ -15,5 +15,5 @@ export abstract class IUserRepository {
         updateProps: IUpdateProps
     ): Promise<UserEntity>;
 		abstract findUser(query: any): Promise<UserEntity>;
-
+		abstract updateUserPass(phone:string,pass:string): Promise<UserEntity>;
 }

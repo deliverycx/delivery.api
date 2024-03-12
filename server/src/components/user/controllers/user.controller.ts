@@ -73,9 +73,35 @@ export class UserController {
 	}
 
 	//@UseGuards(JwtAuthGuard)
-	@Get('send_sms')
-	async sendsms(@Query() query: { phone: string }) {
-		return await this.userUsecase.sendSMSAreo(query.phone)
+	@Post('send_sms')
+	async sendsms(@Body() body: { phone: string }) {
+		const user = await this.userUsecase.checkRegisterUser(body.phone)
+		if(!user){
+			return await this.userUsecase.sendSMSAreo(body.phone)
+		}else{
+			return {error:false}
+		}
+		
+	}
+
+
+	@Post('send_resetsms')
+	async sendResetsms(@Body() body: { phone: string }) {
+		const user = await this.userUsecase.checkRegisterUser(body.phone)
+		if(user){
+			return await this.userUsecase.sendSMSAreo(body.phone)
+		}else{
+			return {error:false}
+		}
+		
+		
+	}
+
+
+	@Post('resetpassword')
+	async resetPassword(@Body() body: { phone: string,password:string }) {
+		return await this.userUsecase.resetPassord(body)
+		
 	}
 
 
