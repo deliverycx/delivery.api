@@ -50,7 +50,7 @@ export class IIkoAxios extends Axios {
 						}
         );
 
-				console.log("вызвал токен");
+				console.log("старый токен вызвал токен");
 				
         return data.token;
     }

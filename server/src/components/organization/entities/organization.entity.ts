@@ -121,4 +121,7 @@ export class OrganizationEntity {
     public get getWorkTime() {
         return this.workTime;
     }
+		public get getTerminal() {
+			return this.terminal;
+	}
 }

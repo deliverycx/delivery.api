@@ -29,7 +29,7 @@ export class IIkoAxiosRequest extends Axios {
 
 		const tokeninRedis = await redisToken
 		if (tokeninRedis) {
-			console.log('token in redis', tokeninRedis);
+			console.log('token in redis');
 			return tokeninRedis
 		} else {
 			const { data } = await this._axios.post<{ token: string }>(
@@ -58,6 +58,7 @@ export class IIkoAxiosRequest extends Axios {
 				headers: { Authorization: `Bearer ${token}` }
 			}
 		);
+		console.log('getOrganizationList');
 
 		return data.organizations
 	}
@@ -80,6 +81,8 @@ export class IIkoAxiosRequest extends Axios {
 			}
 		);
 
+		console.log('getOrganization');
+
 		return data.organizations[0]
 	}
 
@@ -95,13 +98,13 @@ export class IIkoAxiosRequest extends Axios {
 				headers: { Authorization: `Bearer ${token}` }
 			}
 		);
-		console.log(data)
+		console.log('getFoods');
 		return data
 	}
 
 	public async termiralAlive(organization:string,terminal:string) {
 		const token = await this.token();
-		const terminale = await this.termiralGroops(organization)
+		//const terminale = await this.termiralGroops(organization)
 		
 		
 		const { data } = await this._axios.post<any>(
@@ -111,13 +114,15 @@ export class IIkoAxiosRequest extends Axios {
 						organization
 					],
 					"terminalGroupIds": [
-						terminale.id
+						terminal
 					]
 				},
 				{
 					headers: { Authorization: `Bearer ${token}` }
 				}
 		);
+
+		console.log('termiralAlive');
 
 		if(data.isAliveStatus.length !== 0){
 			return data.isAliveStatus[0].isAlive
@@ -142,6 +147,9 @@ export class IIkoAxiosRequest extends Axios {
 				headers: { Authorization: `Bearer ${token}` }
 			}
 		);
+		console.log('organizationTables');
+
+
 		return data.restaurantSections;
 	}
 
@@ -159,7 +167,7 @@ export class IIkoAxiosRequest extends Axios {
 				headers: { Authorization: `Bearer ${token}` }
 			}
 		);
-
+		console.log('termiralGroops');
 
 
 		return data.terminalGroups[0].items[0];
@@ -182,7 +190,7 @@ export class IIkoAxiosRequest extends Axios {
 			}
 		);
 
-
+		console.log('termiralGroopsAlive');
 
 		return data.isAliveStatus[0]
 	}
@@ -202,7 +210,7 @@ export class IIkoAxiosRequest extends Axios {
 			}
 		);
 
-
+		console.log('getStreetCity');
 
 		return data.streets
 	}
@@ -220,7 +228,7 @@ export class IIkoAxiosRequest extends Axios {
 			}
 		);
 
-			
+		console.log('getNomenclature');		
 
 		return data
 	}
@@ -243,6 +251,8 @@ export class IIkoAxiosRequest extends Axios {
 		if(data.terminalGroupStopLists.length === 0){
 			return []
 		}
+
+		console.log('stopList');	
 
 		return data.terminalGroupStopLists.map((val:any) =>{
 			return val.organizationId === organization &&  val.items
