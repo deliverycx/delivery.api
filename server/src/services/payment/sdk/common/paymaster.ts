@@ -129,7 +129,7 @@ export class Paymaster {
 
 				return {
 					merchantId: organizationPaymentInfo.merchantId,
-					testMode: true,
+					
 					dualMode: true,
 						amount: {
 								currency: "RUB",

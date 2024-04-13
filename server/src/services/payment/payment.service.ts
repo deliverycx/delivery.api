@@ -207,14 +207,14 @@ export class PaymentService extends IPaymentService {
 
 		const payMasterBody = {
 			merchantId: organizationPaymentInfo.merchantId,
-			testMode: true,
-			//dualMode: true,
+			//testMode: true,
+			dualMode: true,
 			amount: {
 				currency: "RUB",
 				value: intToDecimal(totalPrice)
 			},
 			invoice: {
-				description: 'Оплата заказа в Старик Хинкалыч',
+				description: 'paybody Оплата заказа в Старик Хинкалыч',
 				params: {
 					user: body.userid,
 					hash: body.hash,
@@ -291,7 +291,6 @@ export class PaymentService extends IPaymentService {
 
 		const payMasterBody = {
 			merchantId: organizationPaymentInfo.merchantId,
-			//testMode: true,
 			dualMode: true,
 			amount: {
 				currency: "RUB",
