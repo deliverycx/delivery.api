@@ -216,7 +216,7 @@ export class PaymentService extends IPaymentService {
 			invoice: {
 				description: 'Оплата заказа в Старик Хинкалыч',
 				params: {
-					user: body.userid,
+					user: body.userid, 
 					hash: body.hash,
 					organization: body.organization,
 					date: body.date,
@@ -227,7 +227,7 @@ export class PaymentService extends IPaymentService {
 				}
 			},
 			protocol: {
-				callbackUrl: `https://14bc-178-34-158-175.ngrok-free.app/webhook/paymentCallback`, //https://f1b6-89-107-139-16.ngrok-free.app //${body.localhost}/api/webhook/paymentCallback
+				callbackUrl: `${body.localhost}/api/webhook/paymentCallback`, //https://f1b6-89-107-139-16.ngrok-free.app //${body.localhost}/api/webhook/paymentCallback
 				returnUrl: `${body.localhost}/success/${body.hash}`
 			},
 			reciept: {
