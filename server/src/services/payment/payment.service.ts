@@ -207,8 +207,8 @@ export class PaymentService extends IPaymentService {
 
 		const payMasterBody = {
 			merchantId: organizationPaymentInfo.merchantId,
-			testMode: true,
-			//dualMode: true,
+			//testMode: true,
+			dualMode: true,
 			amount: {
 				currency: "RUB",
 				value: intToDecimal(totalPrice)
