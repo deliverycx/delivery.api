@@ -1,14 +1,14 @@
 import {
-    Controller,
-    Post,
-    Body,
-    Res,
-    UseGuards,
-    UseFilters,
-    Inject,
-		Get,
-		Param,
-		Query
+	Controller,
+	Post,
+	Body,
+	Res,
+	UseGuards,
+	UseFilters,
+	Inject,
+	Get,
+	Param,
+	Query
 } from "@nestjs/common";
 import { iiko } from "src/services/iiko/interfaces";
 import { IPaymentWebhookDto } from "../../order/dto/paymentWebhook.dto";
@@ -36,281 +36,299 @@ import { AdminAxiosRequest } from "src/services/admin.request";
 
 @Controller("webhook")
 export class WebhookController {
-    constructor(
-        @Inject("IIiko")
-        private readonly IikoService: IIiko,
+	constructor(
+		@Inject("IIiko")
+		private readonly IikoService: IIiko,
 
-        private readonly PaymentService: PaymentService,
-        private readonly IikoStopListGateway: IikoWebsocketGateway,
-				private readonly adminAxiosRequest: AdminAxiosRequest,
-        private readonly MailService: MailService,
-        private readonly BotService: IBotService,
-				private readonly webHookServices: WebHookServices
-    ) {}
+		private readonly PaymentService: PaymentService,
+		private readonly IikoStopListGateway: IikoWebsocketGateway,
+		private readonly adminAxiosRequest: AdminAxiosRequest,
+		private readonly MailService: MailService,
+		private readonly BotService: IBotService,
+		private readonly webHookServices: WebHookServices
+	) { }
 
-    @Post("paymentCallback")
-    //@UseGuards(YooWebhookGuard)
-    async yowebhook(
-        @Body() body: IPaymentWebhookDto,
-        @Res() response: Response
-    ) {
- 
-			console.log('ответ из пумастера тело',body);
-        if (body.status === PaymasterResponse.PaymentStatuses.AUTHORIZED || body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
-						const check:any = await this.PaymentService.checkPymentOrder(body.invoice.params.hash,body.id)
-						if(check){
-							try {
-								
-								await this.PaymentService.captrurePayment(body);
-								await this.BotService.PaymentOrder(body.invoice.params.organization,{...body,statusOrder:"Обработан"})
-							} catch (error) {
-								await this.BotService.PaymentOrder(body.invoice.params.organization,{...body,statusOrder:"Ошибка"})
-								console.log(error);
-							}
-							
-						}
-        }
+	@Post("paymentCallback")
+	//@UseGuards(YooWebhookGuard)
+	async yowebhook(
+		@Body() body: IPaymentWebhookDto,
+		@Res() response: Response
+	) {
 
-        response.status(200).json({});
-    }
+		console.log('ответ из пумастера тело', body);
+		if (body.status === PaymasterResponse.PaymentStatuses.AUTHORIZED || body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
+			const check: any = await this.PaymentService.checkPymentOrder(body.invoice.params.hash, body.id)
+			if (check) {
+				try {
 
-		@Post("paymentCreate")
-    async paymasterPayCreate(
-        @Body() body: any,
-      
-    ) {
-			const url = await this.PaymentService.createPayMasterPayment(body)
-			return url
+					await this.PaymentService.captrurePayment(body);
+					await this.BotService.PaymentOrder(body.invoice.params.organization, { ...body, statusOrder: "Обработан" })
+				} catch (error) {
+					await this.BotService.PaymentOrder(body.invoice.params.organization, { ...body, statusOrder: "Ошибка" })
+					console.log(error);
+				}
+
+			}
 		}
 
-		/*
-		@Post("paymentCallbackBar")
-    //@UseGuards(YooWebhookGuard)
-    async yowebhookBar(
-        @Body() body: any,
-        @Res() response: Response
-    ) {
+		response.status(200).json({});
+	}
 
-			console.log('ответ БАР из пумастера тело',body);
-        if (body.status === PaymasterResponse.PaymentStatuses.AUTHORIZED || body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
-						const check:any = await this.PaymentService.checkPymentOrder({orderId:body.invoice.params.orderId})
-						if(check){
-							try {
-								
-								await this.PaymentService.captrurePaymentBar(body);
-								await this.BotService.PaymentOrder(body.invoice.params.idorganization,{...body,statusOrder:'Бар оплачен'})
-							} catch (error) {
-								await this.BotService.PaymentOrder(body.invoice.params.idorganization,{...body,statusOrder:'Ошибка при оплате Бара'})
-								console.log(error);
-							}
+	@Post("paymentCreate")
+	async paymasterPayCreate(
+		@Body() body: any,
+
+	) {
+		const url = await this.PaymentService.createPayMasterPayment(body)
+		return url
+	}
+
+	/*
+	@Post("paymentCallbackBar")
+	//@UseGuards(YooWebhookGuard)
+	async yowebhookBar(
+			@Body() body: any,
+			@Res() response: Response
+	) {
+
+		console.log('ответ БАР из пумастера тело',body);
+			if (body.status === PaymasterResponse.PaymentStatuses.AUTHORIZED || body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
+					const check:any = await this.PaymentService.checkPymentOrder({orderId:body.invoice.params.orderId})
+					if(check){
+						try {
 							
+							await this.PaymentService.captrurePaymentBar(body);
+							await this.BotService.PaymentOrder(body.invoice.params.idorganization,{...body,statusOrder:'Бар оплачен'})
+						} catch (error) {
+							await this.BotService.PaymentOrder(body.invoice.params.idorganization,{...body,statusOrder:'Ошибка при оплате Бара'})
+							console.log(error);
 						}
-        }
+						
+					}
+			}
 
-        response.status(200).json({});
-    }
+			response.status(200).json({});
+	}
 	
 
-		@Get("dualPayment/:hash")
-    //@UseGuards(YooWebhookGuard)
-    async dualpayment(
-				@Param("hash") hash: string,
-        @Res() response: Response
-    ){
-			try {
-				const check:any = await this.PaymentService.checkPymentOrder({orderHash:hash})
-				if(check){
-					response.status(200).json(check);
+	@Get("dualPayment/:hash")
+	//@UseGuards(YooWebhookGuard)
+	async dualpayment(
+			@Param("hash") hash: string,
+			@Res() response: Response
+	){
+		try {
+			const check:any = await this.PaymentService.checkPymentOrder({orderHash:hash})
+			if(check){
+				response.status(200).json(check);
+			}
+		} catch (error) {
+			response.status(400).json({error:'Заказ не найден'});
+		}
+		
+	}
+
+	@Post("dualPaymentCreate")
+	//@UseGuards(YooWebhookGuard)
+	async dualpaymentcreate(
+			@Body() body:any,
+			@Res() response: Response
+	){
+		try {
+			console.log(body);
+			const check:any = await this.PaymentService.checkPymentOrder({orderHash:body.hash})
+			if(check){
+				const payurl = await this.PaymentService.createBarPayment(check,body.localhost)
+				response.status(200).json(payurl);
+			}
+		} catch (error) {
+			response.status(400).json({error:'Заказ не найден'});
+		}
+		
+	}
+*/
+
+	@ApiResponse({
+		description:
+			"Подключение по http://localhost:9870/iiko для дева, и для прода / и указать порт 9870. Слушать событие stoplist_event",
+		type: StopListEntity
+	})
+	@Post("stoplist")
+	//@UseGuards(IikoWebhookGuard)
+	async iikowebhook(
+		@Body() body: iiko.stoplist,
+		@Res() response: Response
+	) {
+
+		/*
+		try {
+
+				
+				//const stopListEntity = await this.IikoService.getStopList(body);
+
+				this.IikoStopListGateway.sendStopListToClient({});
+
+				response.status(200).json({});
+		} catch (e) {
+				console.log(e);
+		}
+		*/
+		try {
+			const stopListEntity = await this.IikoService.getStopList(body.organizationId);
+
+			response.status(200).json(stopListEntity)
+		} catch (error) {
+			response.status(500).json({})
+		}
+
+
+	}
+
+	@ApiResponse({
+		description:
+			"Подписка",
+		type: subscriptionResponse
+	})
+	@ApiBody({
+		type: subscriptionDTO
+	})
+	@Post("subscription")
+	async subscriptionMail(
+		@Body() body: subscriptionDTO,
+		@Res() response: Response
+	) {
+		try {
+			await this.MailService.sendMail(body.to)
+			response.status(200).json({ status: 'ok' });
+		} catch (e) {
+			console.log(e);
+		}
+	}
+
+
+	@Post("revervetable")
+	async reverveTable(
+		@Body() body: BotReverveTableDTO,
+		@Res() response: Response
+	) {
+		try {
+			await this.BotService.sendReserveTable(body)
+			response.status(200).json({ status: 'ok' });
+		} catch (error) {
+			response.status(400).json({ status: 'no' });
+		}
+	}
+	@Post("push")
+	async push(@Body() body: any) {
+		//console.log('терминал',body);
+
+		/*
+		const result = await this.PaymentService.checkPymentOrderStatus(body)
+		if(result){
+			
+			await this.BotService.canselPaymentOrder(result.organizationid,result) //result.organizationid
+		}
+		*/
+		return 'ok'
+	}
+
+	@Post("test")
+	async test(@Body() body: any) {
+		//console.log('test push',body);
+
+		return 'ok'
+	}
+
+	@Post("webhooks")
+	async webhooks(@Body() body: any) {
+		//console.log('test push',body);
+
+		if (Array.isArray(body)) {
+			body.forEach((value: any) => {
+				if (value.eventType === 'StopListUpdate') {
+					//console.log('вызвали хук стоп листа',value.organizationId);
+					this.IikoService.getStopList(value.organizationId)
 				}
-			} catch (error) {
-				response.status(400).json({error:'Заказ не найден'});
-			}
-			
-		}
-
-		@Post("dualPaymentCreate")
-    //@UseGuards(YooWebhookGuard)
-    async dualpaymentcreate(
-				@Body() body:any,
-        @Res() response: Response
-    ){
-			try {
-				console.log(body);
-				const check:any = await this.PaymentService.checkPymentOrder({orderHash:body.hash})
-				if(check){
-					const payurl = await this.PaymentService.createBarPayment(check,body.localhost)
-					response.status(200).json(payurl);
-				}
-			} catch (error) {
-				response.status(400).json({error:'Заказ не найден'});
-			}
-			
-		}
-	*/
-
-    @ApiResponse({
-        description:
-            "Подключение по http://localhost:9870/iiko для дева, и для прода / и указать порт 9870. Слушать событие stoplist_event",
-        type: StopListEntity
-    })
-    @Post("stoplist")
-    //@UseGuards(IikoWebhookGuard)
-    async iikowebhook(
-        @Body() body: iiko.stoplist,
-        @Res() response: Response
-    ) {
-        
-				/*
-        try {
-
-						
-            //const stopListEntity = await this.IikoService.getStopList(body);
-
-            this.IikoStopListGateway.sendStopListToClient({});
-
-            response.status(200).json({});
-        } catch (e) {
-            console.log(e);
-        }
-				*/
-				try {
-					const stopListEntity = await this.IikoService.getStopList(body.organizationId);
-
-					response.status(200).json(stopListEntity)
-				} catch (error) {
-					response.status(500).json({})
-				}
-				
-				
-    }
-    
-    @ApiResponse({
-      description:
-          "Подписка",
-      type: subscriptionResponse
-    })
-    @ApiBody({
-      type: subscriptionDTO
-    })
-    @Post("subscription")
-    async subscriptionMail(
-        @Body() body: subscriptionDTO,
-        @Res() response: Response
-    ) {
-        try {
-            await this.MailService.sendMail(body.to)
-            response.status(200).json({status:'ok'});
-        } catch (e) {
-            console.log(e);
-        }
-    }
-    
-
-  @Post("revervetable")
-    async reverveTable(
-        @Body() body: BotReverveTableDTO,
-        @Res() response: Response
-    ) {
-      try {
-				await this.BotService.sendReserveTable(body)
-      	response.status(200).json({status:'ok'});
-			} catch (error) {
-				response.status(400).json({status:'no'});
-			}
-    }
-		@Post("push")	
-		async push(@Body() body:any){
-			//console.log('терминал',body);
-
-			/*
-			const result = await this.PaymentService.checkPymentOrderStatus(body)
-			if(result){
-				
-				await this.BotService.canselPaymentOrder(result.organizationid,result) //result.organizationid
-			}
-			*/
-			return 'ok'
-		}
-
-		@Post("test")	
-		async test(@Body() body:any){
-			//console.log('test push',body);
-			
-			return 'ok'
-		}
-
-		@Post("webhooks")	
-		async webhooks(@Body() body:any){
-			//console.log('test push',body);
-
-			if(Array.isArray(body)){
-				body.forEach((value:any)=>{
-					if(value.eventType === 'StopListUpdate'){
-						//console.log('вызвали хук стоп листа',value.organizationId);
-						this.IikoService.getStopList(value.organizationId)
-					}
-				})
-			}
-			
-			return 'ok'
-		}
-
-		@Post("getstreet")	
-		async getStreet(@Body() body:any){
-			 //return await this.IikoService.getStreetCityIkko(body)
-			 return await this.adminAxiosRequest.getStreets(body.organizationId)
-		}
-
-
-		@Get("daData/:street")
-    //@UseGuards(YooWebhookGuard)
-    async daData(
-				@Param("street") street: string,
-        @Res() response: Response
-    ){
-			
-			this.webHookServices.getData(street)
-		}
-
-
-		@Post("flipcount")
-    //@UseGuards(YooWebhookGuard)
-    async flipcount(
-			@Body() body:any
-		){
-
-			const token = await axios.get('https://iiko.biz:9900/api/0/auth/access_token?user_id=CX_Apikey_all&user_secret=CX_Apikey_all759')
-			const org:any = await axios.get(`https://iiko.biz:9900/api/0/organization/list?access_token=${token.data}`)
-			
-			const getorgId = org.data.find((el:any) =>{
-				
-				if(body.phone && el.phone){
-					//console.log('qqq',el.phone.replace(/ /g,''),body.phone.replace(/ /g,''));
-					return el.phone.replace(/ /g,'') === body.phone.replace(/ /g,'')
-				}else{
-					return null
-				}
-				
 			})
+		}
 
-			if(!getorgId){
+		return 'ok'
+	}
+
+	@Post("getstreet")
+	async getStreet(@Body() body: any) {
+		//return await this.IikoService.getStreetCityIkko(body)
+		return await this.adminAxiosRequest.getStreets(body.organizationId)
+	}
+
+
+	@Get("daData/:street")
+	//@UseGuards(YooWebhookGuard)
+	async daData(
+		@Param("street") street: string,
+		@Res() response: Response
+	) {
+
+		this.webHookServices.getData(street)
+	}
+
+
+	@Post("flipcount")
+	//@UseGuards(YooWebhookGuard)
+	async flipcount(
+		@Body() body: any
+	) {
+
+		const token = await axios.get('https://iiko.biz:9900/api/0/auth/access_token?user_id=CX_Apikey_all&user_secret=CX_Apikey_all759')
+		const org: any = await axios.get(`https://iiko.biz:9900/api/0/organization/list?access_token=${token.data}`)
+
+		const getorgId = org.data.find((el: any) => {
+
+			if (body.phone && el.phone) {
+				//console.log('qqq',el.phone.replace(/ /g,''),body.phone.replace(/ /g,''));
+				return el.phone.replace(/ /g, '') === body.phone.replace(/ /g, '')
+			} else {
 				return null
 			}
-			
-			const {data} = await axios.post(`https://iiko.biz:9900/api/0/olaps/olapByPreset?access_token=${token.data}&organizationId=${getorgId.id}&request_timeout=`,
+
+		})
+
+		if (!getorgId) {
+			return null
+		}
+
+		if (body.pages) {
+			const { data } = await axios.post(`https://iiko.biz:9900/api/0/olaps/olapByPreset?access_token=${token.data}&organizationId=${getorgId.id}&request_timeout=`,
 				{
-					"dateTo":String(body.time), 
-					"dateFrom":body.oldtime,
-					"presetId":"9f99fda4-604a-428a-aecc-9563ec53b8e0"
-				}
-			)
-
-
-			const w:string = data.data.split(',')[1] as string
-			const numEl:any = w.match(/(-?\d+(\.\d+)?)/g)
+					"dateTo":body.oldtime,
+					"dateFrom": String(body.time),
+					"presetId": "6ba2e871-8d2b-413b-97cf-d7373dbb0a02" //9f99fda4-604a-428a-aecc-9563ec53b8e0
+				})
+				
+			const numEl = data.data.match(/(-?\d+(\.\d+)?)/g) //data.data.split(',')[1] as string
+			
+			
 			const count = Math.trunc(Number(numEl[0]))
 
 			return count
-		
+		} else {
+			const { data } = await axios.post(`https://iiko.biz:9900/api/0/olaps/olapByPreset?access_token=${token.data}&organizationId=${getorgId.id}&request_timeout=`,
+				{
+					"dateTo": String(body.time),
+					"dateFrom": body.oldtime,
+					"presetId": "9f99fda4-604a-428a-aecc-9563ec53b8e0" //9f99fda4-604a-428a-aecc-9563ec53b8e0
+				})
+			const w: string = data.data.split(',')[1] as string
+			const numEl: any = w.match(/(-?\d+(\.\d+)?)/g)
+			const count = Math.trunc(Number(numEl[0]))
+
+			return count
 		}
+
+
+
+
+
+
+	}
 }
