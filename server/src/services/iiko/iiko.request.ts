@@ -29,7 +29,7 @@ export class IIkoAxiosRequest extends Axios {
 
 		const tokeninRedis = await redisToken
 		if (tokeninRedis) {
-			console.log('token in redis');
+			
 			return tokeninRedis
 		} else {
 			const { data } = await this._axios.post<{ token: string }>(
@@ -44,7 +44,7 @@ export class IIkoAxiosRequest extends Axios {
 				"EX",
 				10 * 60
 			);
-			console.log('token in ikko', data.token);
+			
 			return data.token
 
 		}
@@ -58,7 +58,7 @@ export class IIkoAxiosRequest extends Axios {
 				headers: { Authorization: `Bearer ${token}` }
 			}
 		);
-		console.log('getOrganizationList');
+		
 
 		return data.organizations
 	}
@@ -81,7 +81,7 @@ export class IIkoAxiosRequest extends Axios {
 			}
 		);
 
-		console.log('getOrganization');
+		
 
 		return data.organizations[0]
 	}
@@ -89,7 +89,7 @@ export class IIkoAxiosRequest extends Axios {
 	public async getFoods(id: { organizationId: string }) {
 		const token = await this.token();
 
-		console.log('ID ORG', id)
+		
 		const { data } = await this._axios.post(`/nomenclature`,
 			{
 				organizationId: id.organizationId
@@ -98,7 +98,7 @@ export class IIkoAxiosRequest extends Axios {
 				headers: { Authorization: `Bearer ${token}` }
 			}
 		);
-		console.log('getFoods');
+		
 		return data
 	}
 
@@ -122,7 +122,7 @@ export class IIkoAxiosRequest extends Axios {
 				}
 		);
 
-		console.log('termiralAlive');
+		
 
 		if(data.isAliveStatus.length !== 0){
 			return data.isAliveStatus[0].isAlive
@@ -147,7 +147,7 @@ export class IIkoAxiosRequest extends Axios {
 				headers: { Authorization: `Bearer ${token}` }
 			}
 		);
-		console.log('organizationTables');
+		
 
 
 		return data.restaurantSections;
@@ -167,7 +167,7 @@ export class IIkoAxiosRequest extends Axios {
 				headers: { Authorization: `Bearer ${token}` }
 			}
 		);
-		console.log('termiralGroops');
+		
 
 
 		return data.terminalGroups[0].items[0];
@@ -190,7 +190,7 @@ export class IIkoAxiosRequest extends Axios {
 			}
 		);
 
-		console.log('termiralGroopsAlive');
+		
 
 		return data.isAliveStatus[0]
 	}
@@ -210,7 +210,7 @@ export class IIkoAxiosRequest extends Axios {
 			}
 		);
 
-		console.log('getStreetCity');
+		
 
 		return data.streets
 	}
@@ -228,7 +228,7 @@ export class IIkoAxiosRequest extends Axios {
 			}
 		);
 
-		console.log('getNomenclature');		
+		
 
 		return data
 	}
@@ -252,7 +252,7 @@ export class IIkoAxiosRequest extends Axios {
 			return []
 		}
 
-		console.log('stopList');	
+			
 
 		return data.terminalGroupStopLists.map((val:any) =>{
 			return val.organizationId === organization &&  val.items
