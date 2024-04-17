@@ -74,7 +74,7 @@ export class OrderCheckBuilder {
 			
 			const org = await this.OrganizationRepository.getOneByGUID(this._state.orderInfo.organizationid)
 			const isAlive = await this.orderService.termiralAlive(this._state.orderInfo.organizationid,org.getTerminal)
-			console.log('на чеке',org.getTerminal);
+			console.log('на чеке',isAlive,this._state.orderInfo.organizationid,org.getTerminal);
 			if(!isAlive){
 				this._state.errors.push(
 					new CannotDeliveryError(
