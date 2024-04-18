@@ -310,7 +310,7 @@ export class WebhookController {
 			
 			const count = Math.trunc(Number(numEl[0]))
 
-			return count
+			return count ? count : 0
 		} else {
 			const { data } = await axios.post(`https://iiko.biz:9900/api/0/olaps/olapByPreset?access_token=${token.data}&organizationId=${getorgId.id}&request_timeout=`,
 				{
