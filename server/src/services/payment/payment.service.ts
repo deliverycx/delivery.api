@@ -204,11 +204,11 @@ export class PaymentService extends IPaymentService {
 						*/
 		//const orderHash = createOrderHash();
 
-
+		console.log('оплата с дестопа');				
 		const payMasterBody = {
 			merchantId: organizationPaymentInfo.merchantId,
-			//testMode: true,
-			dualMode: true,
+			testMode: true,
+			//dualMode: true,
 			amount: {
 				currency: "RUB",
 				value: intToDecimal(totalPrice)
