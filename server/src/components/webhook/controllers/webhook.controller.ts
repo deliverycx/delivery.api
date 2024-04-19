@@ -306,7 +306,9 @@ export class WebhookController {
 				})
 				
 			const numEl = data.data.match(/(-?\d+(\.\d+)?)/g) //data.data.split(',')[1] as string
-			
+			if(!numEl){
+				return 0
+			}
 			
 			const count = Math.trunc(Number(numEl[0]))
 
