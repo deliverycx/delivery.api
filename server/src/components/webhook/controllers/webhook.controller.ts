@@ -55,7 +55,7 @@ export class WebhookController {
 		@Res() response: Response
 	) {
 
-		console.log('ответ из пумастера тело', body);
+		console.log('ответ из пумастера', new Date(), body);
 		if (body.status === PaymasterResponse.PaymentStatuses.AUTHORIZED || body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
 			const check: any = await this.PaymentService.checkPymentOrder(body.invoice.params.hash, body.id)
 			if (check) {
