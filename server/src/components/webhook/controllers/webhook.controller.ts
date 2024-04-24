@@ -297,11 +297,13 @@ export class WebhookController {
 			return null
 		}
 
+		console.log(body);
+
 		if (body.pages) {
 			const { data } = await axios.post(`https://iiko.biz:9900/api/0/olaps/olapByPreset?access_token=${token.data}&organizationId=${getorgId.id}&request_timeout=`,
 				{
-					"dateTo":body.oldtime,
-					"dateFrom": String(body.time),
+					"dateTo": String(body.time),
+					"dateFrom": String(body.oldtime),
 					"presetId": "6ba2e871-8d2b-413b-97cf-d7373dbb0a02" //9f99fda4-604a-428a-aecc-9563ec53b8e0
 				})
 				
@@ -320,6 +322,8 @@ export class WebhookController {
 					"dateFrom": body.oldtime,
 					"presetId": "9f99fda4-604a-428a-aecc-9563ec53b8e0" //9f99fda4-604a-428a-aecc-9563ec53b8e0
 				})
+
+				
 			const w: string = data.data.split(',')[1] as string
 			const numEl: any = w.match(/(-?\d+(\.\d+)?)/g)
 			const count = Math.trunc(Number(numEl[0]))
