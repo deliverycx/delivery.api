@@ -297,7 +297,7 @@ export class WebhookController {
 			return null
 		}
 
-		console.log(body);
+		
 
 		if (body.pages) {
 			const { data } = await axios.post(`https://iiko.biz:9900/api/0/olaps/olapByPreset?access_token=${token.data}&organizationId=${getorgId.id}&request_timeout=`,
