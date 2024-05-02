@@ -10,7 +10,7 @@ async function bootstrap() {
 		app.use(cookieParser())
 
     const allowedRequestedFromHosts = process.env.CLIENT_PATH.split(" ");
-
+		process.on('unhandledRejection', (reason, promise) => {})
     app.set("trust proxy", true);
 		/*
     app.enableCors({
