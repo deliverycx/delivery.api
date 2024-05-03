@@ -42,7 +42,7 @@ export class DeliveryService implements IDeliveryService {
 
 				  
 				const forhach = validationHachapuriFO(carts)
-				console.log(forhach);
+				
         const totalPrice = await this.cartPriceCalculating(userId,min);
         const deliveryPrice = await this.deliveryPriceCalculating(
             totalPrice,
