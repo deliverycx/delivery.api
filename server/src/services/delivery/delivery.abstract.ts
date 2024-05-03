@@ -6,6 +6,7 @@ export interface IDeliveryPrices {
     deltaPrice: number;
     totalPrice: number;
 		fullPrice:number
+		discounts:Record<string, any>
 }
 
 export abstract class IDeliveryService {

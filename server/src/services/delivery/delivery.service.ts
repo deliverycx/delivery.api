@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { validationHIdiscount } from "src/common/helpers/validationHIdiscount";
+import { validationHachapuriFO, validationHIdiscount } from "src/common/helpers/validationHIdiscount";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
 import { IIiko, OrderTypesEnum } from "../iiko/iiko.abstract";
 import { IIkoAxios } from "../iiko/iiko.axios";
@@ -37,8 +37,12 @@ export class DeliveryService implements IDeliveryService {
     ): Promise<IDeliveryPrices> {
 				const carts = await this.cartRepository.getAllDisc(userId)
 				
+				
 				const {count,min} = validationHIdiscount(carts)
 
+				  
+				const forhach = validationHachapuriFO(carts)
+				console.log(forhach);
         const totalPrice = await this.cartPriceCalculating(userId,min);
         const deliveryPrice = await this.deliveryPriceCalculating(
             totalPrice,
@@ -57,7 +61,10 @@ export class DeliveryService implements IDeliveryService {
             deliveryPrice,
             totalPrice: totalPrice + deliveryPrice,
             deltaPrice:deltaPrice !== 0 ? deltaPrice : 0,
-						fullPrice:totalPrice
+						fullPrice:totalPrice,
+						discounts:{
+							forhach:forhach
+						}
         	};
 				}
 
@@ -67,9 +74,15 @@ export class DeliveryService implements IDeliveryService {
             deliveryPrice,
             totalPrice: totalPrice + deliveryPrice,
             deltaPrice,
-						fullPrice:totalPrice
+						fullPrice:totalPrice,
+						discounts:{
+							forhach:forhach
+						}
         };
     }
+
+
+	
 
 		async discountDozenServise(userId: UniqueId,organization:string){
 				const carts = await this.cartRepository.getAllDisc(userId)

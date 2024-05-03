@@ -107,4 +107,6 @@ export class CartUsecase {
 		async getOrganiztionTable(id:string){
 			return this.CartRepository.getAllOrgTables(id)
 		}
+
+		
 }
