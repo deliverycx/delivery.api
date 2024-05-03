@@ -23,7 +23,7 @@ export class AuthJWTGuard implements CanActivate {
 			const token = this.extractTokenFromHeader(request);
 
 			if (!token) {
-				throw new UnauthorizedException();
+				return false
 			}
 				
       try {
@@ -55,13 +55,13 @@ export class AuthJWTGuard implements CanActivate {
 			const user = await this.userService.getUser(id)
 				if(!user){
 					console.log('token expired',user,id);
-					throw new UnauthorizedException();
+					
             //throw new BadRequestException('token expired');
         }
 			const tokenMatches = await argon2.verify(user.getToken,token)
 				if(!tokenMatches){
 					console.log('Matches invalid refresh token',user.getToken,token);
-					throw new UnauthorizedException();
+					
 					
 					//throw new BadRequestException('Matches invalid refresh token');
 				}
