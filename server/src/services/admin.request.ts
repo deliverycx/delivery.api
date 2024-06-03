@@ -30,7 +30,7 @@ export class AdminAxiosRequest {
 		})
 		const url = await redisUrl
 		const adminurl = process.env.NODE_ENV === 'development' ? `${process.env.ADMIN_URL}`
-			:  `${process.env.ADMIN_URL}` 
+			:  `${url}${process.env.ADMIN_URL}` 
 		return adminurl
 	}
 
