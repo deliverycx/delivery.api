@@ -28,12 +28,14 @@ import { REDIS } from "src/modules/redis/redis.constants";
 
 @ApiTags("Product endpoints")
 @Controller("product")
+/*
 @UseFilters(new ValidationException())
 @UsePipes(
     new ValidationPipe({
         transform: true
     })
 )
+*/
 export class ProductController {
     constructor(
 			private readonly productUsecase: ProductUsecase,
