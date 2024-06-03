@@ -18,17 +18,6 @@ export class AdminAxiosRequest {
 	}
 
 	public async getLocalhost(){
-		
-		const redisUrl = new Promise((resolve, reject) => {
-			this.redis.get("localhoste", (err, token) => {
-				if (!err) {
-					resolve(token)
-				} else {
-					reject(err)
-				}
-			});
-		})
-		const url = await redisUrl
 		const adminurl = process.env.NODE_ENV === 'development' ? `${process.env.ADMIN_URL}`
 			:  `${process.env.ADMIN_URL}` 
 		return adminurl
@@ -36,7 +25,7 @@ export class AdminAxiosRequest {
 
 	public async getOrganizationList(organization:string) {
 		const url = await this.getLocalhost() 
-		console.log('url',url); 
+		//console.log('url',url); 
 		/**/
 		const { data } = await axios.get(`${url}/unload/getNomenclature?organization=${organization}`);
 		
