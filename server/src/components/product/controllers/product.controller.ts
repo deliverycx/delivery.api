@@ -81,13 +81,16 @@ export class ProductController {
         @Query() query: GetAllDTO,
 				@Headers('localhost') headers, 
     ) {
-			//console.log('AUTHH LOGG', headers)
-			this.redis.set(
+			console.log('AUTHH LOGG', headers)
+			if(headers){
+				this.redis.set(
 				"localhoste",
-				headers,
-				"EX",
-				60 * 60
-			);
+					headers,
+					"EX",
+					60 * 60
+				);
+			}
+			
         const result = await this.productUsecase.getAllNomenClature(query.organization)
 				
 				return result
