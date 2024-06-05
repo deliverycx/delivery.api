@@ -29,7 +29,7 @@ export class IIkoAxiosRequest extends Axios {
 
 		const tokeninRedis = await redisToken
 		if (tokeninRedis) {
-			
+
 			return tokeninRedis
 		} else {
 			const { data } = await this._axios.post<{ token: string }>(
@@ -44,7 +44,7 @@ export class IIkoAxiosRequest extends Axios {
 				"EX",
 				10 * 60
 			);
-			
+
 			return data.token
 
 		}
@@ -58,12 +58,12 @@ export class IIkoAxiosRequest extends Axios {
 				headers: { Authorization: `Bearer ${token}` }
 			}
 		);
-		
+
 
 		return data.organizations
 	}
 
-	public async getOrganization(organization:string) {
+	public async getOrganization(organization: string) {
 		const token = await this.token();
 		const { data } = await this._axios.post(`/organizations`,
 			{
@@ -81,7 +81,7 @@ export class IIkoAxiosRequest extends Axios {
 			}
 		);
 
-		
+
 
 		return data.organizations[0]
 	}
@@ -89,7 +89,7 @@ export class IIkoAxiosRequest extends Axios {
 	public async getFoods(id: { organizationId: string }) {
 		const token = await this.token();
 
-		
+
 		const { data } = await this._axios.post(`/nomenclature`,
 			{
 				organizationId: id.organizationId
@@ -98,41 +98,41 @@ export class IIkoAxiosRequest extends Axios {
 				headers: { Authorization: `Bearer ${token}` }
 			}
 		);
-		
+
 		return data
 	}
 
-	public async termiralAlive(organization:string,terminal:string) {
+	public async termiralAlive(organization: string, terminal: string) {
 		const token = await this.token();
 		//const terminale = await this.termiralGroops(organization)
-		
-		
+
+
 		const { data } = await this._axios.post<any>(
-				`/terminal_groups/is_alive`,
-				{
-					"organizationIds": [
-						organization
-					],
-					"terminalGroupIds": [
-						terminal
-					]
-				},
-				{
-					headers: { Authorization: `Bearer ${token}` }
-				}
+			`/terminal_groups/is_alive`,
+			{
+				"organizationIds": [
+					organization
+				],
+				"terminalGroupIds": [
+					terminal
+				]
+			},
+			{
+				headers: { Authorization: `Bearer ${token}` }
+			}
 		);
 
-		
 
-		if(data.isAliveStatus.length !== 0){
+
+		if (data.isAliveStatus.length !== 0) {
 			return data.isAliveStatus[0].isAlive
-		}else{
+		} else {
 			throw Error()
 		}
 	}
 
 
-	
+
 
 	public async organizationTables(termital: string) {
 		const token = await this.token();
@@ -147,7 +147,7 @@ export class IIkoAxiosRequest extends Axios {
 				headers: { Authorization: `Bearer ${token}` }
 			}
 		);
-		
+
 
 
 		return data.restaurantSections;
@@ -167,7 +167,7 @@ export class IIkoAxiosRequest extends Axios {
 				headers: { Authorization: `Bearer ${token}` }
 			}
 		);
-		
+
 
 
 		return data.terminalGroups[0].items[0];
@@ -190,7 +190,7 @@ export class IIkoAxiosRequest extends Axios {
 			}
 		);
 
-		
+
 
 		return data.isAliveStatus[0]
 	}
@@ -210,7 +210,7 @@ export class IIkoAxiosRequest extends Axios {
 			}
 		);
 
-		
+
 
 		return data.streets
 	}
@@ -228,7 +228,7 @@ export class IIkoAxiosRequest extends Axios {
 			}
 		);
 
-		
+
 
 		return data
 	}
@@ -246,16 +246,16 @@ export class IIkoAxiosRequest extends Axios {
 			{
 				headers: { Authorization: `Bearer ${token}` }
 			}
-	);
+		);
 
-		if(data.terminalGroupStopLists.length === 0){
+		if (data.terminalGroupStopLists.length === 0) {
 			return []
 		}
 
-			
 
-		return data.terminalGroupStopLists.map((val:any) =>{
-			return val.organizationId === organization &&  val.items
+
+		return data.terminalGroupStopLists.map((val: any) => {
+			return val.organizationId === organization && val.items
 		})[0];
 	}
 
@@ -268,8 +268,8 @@ export class IIkoAxiosRequest extends Axios {
 			{
 				"organizationId": organizationIds,
 				"webHooksUri": urls,
-				"authToken":"539ecfae"
-				
+				"authToken": "8302094a-a920-4072-b076-a3dd50d35fa7"
+
 			},
 			{
 				headers: { Authorization: `Bearer ${token}` }
