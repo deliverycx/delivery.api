@@ -55,10 +55,10 @@ export class WebhookController {
 		@Res() response: Response
 	) {
 
-		if(body.invoice.params.organization === '11663d0f-51a6-419d-8814-d3cb180eeab4'){
+		if (body.invoice.params.organization === '11663d0f-51a6-419d-8814-d3cb180eeab4') {
 			console.log('ответ из пумастера', new Date(), body);
 		}
-		
+
 		if (body.status === PaymasterResponse.PaymentStatuses.AUTHORIZED || body.status === PaymasterResponse.PaymentStatuses.SUCCESSED) {
 			const check: any = await this.PaymentService.checkPymentOrder(body.invoice.params.hash, body.id)
 			if (check) {
@@ -223,7 +223,7 @@ export class WebhookController {
 	}
 	@Post("push")
 	async push(@Body() body: any) {
-		//console.log('терминал',body);
+		console.log('терминал');
 
 		/*
 		const result = await this.PaymentService.checkPymentOrderStatus(body)
@@ -281,7 +281,7 @@ export class WebhookController {
 	async flipcount(
 		@Body() body: any
 	) {
-
+		console.log('счетчик');
 		const token = await axios.get('https://iiko.biz:9900/api/0/auth/access_token?user_id=CX_Apikey_all&user_secret=CX_Apikey_all759')
 		const org: any = await axios.get(`https://iiko.biz:9900/api/0/organization/list?access_token=${token.data}`)
 
@@ -300,7 +300,7 @@ export class WebhookController {
 			return null
 		}
 
-		
+
 
 		if (body.pages) {
 			const { data } = await axios.post(`https://iiko.biz:9900/api/0/olaps/olapByPreset?access_token=${token.data}&organizationId=${getorgId.id}&request_timeout=`,
@@ -309,12 +309,12 @@ export class WebhookController {
 					"dateFrom": String(body.oldtime),
 					"presetId": "6ba2e871-8d2b-413b-97cf-d7373dbb0a02" //9f99fda4-604a-428a-aecc-9563ec53b8e0
 				})
-				
+
 			const numEl = data.data.match(/(-?\d+(\.\d+)?)/g) //data.data.split(',')[1] as string
-			if(!numEl){
+			if (!numEl) {
 				return 0
 			}
-			
+
 			const count = Math.trunc(Number(numEl[0]))
 
 			return count ? count : 0
@@ -326,7 +326,7 @@ export class WebhookController {
 					"presetId": "9f99fda4-604a-428a-aecc-9563ec53b8e0" //9f99fda4-604a-428a-aecc-9563ec53b8e0
 				})
 
-				
+
 			const w: string = data.data.split(',')[1] as string
 			const numEl: any = w.match(/(-?\d+(\.\d+)?)/g)
 			const count = Math.trunc(Number(numEl[0]))
