@@ -223,7 +223,7 @@ export class WebhookController {
 	}
 	@Post("push")
 	async push(@Body() body: any) {
-		console.log('терминал');
+
 
 		/*
 		const result = await this.PaymentService.checkPymentOrderStatus(body)
@@ -281,7 +281,7 @@ export class WebhookController {
 	async flipcount(
 		@Body() body: any
 	) {
-		console.log('счетчик');
+
 		const token = await axios.get('https://iiko.biz:9900/api/0/auth/access_token?user_id=CX_Apikey_all&user_secret=CX_Apikey_all759')
 		const org: any = await axios.get(`https://iiko.biz:9900/api/0/organization/list?access_token=${token.data}`)
 
