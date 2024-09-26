@@ -282,32 +282,29 @@ export class WebhookController {
 		@Body() body: any
 	) {
 
-		const transportData = await this.iikoAxios.organization(body.point)
-		const namePoint = transportData.organizations[0].name
+		//const transportData = await this.iikoAxios.organization(body.point)
+		//const namePoint = transportData.organizations[0].name
 
 		const token = await axios.get('https://iiko.biz:9900/api/0/auth/access_token?user_id=CX_Apikey_all&user_secret=CX_Apikey_all759')
 		const org: any = await axios.get(`https://iiko.biz:9900/api/0/organization/list?access_token=${token.data}`)
 
-		/*
+		/**/
 		const getorgId = org.data.find((el: any) => {
 
 			if (body.phone && el.phone) {
 
 				//console.log('qqq',el.phone.replace(/ /g,''),body.phone.replace(/ /g,''));
 				return el.phone.replace(/ /g, '') === body.phone.replace(/ /g, '')
-			} else if (el.fullName === namePoint) {
-				//console.log(el);
-				return el
 			} else {
 				return null
 			}
 
 		})
-		*/
 
-		const getorgId = org.data.find((el: any) => el.fullName === namePoint)
 
-		console.log(getorgId);
+		//const getorgId = org.data.find((el: any) => el.fullName === namePoint)
+
+		//console.log(getorgId);
 
 		if (!getorgId) {
 			return null
