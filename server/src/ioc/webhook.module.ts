@@ -31,80 +31,86 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
 import { OrderService } from "src/components/order/services/order/order.service";
 import { cartProviders } from "src/components/cart/providers/cart.provider";
 import { AdminAxiosRequest } from "src/services/admin.request";
+import { OrganizationRepository } from "src/components/organization/repositories/base.repository";
+import { IOrganizationRepository } from "src/components/organization/repositories/interface.repository";
 
 @Module({
-    imports: [
-			ClientsModule.register([
-				{
-					name: 'COMMUNICATION',
-					transport: Transport.RMQ,
-					options: {
-						urls: [`amqp://${process.env.RABBITMQ_HOST}`],
-						queue: 'cats_queue',
-						noAck: false,
-						queueOptions: {
-							durable: false
-						},
+	imports: [
+		ClientsModule.register([
+			{
+				name: 'COMMUNICATION',
+				transport: Transport.RMQ,
+				options: {
+					urls: [`amqp://${process.env.RABBITMQ_HOST}`],
+					queue: 'cats_queue',
+					noAck: false,
+					queueOptions: {
+						durable: false
 					},
 				},
-			]),
-			IikoModule, RedisModule
-		],
-    controllers: [WebhookController],
-    providers: [
-        {
-            provide: PaymentService,
-            useClass: PaymentService
-        },
-        {
-            provide: ICartRepository,
-            useClass: CartRepository
-        },
-        {
-            provide: IDeliveryService,
-            useClass: DeliveryService
-        },
-        {
-            provide: IOrderRepository,
-            useClass: OrderRepository
-        },
-        {
-            provide: IOrderUtilsService,
-            useClass: OrderUtilsService
-        },
-        {
-            provide: "IIiko",
-            useClass: IikoService
-        },
-        {
-            provide: OrderCreateBuilder,
-            useClass: OrderCreateBuilder
-        },
-        {
-            provide: OrderCheckBuilder,
-            useClass: OrderCheckBuilder
-        },
-        {
-            provide: ValidationCount,
-            useClass: ValidationCount
-        },
-        {
-            provide: IBotService,
-            useClass: BotService
-        },
-        BotAxiosProvider,
-        ...paymasterProvider,
-        IikoWebsocketGateway,
-        ...productProviders,
-        ...orderProviders,
-				...cartProviders,
-        ...stopListProviders,
-				PaymentRepository,
-				AdminAxiosRequest,
-				OrderService,
-        OrderUsecase,
-        MailService,
-				WebHookServices
-    ]
+			},
+		]),
+		IikoModule, RedisModule
+	],
+	controllers: [WebhookController],
+	providers: [
+		{
+			provide: PaymentService,
+			useClass: PaymentService
+		},
+		{
+			provide: ICartRepository,
+			useClass: CartRepository
+		},
+		{
+			provide: IDeliveryService,
+			useClass: DeliveryService
+		},
+		{
+			provide: IOrderRepository,
+			useClass: OrderRepository
+		},
+		{
+			provide: IOrderUtilsService,
+			useClass: OrderUtilsService
+		},
+		{
+			provide: "IIiko",
+			useClass: IikoService
+		},
+		{
+			provide: OrderCreateBuilder,
+			useClass: OrderCreateBuilder
+		},
+		{
+			provide: OrderCheckBuilder,
+			useClass: OrderCheckBuilder
+		},
+		{
+			provide: ValidationCount,
+			useClass: ValidationCount
+		},
+		{
+			provide: IBotService,
+			useClass: BotService
+		},
+		{
+			provide: IOrganizationRepository,
+			useClass: OrganizationRepository
+		},
+		BotAxiosProvider,
+		...paymasterProvider,
+		IikoWebsocketGateway,
+		...productProviders,
+		...orderProviders,
+		...cartProviders,
+		...stopListProviders,
+		PaymentRepository,
+		AdminAxiosRequest,
+		OrderService,
+		OrderUsecase,
+		MailService,
+		WebHookServices
+	]
 })
-export class WebhookModule {}
+export class WebhookModule { }

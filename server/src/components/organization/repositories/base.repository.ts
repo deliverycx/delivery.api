@@ -33,26 +33,26 @@ export class OrganizationRepository
 	}
 
 	public async filtersMetod(data: any, cityid: string) {
-	
-		const result = await this.OrganizationModel.find({ 
+
+		const result = await this.OrganizationModel.find({
 			filters: { $in: data },
-			 city: cityid 
-			}).populate("city filters")
+			city: cityid
+		}).populate("city filters")
 
 		return organizationMapper(result)
 	}
 
 	public async pointSerchMetod(searchString: string, cityid: string) {
 
-		const result = await this.OrganizationModel.find({ 
-				"address.street":{
-					$regex: searchString,
-					$options: "i"
-				
-				},
-			 city: cityid 
-			})
-			
+		const result = await this.OrganizationModel.find({
+			"address.street": {
+				$regex: searchString,
+				$options: "i"
+
+			},
+			city: cityid
+		})
+
 		return organizationMapper(result)
 	}
 
@@ -80,10 +80,11 @@ export class OrganizationRepository
 			organizationDoc.redirectON,
 			organizationDoc.gallery,
 			organizationDoc.filters,
-			organizationDoc.terminal
+			organizationDoc.terminal,
+			organizationDoc.pointname
 		);
 
-		
+
 		return organizationEntity;
 	}
 

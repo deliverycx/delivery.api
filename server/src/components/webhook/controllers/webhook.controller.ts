@@ -33,6 +33,8 @@ import axios from 'axios';
 import { WebHookServices } from "../services/webhook.services";
 import { AdminAxiosRequest } from "src/services/admin.request";
 import { IIkoAxios } from "src/services/iiko/iiko.axios";
+import { OrganizationRepository } from "src/components/organization/repositories/base.repository";
+import { IOrganizationRepository } from "src/components/organization/repositories/interface.repository";
 
 
 @Controller("webhook")
@@ -46,7 +48,8 @@ export class WebhookController {
 		private readonly adminAxiosRequest: AdminAxiosRequest,
 		private readonly MailService: MailService,
 		private readonly BotService: IBotService,
-		private readonly webHookServices: WebHookServices
+		private readonly webHookServices: WebHookServices,
+		private readonly organizationRepository: IOrganizationRepository
 	) { }
 
 	@Post("paymentCallback")
@@ -282,16 +285,17 @@ export class WebhookController {
 		@Body() body: any
 	) {
 
-		//const transportData = await this.iikoAxios.organization(body.point)
-		//const namePoint = transportData.organizations[0].name
+		const resultData = await this.organizationRepository.getOneByGUID(body.point)
+		const namePoint = resultData.pointname
 
 		const token = await axios.get('https://iiko.biz:9900/api/0/auth/access_token?user_id=CX_Apikey_all&user_secret=CX_Apikey_all759')
 		const org: any = await axios.get(`https://iiko.biz:9900/api/0/organization/list?access_token=${token.data}`)
 
 		/**/
 		const getorgId = org.data.find((el: any) => {
-
-			if (body.phone && el.phone) {
+			if (namePoint) {
+				return el.fullName === namePoint
+			} else if (body.phone && el.phone) {
 
 				//console.log('qqq',el.phone.replace(/ /g,''),body.phone.replace(/ /g,''));
 				return el.phone.replace(/ /g, '') === body.phone.replace(/ /g, '')
@@ -304,7 +308,6 @@ export class WebhookController {
 
 		//const getorgId = org.data.find((el: any) => el.fullName === namePoint)
 
-		//console.log(getorgId);
 
 		if (!getorgId) {
 			return null
