@@ -32,6 +32,7 @@ import { ClientProxy } from "@nestjs/microservices";
 import axios from 'axios';
 import { WebHookServices } from "../services/webhook.services";
 import { AdminAxiosRequest } from "src/services/admin.request";
+import { IIkoAxios } from "src/services/iiko/iiko.axios";
 
 
 @Controller("webhook")
@@ -39,7 +40,7 @@ export class WebhookController {
 	constructor(
 		@Inject("IIiko")
 		private readonly IikoService: IIiko,
-
+		private readonly iikoAxios: IIkoAxios,
 		private readonly PaymentService: PaymentService,
 		private readonly IikoStopListGateway: IikoWebsocketGateway,
 		private readonly adminAxiosRequest: AdminAxiosRequest,
@@ -281,19 +282,32 @@ export class WebhookController {
 		@Body() body: any
 	) {
 
+		const transportData = await this.iikoAxios.organization(body.point)
+		const namePoint = transportData.organizations[0].name
+
 		const token = await axios.get('https://iiko.biz:9900/api/0/auth/access_token?user_id=CX_Apikey_all&user_secret=CX_Apikey_all759')
 		const org: any = await axios.get(`https://iiko.biz:9900/api/0/organization/list?access_token=${token.data}`)
 
+		/*
 		const getorgId = org.data.find((el: any) => {
 
 			if (body.phone && el.phone) {
+
 				//console.log('qqq',el.phone.replace(/ /g,''),body.phone.replace(/ /g,''));
 				return el.phone.replace(/ /g, '') === body.phone.replace(/ /g, '')
+			} else if (el.fullName === namePoint) {
+				//console.log(el);
+				return el
 			} else {
 				return null
 			}
 
 		})
+		*/
+
+		const getorgId = org.data.find((el: any) => el.fullName === namePoint)
+
+		console.log(getorgId);
 
 		if (!getorgId) {
 			return null

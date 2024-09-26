@@ -74,6 +74,26 @@ export class IIkoAxios extends Axios {
 		return data;
 	}
 
+	public async organization(organization) {
+		const token = await this.token();
+		const { data } = await this._axios.post<any>(
+			`/organizations`,
+			{
+				"organizationIds": [
+					organization
+				],
+				"returnAdditionalInfo": true
+			},
+			{
+				headers: { Authorization: `Bearer ${token}` }
+			}
+		);
+
+
+
+		return data;
+	}
+
 	public async termiralGroops(organization: string) {
 		const token = await this.token();
 		const { data } = await this._axios.post<any>(

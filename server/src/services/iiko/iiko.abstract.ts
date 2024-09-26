@@ -6,78 +6,79 @@ import { FilterNoZeroBalanceType } from "src/components/stopList/entities/stopLi
 import { IDeliveryPrices } from "../delivery/delivery.abstract";
 
 export enum OrderTypesEnum {
-    PICKUP = "PICKUP",
-    COURIER = "COURIER",
-		ONSPOT = "ONSPOT"
+	PICKUP = "PICKUP",
+	COURIER = "COURIER",
+	ONSPOT = "ONSPOT"
 }
 
 export const constOrderPaymentTypes = {
-	CASH:"CASH",
-	CARD:"CARD",
-	BYCARD:"BYCARD",
-	PAY:"PAY",
-	KUR:"KUR"
+	CASH: "CASH",
+	CARD: "CARD",
+	BYCARD: "BYCARD",
+	PAY: "PAY",
+	KUR: "KUR"
 }
 
 export interface IReturnIikoOrderTypes {
-    name: string;
-    id: UniqueId;
+	name: string;
+	id: UniqueId;
 }
 export interface IReturnCreateOrder {
-    result: string;
-    problem: any;
+	result: string;
+	problem: any;
 }
 
 export abstract class IIiko {
-    abstract create: (
-        cart: Array<CartEntity>,
-        customerInfo: OrderDTO,
-        prices: IDeliveryPrices
-    ) => Promise<any>;
-
-		abstract statusOrder: (
-			organizationId:string,orderIds:string,orderTypes:string
+	abstract create: (
+		cart: Array<CartEntity>,
+		customerInfo: OrderDTO,
+		prices: IDeliveryPrices
 	) => Promise<any>;
 
-    abstract getOrderTypesId: (
-        organizationId: UniqueId,
-        orderType: OrderTypesEnum
-    ) => Promise<IReturnIikoOrderTypes>;
+	abstract statusOrder: (
+		organizationId: string, orderIds: string, orderTypes: string
+	) => Promise<any>;
 
-    abstract check: (
-        userId: UniqueId,
-        cart: Array<CartEntity>,
-        orderInfo: OrderDTO
-    ) => Promise<iiko.ICheckResult>;
 
-    abstract getStopList: (
-			organizationId:string
-    ) => Promise<any>;
+	abstract getOrderTypesId: (
+		organizationId: UniqueId,
+		orderType: OrderTypesEnum
+	) => Promise<IReturnIikoOrderTypes>;
 
-		abstract getDiscount: (
-			organizationId: UniqueId,
-			cart: Array<CartEntity>,
-		) => any;
+	abstract check: (
+		userId: UniqueId,
+		cart: Array<CartEntity>,
+		orderInfo: OrderDTO
+	) => Promise<iiko.ICheckResult>;
 
-		abstract getTerminalLive: (
-			organizationId: UniqueId,
-		) => any
-		
+	abstract getStopList: (
+		organizationId: string
+	) => Promise<any>;
 
-		abstract getStreetCityIkko: (
-			body:{
-				organizationId:string
-				cityId:string
-			}
-		) => any;
+	abstract getDiscount: (
+		organizationId: UniqueId,
+		cart: Array<CartEntity>,
+	) => any;
 
-		abstract updatePayment: (
-			body:any
-		) => any;
+	abstract getTerminalLive: (
+		organizationId: UniqueId,
+	) => any
 
-		abstract updateOrderProblem: (
-			body:any,
-			problems:any
-		) => any;
-		
+
+	abstract getStreetCityIkko: (
+		body: {
+			organizationId: string
+			cityId: string
+		}
+	) => any;
+
+	abstract updatePayment: (
+		body: any
+	) => any;
+
+	abstract updateOrderProblem: (
+		body: any,
+		problems: any
+	) => any;
+
 }
