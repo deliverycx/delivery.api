@@ -8,33 +8,33 @@ import { Model } from "mongoose";
 
 @Injectable()
 export class CityRepository implements ICityRepository {
-    constructor(
-        @Inject("City")
-        private readonly cityModel: Model<CityClass>
-    ) {}
+	constructor(
+		@Inject("City")
+		private readonly cityModel: Model<CityClass>
+	) { }
 
-    async getAll(searchString: string) {
-        const result = await this.cityModel
-            .find({
-                name: {
-                    $regex: searchString,
-                    $options: "i"
-                }
-            })
-            .populate("organizations")
-            .lean();
+	async getAll(searchString: string) {
+		const result = await this.cityModel
+			.find({
+				name: {
+					$regex: searchString,
+					$options: "i"
+				}
+			})
+			.populate("organizations")
+			.lean();
 
-						
 
-        return cityMapper(result);
-    }
 
-		async getBuId(id: string) {
-			const result = await this.cityModel
-					.findById(id)
-					.populate("organizations")
-					.lean();
+		return cityMapper(result);
+	}
 
-			return new CityEntity(result._id, result.name,result.isHidden,result.organizations.length);
+	async getBuId(id: string) {
+		const result = await this.cityModel
+			.findById(id)
+			.populate("organizations")
+			.lean();
+
+		return new CityEntity(result._id, result.name, result.isHidden, result.organizations.length, result.isHiddenOnMobile);
 	}
 }
