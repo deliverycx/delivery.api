@@ -1,29 +1,32 @@
 import {
-    buildSchema,
-    getModelForClass,
-    ModelOptions,
-    mongoose,
-    prop,
-    Ref
+	buildSchema,
+	getModelForClass,
+	ModelOptions,
+	mongoose,
+	prop,
+	Ref
 } from "@typegoose/typegoose";
 import { OrganizationClass } from "./organization.model";
 
 @ModelOptions({
-    options: { customName: "City" },
-    schemaOptions: { versionKey: false, timestamps: true }
+	options: { customName: "City" },
+	schemaOptions: { versionKey: false, timestamps: true }
 })
 export class CityClass {
-    @prop({ type: mongoose.Types.ObjectId })
-    public _id!: UniqueId;
+	@prop({ type: mongoose.Types.ObjectId })
+	public _id!: UniqueId;
 
-    @prop()
-    public name!: string;
+	@prop()
+	public name!: string;
 
-    @prop({ ref: "Organization" })
-    public organizations!: Ref<OrganizationClass>[];
+	@prop({ ref: "Organization" })
+	public organizations!: Ref<OrganizationClass>[];
 
-		@prop({ default: false })
-    public isHidden:boolean
+	@prop({ default: false })
+	public isHidden: boolean
+
+	@prop({ default: false })
+	isHiddenOnMobile: boolean
 }
 
 export const CitySchema = buildSchema(CityClass);
