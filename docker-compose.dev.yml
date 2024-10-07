@@ -1,42 +1,44 @@
 version: "3.9"
 
 services:
-    deliverycx_backend:
-        container_name: development_backend
-        env_file:
-            - ./server/.production.env
-        depends_on:
-            - redis
-            - mongodb
-        build:
-            context: ./server
-        networks:
-          - mynetwork
-        links:
-            - redis
-        volumes:
-          - "./server/pinologs:/usr/node/app/pinologs"
-    redis:
-        image: redis
-        command:
-            - "redis-server"
-            - "--loglevel ${REDIS_LOGLEVEL:-warning}"
-            - "--databases 2"
-            - "--save 900 1"
-            - "--save 300 10"
-            - "--save 60 10000"
-        volumes:
-            - ./redis/data:/data
-        networks:
-          - mynetwork
-    mongodb:
-        container_name: development_mongodb
-        image: mongo:6.0-focal 
-        volumes:
-            - ./mongo/data:/data/db   
-        networks:
-            - mynetwork
+  deliverycx_backend:
+    container_name: development_backend
+    env_file:
+      - ./server/.production.env
+    depends_on:
+      - redis
+      - mongodb
+    build:
+      context: ./server
+    networks:
+      - mynetwork
+    links:
+      - redis
+    volumes:
+      - "./server/pinologs:/usr/node/app/pinologs"
+  redis:
+    image: redis
+    command:
+      - "redis-server"
+      - "--loglevel ${REDIS_LOGLEVEL:-warning}"
+      - "--databases 2"
+      - "--save 900 1"
+      - "--save 300 10"
+      - "--save 60 10000"
+    volumes:
+      - ./redis/data:/data
+    networks:
+      - mynetwork
+  mongodb:
+    container_name: development_mongodb
+    image: mongo:6.0-focal
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo/data:/data/db
+    networks:
+      - mynetwork
 networks:
   mynetwork:
     external:
-      name: delivglobalnetwork             
+      name: delivglobalnetwork
