@@ -10,7 +10,6 @@ export const organizationMapper: Mapper<
 
 
 	return p.map((organization) => {
-		console.log(organization);
 		return new OrganizationEntity(
 			organization._id,
 			organization.address.street,
