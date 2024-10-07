@@ -29,107 +29,107 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
 
 // КОСТЫЛЬ
 try {
-    fs.statSync(__dirname + "/../../pinologs");
+	fs.statSync(__dirname + "/../../pinologs");
 } catch (e) {
-    fs.mkdirSync(__dirname + "/../../pinologs");
+	fs.mkdirSync(__dirname + "/../../pinologs");
 }
 
 @Module({
-    imports: [
-        ConfigModule.forRoot({
-            envFilePath: path.resolve(
-                __dirname,
-                `../../.${process.env.NODE_ENV}.env`
-            )
-        }),
-        MongooseModule.forRoot(process.env.CONNECTION, {
-            connectionName: "DatabaseConnection"
-        }),
-				MongooseModule.forRoot(process.env.CONNECTION_ADMIN, {
-					connectionName: "ADMINDatabaseConnection"
-			}),
-				
-        RedisModule,
-        LoggerModule.forRoot({
-            pinoHttp: [
-                {
-                    name: "INFO LOGS",
-                    level: "info",
-                    autoLogging: true,
-                    prettyPrint: true
-                },
-                fs.createWriteStream("./pinologs/info.log", {
-                    encoding: "utf-8",
-                    flags: "a+"
-                })
-            ]
-        }),
-				ClientsModule.register([
-					{
-						name: 'COMMUNICATION',
-						transport: Transport.TCP,
-					},
-					
-				]),
+	imports: [
+		ConfigModule.forRoot({
+			envFilePath: path.resolve(
+				__dirname,
+				`../../.${process.env.NODE_ENV}.env`
+			)
+		}),
+		MongooseModule.forRoot(process.env.CONNECTION, {
+			connectionName: "DatabaseConnection"
+		}),
+		MongooseModule.forRoot(process.env.CONNECTION_ADMIN, {
+			connectionName: "ADMINDatabaseConnection"
+		}),
 
-        ProductModule,
-        CategoryModule,
-        CityModule,
-        OrganizationModule,
-        UserModule,
-        CartModule,
-        OrderModule,
-        FavoriteModule,
-        WebhookModule,
-        CardModule,
-				StopListModule
-    ],
-    providers: [
-        {
-            provide: APP_INTERCEPTOR,
-            useClass: ErrorsInterceptor
-        },
-        {
-            provide: APP_FILTER,
-            useClass: InternalException
-        },
-        {
-            provide: APP_FILTER,
-            useClass: BaseErrorsFilter
-        }
-    ]
+		RedisModule,
+		LoggerModule.forRoot({
+			pinoHttp: [
+				{
+					name: "INFO LOGS",
+					level: "info",
+					autoLogging: true,
+					prettyPrint: true
+				},
+				fs.createWriteStream("./pinologs/info.log", {
+					encoding: "utf-8",
+					flags: "w"
+				})
+			]
+		}),
+		ClientsModule.register([
+			{
+				name: 'COMMUNICATION',
+				transport: Transport.TCP,
+			},
+
+		]),
+
+		ProductModule,
+		CategoryModule,
+		CityModule,
+		OrganizationModule,
+		UserModule,
+		CartModule,
+		OrderModule,
+		FavoriteModule,
+		WebhookModule,
+		CardModule,
+		StopListModule
+	],
+	providers: [
+		{
+			provide: APP_INTERCEPTOR,
+			useClass: ErrorsInterceptor
+		},
+		{
+			provide: APP_FILTER,
+			useClass: InternalException
+		},
+		{
+			provide: APP_FILTER,
+			useClass: BaseErrorsFilter
+		}
+	]
 })
 export class AppModule implements NestModule {
-    constructor(@Inject(REDIS) private readonly redis: RedisClient) {}
+	constructor(@Inject(REDIS) private readonly redis: RedisClient) { }
 
-    async configure(consumer: MiddlewareConsumer) {
-        consumer
-            .apply(
-							session({
+	async configure(consumer: MiddlewareConsumer) {
+		consumer
+			.apply(
+				session({
 
-								secret: process.env.SESSION_SECRET,
-								resave: false,
+					secret: process.env.SESSION_SECRET,
+					resave: false,
 
-								saveUninitialized: false,
+					saveUninitialized: false,
 
-						})
-								/*
-                session({
-                    store: new (RedisStore(session))({
-                        client: this.redis,
-                        logErrors: true
-                    }),
-                    secret: process.env.SESSION_SECRET,
-                    resave: true,
+				})
+				/*
+				session({
+						store: new (RedisStore(session))({
+								client: this.redis,
+								logErrors: true
+						}),
+						secret: process.env.SESSION_SECRET,
+						resave: true,
 
-                    saveUninitialized: false,
-                    cookie: {
-                        sameSite: true,
-                        httpOnly: true
-                    }
-                })
-								*/
-            )
-            .forRoutes("*");
-    }
+						saveUninitialized: false,
+						cookie: {
+								sameSite: true,
+								httpOnly: true
+						}
+				})
+				*/
+			)
+			.forRoutes("*");
+	}
 }
