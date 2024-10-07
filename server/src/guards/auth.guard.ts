@@ -53,17 +53,12 @@ export class AuthJWTGuard implements CanActivate {
 
 	private async refreshToken(token: string, id: string) {
 		const user = await this.userService.getUser(id)
-		if (!user) {
-			//console.log('token expired',user,id);
-
-			//throw new BadRequestException('token expired');
+		if (user) {
+			const tokenMatches = await argon2.verify(user.getToken, token)
+			if (!tokenMatches) {
+				console.log('Matches invalid refresh token', user.getToken, token);
+			}
 		}
-		const tokenMatches = await argon2.verify(user.getToken, token)
-		if (!tokenMatches) {
-			console.log('Matches invalid refresh token', user.getToken, token);
 
-
-			//throw new BadRequestException('Matches invalid refresh token');
-		}
 	}
 }
