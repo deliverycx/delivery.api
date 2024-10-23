@@ -207,8 +207,8 @@ export class PaymentService extends IPaymentService {
 		console.log('оплата с дестопа');
 		const payMasterBody = {
 			merchantId: organizationPaymentInfo.merchantId,
-			testMode: true,
-			//dualMode: true,
+			//testMode: true,
+			dualMode: true,
 			amount: {
 				currency: "RUB",
 				value: intToDecimal(totalPrice)
@@ -228,7 +228,7 @@ export class PaymentService extends IPaymentService {
 			},
 			protocol: {
 				callbackUrl: `https://xn--80apgfh0ct5a.xn--p1ai/api/webhook/paymentCallback`, //https://f1b6-89-107-139-16.ngrok-free.app //${body.localhost}/api/webhook/paymentCallback
-				returnUrl: `${body.localhost}`
+				returnUrl: body.localhost
 			},
 			reciept: {
 				client: {
