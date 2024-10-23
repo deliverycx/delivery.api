@@ -67,21 +67,21 @@ export class PaymentService extends IPaymentService {
 			//console.log('тело в ребитт',paymentbody);
 			await this.IikoService.updateOrderProblem(
 				{
-					organization:body.invoice.params.organization,
-					orderId:body.invoice.params.orderId,
+					organization: body.invoice.params.organization,
+					orderId: body.invoice.params.orderId,
 				},
 				{
-					hasProblem:false,
-					problem:"Заказ оплачен"
+					hasProblem: false,
+					problem: "Заказ оплачен"
 				}
 			)
 			await this.orderService.updatePaymentOrder(body.invoice.params.hash, paymentbody, orderHashBody)
 			await this.IikoService.updatePayment({
-				organization:body.invoice.params.organization,
-				orderId:body.invoice.params.orderId,
-				orderAmount:body.invoice.params.orderAmount
+				organization: body.invoice.params.organization,
+				orderId: body.invoice.params.orderId,
+				orderAmount: body.invoice.params.orderAmount
 			})
-			
+
 		}
 
 
@@ -204,7 +204,7 @@ export class PaymentService extends IPaymentService {
 						*/
 		//const orderHash = createOrderHash();
 
-		console.log('оплата с дестопа');				
+		console.log('оплата с дестопа');
 		const payMasterBody = {
 			merchantId: organizationPaymentInfo.merchantId,
 			testMode: true,
@@ -216,7 +216,7 @@ export class PaymentService extends IPaymentService {
 			invoice: {
 				description: 'Оплата заказа в Старик Хинкалыч',
 				params: {
-					user: body.userid, 
+					user: body.userid,
 					hash: body.hash,
 					organization: body.organization,
 					date: body.date,
@@ -228,7 +228,7 @@ export class PaymentService extends IPaymentService {
 			},
 			protocol: {
 				callbackUrl: `${body.localhost}/api/webhook/paymentCallback`, //https://f1b6-89-107-139-16.ngrok-free.app //${body.localhost}/api/webhook/paymentCallback
-				returnUrl: `${body.localhost}/success/${body.hash}`
+				returnUrl: body.localhost
 			},
 			reciept: {
 				client: {
@@ -287,7 +287,7 @@ export class PaymentService extends IPaymentService {
 
 	async createPayMasterPayment(body: any) {
 		const organizationPaymentInfo = await this.organizationRepository.getPaymentsInfo(body.organization, 'ip')
-		
+
 
 		const payMasterBody = {
 			merchantId: organizationPaymentInfo.merchantId,
@@ -304,14 +304,14 @@ export class PaymentService extends IPaymentService {
 					hash: body.orderHash,
 					organization: body.organization,
 					orderId: body.orderId,
-					orderAmount:String(body.orderParams.orderAmount),
+					orderAmount: String(body.orderParams.orderAmount),
 					date: String(body.orderParams.date),
 					name: String(body.orderParams.name),
 					phone: String(body.orderParams.phone)
 				}
 			},
 			protocol: {
-				callbackUrl: `${body.orderParams.localhost}/api/webhook/paymentCallback`, //https://f1b6-89-107-139-16.ngrok-free.app //${body.localhost}/api/webhook/paymentCallback
+				callbackUrl: `https://xn--80apgfh0ct5a.xn--p1ai/api/webhook/paymentCallback`, //https://f1b6-89-107-139-16.ngrok-free.app //${body.localhost}/api/webhook/paymentCallback
 				returnUrl: `${body.orderParams.localhost}/success/${body.orderParams.hash}`
 			},
 			reciept: {
@@ -322,7 +322,7 @@ export class PaymentService extends IPaymentService {
 
 		};
 
-		console.log('payMasterBody',payMasterBody);
+		console.log('payMasterBody', payMasterBody);
 
 		const paymentResult = await this.Paymaster.paymentUrl(
 			payMasterBody,
@@ -331,12 +331,12 @@ export class PaymentService extends IPaymentService {
 
 		await this.IikoService.updateOrderProblem(
 			{
-				organization:body.organization,
-				orderId:body.orderId,
+				organization: body.organization,
+				orderId: body.orderId,
 			},
 			{
-				hasProblem:true,
-				problem:"Ожидаем оплату заказа"
+				hasProblem: true,
+				problem: "Ожидаем оплату заказа"
 			}
 		)
 
