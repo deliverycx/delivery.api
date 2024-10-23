@@ -291,7 +291,8 @@ export class PaymentService extends IPaymentService {
 
 		const payMasterBody = {
 			merchantId: organizationPaymentInfo.merchantId,
-			dualMode: true,
+			testMode: body.organization === "1b0eb12f-970d-44b6-8167-044c097f174b" ? true : false,
+			dualMode: body.organization === "1b0eb12f-970d-44b6-8167-044c097f174b" ? false : true,
 			amount: {
 				currency: "RUB",
 				value: intToDecimal(body.orderParams.orderTotalAmount)
