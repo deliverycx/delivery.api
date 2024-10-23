@@ -291,7 +291,6 @@ export class PaymentService extends IPaymentService {
 
 		const payMasterBody = {
 			merchantId: organizationPaymentInfo.merchantId,
-			//testMode: true,
 			dualMode: true,
 			amount: {
 				currency: "RUB",
@@ -312,7 +311,7 @@ export class PaymentService extends IPaymentService {
 			},
 			protocol: {
 				callbackUrl: `https://xn--80apgfh0ct5a.xn--p1ai/api/webhook/paymentCallback`, //https://f1b6-89-107-139-16.ngrok-free.app //${body.localhost}/api/webhook/paymentCallback
-				returnUrl: `${body.orderParams.localhost}/success/${body.orderParams.hash}`
+				returnUrl: body.orderParams.localhost
 			},
 			reciept: {
 				client: {
