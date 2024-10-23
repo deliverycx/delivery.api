@@ -36,8 +36,6 @@ services:
       - ./mongo/data:/data/db
     networks:
       - mynetwork
-    ports:
-      - "27017:27017"
 networks:
   mynetwork:
     external:
