@@ -12,79 +12,79 @@ import { IIkoAxiosRequest } from "src/services/iiko/iiko.request";
 
 @Injectable()
 export class StopListUsecase {
-    constructor(
-				@Inject("IIKO_AXIOS")
-				private readonly axios: IIkoAxios,
-				private readonly iikoAxiosRequest: IIkoAxiosRequest,
-        private readonly organizationRepository: IOrganizationRepository,
-        private readonly stopListRepository: IStopListRepository,
-        private readonly cartRepository: ICartRepository,
-				
-    ) {}
+	constructor(
+		@Inject("IIKO_AXIOS")
+		private readonly axios: IIkoAxios,
+		private readonly iikoAxiosRequest: IIkoAxiosRequest,
+		private readonly organizationRepository: IOrganizationRepository,
+		private readonly stopListRepository: IStopListRepository,
+		private readonly cartRepository: ICartRepository,
 
-		async getAll(organizationGUID:string){
-			try {
-				const resultstoplist = await this.stopListRepository.getAll(organizationGUID)
-				if(resultstoplist){
-					return resultstoplist.stoplist
-				}
-			} catch (error) {
-				//console.log(error.response.data);
+	) { }
+
+	async getAll(organizationGUID: string) {
+		try {
+			const resultstoplist = await this.stopListRepository.getAll(organizationGUID)
+			if (resultstoplist) {
+				return resultstoplist.stoplist
 			}
-			
+		} catch (error) {
+			//console.log(error.response.data);
 		}
 
+	}
 
 
-		
 
-    async stopListEventAction(
-        organizationGUID: UniqueId,
-       
-    ) {
-			try {
-				if(organizationGUID && organizationGUID !== "undefined"){
-					const data = await this.iikoAxiosRequest.stopList(organizationGUID);
-					
-						
-					const stopList =
-					data.length === 0 ? 
-				 	[]	
-				  :	data
+
+
+	async stopListEventAction(
+		organizationGUID: UniqueId,
+
+	) {
+		try {
+			if (organizationGUID && organizationGUID !== "undefined") {
+				const data = await this.iikoAxiosRequest.stopList(organizationGUID);
+
+
+				const stopList =
+					data.length === 0 ?
+						[]
+						: data
 							.map((stopListArrayItem) => stopListArrayItem.items)
 							.flat();
 
-							
 
-					await this.stopListRepository.update(organizationGUID, stopList);
-				}else{
-					return []
-				}
-				
-			} catch (error) {
-				//console.log(error.response.data);
+				console.log("stoplist", organizationGUID, stopList);
+				await this.stopListRepository.update(organizationGUID, stopList);
+			} else {
+				return []
 			}
-				/*
-        const organization = await this.organizationRepository.getOneByGUID(
-            organizationGUID
-        );
-        const organizationID = organization.getId.toString();
 
-        await this.stopListRepository.update(organizationID, stopList);
+		} catch (error) {
+			//console.log(error.response.data);
+		}
+		/*
+		const organization = await this.organizationRepository.getOneByGUID(
+				organizationGUID
+		);
+		const organizationID = organization.getId.toString();
 
-				console.log('stoplist',stopList,organizationID);	
-        const stopListEntity = await this.stopListRepository.getAll(
-            organizationID
-        );
-				
+		await this.stopListRepository.update(organizationID, stopList);
 
-        await this.cartRepository.removeSome(
-            stopListEntity.stopList.map((el) => el.productId)
-        );
+		console.log('stoplist',stopList,organizationID);	
+		const stopListEntity = await this.stopListRepository.getAll(
+				organizationID
+		);
+		
 
-        return stopListEntity;
-				*/
-				
-				
-    }
+		await this.cartRepository.removeSome(
+				stopListEntity.stopList.map((el) => el.productId)
+		);
+
+		return stopListEntity;
+		*/
+
+
+	}
 }
