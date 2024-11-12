@@ -55,7 +55,7 @@ export class StopListUsecase {
 							.flat();
 
 
-				console.log("stoplist", organizationGUID, stopList);
+				//console.log("stoplist", organizationGUID, stopList);
 				await this.stopListRepository.update(organizationGUID, stopList);
 			} else {
 				return []

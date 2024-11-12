@@ -252,7 +252,7 @@ export class WebhookController {
 		if (Array.isArray(body)) {
 			body.forEach((value: any) => {
 				if (value.eventType === 'StopListUpdate') {
-					console.log('вызвали хук стоп листа', value.organizationId);
+					//console.log('вызвали хук стоп листа', value.organizationId);
 					this.IikoService.getStopList(value.organizationId)
 				}
 			})
