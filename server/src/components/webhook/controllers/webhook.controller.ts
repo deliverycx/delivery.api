@@ -316,12 +316,13 @@ export class WebhookController {
 
 
 		const zaplatka = async (org: string, dateTo: any, dateFrom: any) => {
+			console.log(org);
 			const iikoolap = async (adress: string) => {
 				try {
 					const { data } = await axios.get(`https://${adress}.iiko.it:443/resto/api/auth?login=Cabus&pass=c5f87eaa2c51c9bd9546472ff36106a8bff8406f`)
 					const { data: hi } = await axios.get(`https://${adress}.iiko.it:443/resto/api/v2/reports/olap/byPresetId/6ba2e871-8d2b-413b-97cf-d7373dbb0a02?key=${data}&dateFrom=${String(dateFrom)}&dateTo=${String(dateTo)}`)
 
-					const dash = hi && Array.isArray(hi.data[0]) as any
+					const dash = hi && hi.data[0]
 					console.log('olape', dash);
 					return dash.DishAmountInt
 				} catch (error) {
@@ -330,10 +331,10 @@ export class WebhookController {
 			}
 
 			switch (org) {
-				case '858ab31f-49cd-4849-8fee-a1547ad556f7': return await iikoolap('cx-stavropol-buravceva')
+				case '8324ab10-fc52-405f-b4ad-245edf319766': return await iikoolap('cx-stavropol-buravceva')
 			}
 		}
-		await zaplatka(getorgId.id, body.time, body.oldtime)
+		await zaplatka(body.point, body.time, body.oldtime)
 
 
 		if (body.pages) {
