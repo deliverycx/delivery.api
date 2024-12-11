@@ -331,7 +331,7 @@ export class WebhookController {
 			}
 
 			switch (org) {
-				case '8324ab10-fc52-405f-b4ad-245edf319766': return await iikoolap('cx-stavropol-buravceva')
+				case '858ab31f-49cd-4849-8fee-a1547ad556f7': return await iikoolap('cx-stavropol-buravceva')
 			}
 		}
 		await zaplatka(body.point, body.time, body.oldtime)
