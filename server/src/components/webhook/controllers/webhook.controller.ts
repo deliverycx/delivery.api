@@ -334,7 +334,8 @@ export class WebhookController {
 				case '858ab31f-49cd-4849-8fee-a1547ad556f7': return await iikoolap('cx-stavropol-buravceva')
 			}
 		}
-		await zaplatka(body.point, body.time, body.oldtime)
+		const scet = await zaplatka(body.point, body.time, body.oldtime)
+		if (scet) return scet
 
 
 		if (body.pages) {
