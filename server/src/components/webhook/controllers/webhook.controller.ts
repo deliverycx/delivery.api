@@ -324,7 +324,7 @@ export class WebhookController {
 
 					const dash = hi && hi.data[0]
 					console.log('olape', org, dash);
-					return dash.DishAmountInt
+					return Math.trunc(dash.DishAmountInt)
 				} catch (error) {
 
 				}
