@@ -316,7 +316,7 @@ export class WebhookController {
 
 
 		const zaplatka = async (org: string, dateTo: any, dateFrom: any) => {
-			console.log(org);
+
 			const iikoolap = async (adress: string) => {
 				try {
 					const { data } = await axios.get(`https://${adress}.iiko.it:443/resto/api/auth?login=Cabus&pass=c5f87eaa2c51c9bd9546472ff36106a8bff8406f`)
@@ -332,6 +332,9 @@ export class WebhookController {
 
 			switch (org) {
 				case '858ab31f-49cd-4849-8fee-a1547ad556f7': return await iikoolap('cx-stavropol-buravceva')
+				case '0d664714-c67d-41df-9d89-7cf0f33139cf': return await iikoolap('cx-voronezh-nikitinskaya')
+				case 'e2b73f1f-f813-4a83-b2df-21e9054cbd15': return await iikoolap('cx-krasnoperekopsk')
+				case '4525dd0a-319b-4a47-8818-82b5d874d2ed': return await iikoolap('cx-samara-ambar')
 			}
 		}
 		const scet = await zaplatka(body.point, body.time, body.oldtime)
