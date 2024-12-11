@@ -323,7 +323,7 @@ export class WebhookController {
 					const { data: hi } = await axios.get(`https://${adress}.iiko.it:443/resto/api/v2/reports/olap/byPresetId/6ba2e871-8d2b-413b-97cf-d7373dbb0a02?key=${data}&dateFrom=${String(dateFrom)}&dateTo=${String(dateTo)}`)
 
 					const dash = hi && hi.data[0]
-					console.log('olape', dash);
+					console.log('olape', org, dash);
 					return dash.DishAmountInt
 				} catch (error) {
 
