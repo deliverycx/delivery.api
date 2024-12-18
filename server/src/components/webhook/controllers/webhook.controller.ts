@@ -285,13 +285,38 @@ export class WebhookController {
 		@Body() body: any
 	) {
 
+		const pointUlr = await this.adminAxiosRequest.getUrlCounter(body.point)
+
+		const iikoolap = async (adress: string) => {
+			try {
+				const { data } = await axios.get(`https://${adress}:443/resto/api/auth?login=Cabus&pass=c5f87eaa2c51c9bd9546472ff36106a8bff8406f`)
+				const { data: hi } = await axios.get(`https://${adress}:443/resto/api/v2/reports/olap/byPresetId/6ba2e871-8d2b-413b-97cf-d7373dbb0a02?key=${data}&dateFrom=${String("2015-01-01")}&dateTo=${String(body.time)}`)
+
+				const dash = hi && hi.data[0]
+
+				return Math.trunc(dash.DishAmountInt)
+			} catch (error) {
+
+			}
+		}
+
+		if (pointUlr && pointUlr.url) {
+			const scet = await iikoolap(pointUlr.url)
+			console.log(scet);
+			return scet || null
+		} else {
+			return null
+		}
+
+
+		/*
 		const resultData = await this.organizationRepository.getOneByGUID(body.point)
 		const namePoint = resultData.pointname
 
 		const token = await axios.get('https://iiko.biz:9900/api/0/auth/access_token?user_id=CX_Apikey_all&user_secret=CX_Apikey_all759')
 		const org: any = await axios.get(`https://iiko.biz:9900/api/0/organization/list?access_token=${token.data}`)
 
-		/**/
+		
 		const getorgId = org.data.find((el: any) => {
 			if (namePoint) {
 				return el.fullName === namePoint
@@ -375,6 +400,8 @@ export class WebhookController {
 
 			return count
 		}
+
+		*/
 
 
 
