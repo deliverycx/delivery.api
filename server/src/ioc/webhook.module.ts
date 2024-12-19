@@ -33,7 +33,6 @@ import { cartProviders } from "src/components/cart/providers/cart.provider";
 import { AdminAxiosRequest } from "src/services/admin.request";
 import { OrganizationRepository } from "src/components/organization/repositories/base.repository";
 import { IOrganizationRepository } from "src/components/organization/repositories/interface.repository";
-import { redisStore } from 'cache-manager-redis-store';
 
 @Module({
 	imports: [
