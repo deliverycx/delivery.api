@@ -309,7 +309,7 @@ export class WebhookController {
 
 
 		const tokeninRedis = await redisCounter
-		console.log("redisToken", tokeninRedis);
+
 		if (tokeninRedis) {
 			return Number(tokeninRedis)
 		}
@@ -331,7 +331,7 @@ export class WebhookController {
 
 		if (pointUlr && pointUlr.url) {
 			const scet = await iikoolap(pointUlr.url)
-			console.log("tik", scet);
+
 			if (scet) {
 				this.redis.set(
 					pointUlr.url,
