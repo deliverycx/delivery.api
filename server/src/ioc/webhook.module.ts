@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { CacheModule, Module } from "@nestjs/common";
 import { PaymentService } from "src/services/payment/payment.service";
 import { WebhookController } from "src/components/webhook/controllers/webhook.controller";
 import { ICartRepository } from "src/components/cart/repositories/interface.repository";
@@ -33,6 +33,7 @@ import { cartProviders } from "src/components/cart/providers/cart.provider";
 import { AdminAxiosRequest } from "src/services/admin.request";
 import { OrganizationRepository } from "src/components/organization/repositories/base.repository";
 import { IOrganizationRepository } from "src/components/organization/repositories/interface.repository";
+import { redisStore } from 'cache-manager-redis-store';
 
 @Module({
 	imports: [

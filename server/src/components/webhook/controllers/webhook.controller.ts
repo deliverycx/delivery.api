@@ -8,7 +8,10 @@ import {
 	Inject,
 	Get,
 	Param,
-	Query
+	Query,
+	CACHE_MANAGER,
+	CacheInterceptor,
+	UseInterceptors
 } from "@nestjs/common";
 import { iiko } from "src/services/iiko/interfaces";
 import { IPaymentWebhookDto } from "../../order/dto/paymentWebhook.dto";
@@ -35,6 +38,9 @@ import { AdminAxiosRequest } from "src/services/admin.request";
 import { IIkoAxios } from "src/services/iiko/iiko.axios";
 import { OrganizationRepository } from "src/components/organization/repositories/base.repository";
 import { IOrganizationRepository } from "src/components/organization/repositories/interface.repository";
+import { RedisStore } from "connect-redis";
+import { RedisClient } from "redis";
+import { REDIS } from "src/modules/redis/redis.constants";
 
 
 @Controller("webhook")
@@ -49,7 +55,8 @@ export class WebhookController {
 		private readonly MailService: MailService,
 		private readonly BotService: IBotService,
 		private readonly webHookServices: WebHookServices,
-		private readonly organizationRepository: IOrganizationRepository
+		private readonly organizationRepository: IOrganizationRepository,
+		@Inject(REDIS) private readonly redis: RedisClient,
 	) { }
 
 	@Post("paymentCallback")
@@ -245,6 +252,7 @@ export class WebhookController {
 		return 'ok'
 	}
 
+
 	@Post("webhooks")
 	async webhooks(@Body() body: any) {
 		//console.log('test push',body);
@@ -279,6 +287,7 @@ export class WebhookController {
 	}
 
 
+
 	@Post("flipcount")
 	//@UseGuards(YooWebhookGuard)
 	async flipcount(
@@ -286,6 +295,26 @@ export class WebhookController {
 	) {
 
 		const pointUlr = await this.adminAxiosRequest.getUrlCounter(body.point)
+
+
+		const redisCounter = new Promise((resolve, reject) => {
+			this.redis.get(pointUlr.url, (err, token) => {
+				if (!err) {
+					resolve(token)
+				} else {
+					reject(err)
+				}
+			});
+		})
+
+
+		const tokeninRedis = await redisCounter
+		console.log("redisToken", tokeninRedis);
+		if (tokeninRedis) {
+			return Number(tokeninRedis)
+		}
+
+
 
 		const iikoolap = async (adress: string) => {
 			try {
@@ -302,7 +331,15 @@ export class WebhookController {
 
 		if (pointUlr && pointUlr.url) {
 			const scet = await iikoolap(pointUlr.url)
-			console.log(scet);
+			console.log("tik", scet);
+			if (scet) {
+				this.redis.set(
+					pointUlr.url,
+					String(scet),
+					"EX",
+					2 * 60
+				);
+			}
 			return scet || null
 		} else {
 			return null
