@@ -24,7 +24,7 @@ export class CityController {
 			query.search ? query.search : ""
 		);
 
-		fnNG()
+		//fnNG()
 		//throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
 		return result;
 	}
