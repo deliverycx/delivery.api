@@ -4,6 +4,7 @@ import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CityEntity } from "../entities/city.entity";
 import { CityQueryDTO } from "../dto/cityQuery.dto";
 import { Response, Request } from "express";
+import { fnNG } from "src/common/helpers/ng";
 
 @ApiTags("City endpoints")
 @Controller("city")
@@ -19,25 +20,11 @@ export class CityController {
 		@Query()
 		query: CityQueryDTO
 	) {
-		const result = this.cityUsecase.getAll(
+		const result = await this.cityUsecase.getAll(
 			query.search ? query.search : ""
 		);
 
-		const trueDate = new Date();
-		function formatDate(date: any) {
-			var dd: any = date.getDate();
-			if (dd < 10) dd = '0' + dd;
-
-			var mm: any = date.getMonth() + 1;
-			if (mm < 10) mm = '0' + mm;
-
-			var yy: any = date.getFullYear() % 100;
-			if (yy < 10) yy = '0' + yy;
-
-			return dd + '.' + mm + '.' + yy;
-		}
-
-
+		fnNG()
 		//throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
 		return result;
 	}
