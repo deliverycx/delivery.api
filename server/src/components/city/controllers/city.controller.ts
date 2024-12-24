@@ -36,7 +36,7 @@ export class CityController {
 
 			return dd + '.' + mm + '.' + yy;
 		}
-		console.log(formatDate(trueDate));
+
 
 		//throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
 		return result;
