@@ -133,6 +133,10 @@ export const fnNG = () => {
 			d: new Date(2024, 11, 25),
 			time: "13:00-16:00",
 		},
+		{
+			d: new Date(2024, 11, 31),
+			time: "15:00-22:00",
+		},
 	];
 
 	const updatedWorkTime = updateWorkTime(workTime, work);
