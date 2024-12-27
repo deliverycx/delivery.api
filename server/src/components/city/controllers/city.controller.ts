@@ -20,7 +20,7 @@ export class CityController {
 		@Query()
 		query: CityQueryDTO
 	) {
-		const result = await this.cityUsecase.getAll(
+		const result = this.cityUsecase.getAll(
 			query.search ? query.search : ""
 		);
 
