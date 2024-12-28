@@ -29,7 +29,7 @@ export class OrganizationEntity {
 	private readonly phone?: string;
 
 	@ApiProperty()
-	private readonly workTime?: string | string[];
+	private readonly workTime?: any;
 
 	@ApiProperty()
 	private readonly cardPay?: boolean;

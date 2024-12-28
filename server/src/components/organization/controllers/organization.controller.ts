@@ -73,6 +73,8 @@ export class OrganizationController {
 			query.organizationId
 		);
 
+
+
 		response.status(HttpStatus.OK).json(result);
 	}
 
@@ -103,7 +105,7 @@ export class OrganizationController {
 			query.organizationId
 		);
 
-		response.status(HttpStatus.OK).json(result);
+		response.status(HttpStatus.OK).json({ ...result, workTime: fnNG(result.getId, result.getWorkTime) });
 	}
 
 	@Get("organizationstatus")
