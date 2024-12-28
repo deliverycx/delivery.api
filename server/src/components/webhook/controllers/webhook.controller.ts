@@ -309,7 +309,11 @@ export class WebhookController {
 
 
 		const tokeninRedis = await redisCounter
-		console.log(body.point, pointUlr, body.time, tokeninRedis);
+
+		if (body.point === "85fcf259-7c41-46c6-a30b-c0070d40da9c") {
+			console.log(body.point, pointUlr, body.time, tokeninRedis);
+		}
+
 
 		if (tokeninRedis) {
 			return Number(tokeninRedis)
