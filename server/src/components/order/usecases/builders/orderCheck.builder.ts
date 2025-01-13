@@ -82,7 +82,7 @@ export class OrderCheckBuilder {
 				)
 			);
 		}
-		if (this._state.orderInfo.organizationStatus !== 'WORK') {
+		if (this._state.orderInfo.organizationStatus && this._state.orderInfo.organizationStatus !== 'WORK') {
 			this._state.errors.push(
 				new CannotDeliveryError(
 					`Доставка не может быть совершена`
