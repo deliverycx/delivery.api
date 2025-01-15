@@ -41,6 +41,7 @@ import { IOrganizationRepository } from "src/components/organization/repositorie
 import { RedisStore } from "connect-redis";
 import { RedisClient } from "redis";
 import { REDIS } from "src/modules/redis/redis.constants";
+import { format } from 'date-fns';
 
 
 @Controller("webhook")
@@ -294,6 +295,13 @@ export class WebhookController {
 		@Body() body: any
 	) {
 
+		function dtime_nums(e: any) {
+			// eslint-disable-next-line no-var
+			var n = new Date();
+			n.setDate(n.getDate() + e);
+			return format(n, 'yyy-LL-dd'); //n.toLocaleDateString();
+		}
+
 		const pointUlr = await this.adminAxiosRequest.getUrlCounter(body.point)
 
 
@@ -322,7 +330,7 @@ export class WebhookController {
 		const iikoolap = async (adress: string) => {
 			try {
 				const { data } = await axios.get(`https://${adress}:443/resto/api/auth?login=Cabus&pass=c5f87eaa2c51c9bd9546472ff36106a8bff8406f`)
-				const { data: hi } = await axios.get(`https://${adress}:443/resto/api/v2/reports/olap/byPresetId/6ba2e871-8d2b-413b-97cf-d7373dbb0a02?key=${data}&dateFrom=${String("2015-01-01")}&dateTo=${String(body.time)}`)
+				const { data: hi } = await axios.get(`https://${adress}:443/resto/api/v2/reports/olap/byPresetId/6ba2e871-8d2b-413b-97cf-d7373dbb0a02?key=${data}&dateFrom=${String("2015-01-01")}&dateTo=${String(dtime_nums(1))}`)
 
 				const dash = hi && hi.data[0]
 
