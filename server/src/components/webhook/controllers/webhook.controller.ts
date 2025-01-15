@@ -41,7 +41,6 @@ import { IOrganizationRepository } from "src/components/organization/repositorie
 import { RedisStore } from "connect-redis";
 import { RedisClient } from "redis";
 import { REDIS } from "src/modules/redis/redis.constants";
-import { format } from 'date-fns';
 
 
 @Controller("webhook")
@@ -299,8 +298,24 @@ export class WebhookController {
 			// eslint-disable-next-line no-var
 			var n = new Date();
 			n.setDate(n.getDate() + e);
-			return format(n, 'yyy-LL-dd'); //n.toLocaleDateString();
+
+
+			function formatDate(date: any) {
+				var dd: any = date.getDate();
+				if (dd < 10) dd = '0' + dd;
+
+				var mm: any = date.getMonth() + 1;
+				if (mm < 10) mm = '0' + mm;
+
+				var yy: any = date.getFullYear();
+				if (yy < 10) yy = '0' + yy;
+
+				return yy + '-' + mm + '-' + dd;
+			}
+			return formatDate(n); //n.toLocaleDateString();
 		}
+
+
 
 		const pointUlr = await this.adminAxiosRequest.getUrlCounter(body.point)
 
