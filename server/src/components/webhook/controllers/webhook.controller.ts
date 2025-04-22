@@ -294,83 +294,95 @@ export class WebhookController {
 		@Body() body: any
 	) {
 
-		function dtime_nums(e: any) {
-			// eslint-disable-next-line no-var
-			var n = new Date();
-			n.setDate(n.getDate() + e);
-
-
-			function formatDate(date: any) {
-				var dd: any = date.getDate();
-				if (dd < 10) dd = '0' + dd;
-
-				var mm: any = date.getMonth() + 1;
-				if (mm < 10) mm = '0' + mm;
-
-				var yy: any = date.getFullYear();
-				if (yy < 10) yy = '0' + yy;
-
-				return yy + '-' + mm + '-' + dd;
-			}
-			return formatDate(n); //n.toLocaleDateString();
-		}
+		try {
 
 
 
-		const pointUlr = await this.adminAxiosRequest.getUrlCounter(body.point)
+			function dtime_nums(e: any) {
+				// eslint-disable-next-line no-var
+				var n = new Date();
+				n.setDate(n.getDate() + e);
 
 
-		const redisCounter = new Promise((resolve, reject) => {
-			this.redis.get(pointUlr.url, (err, token) => {
-				if (!err) {
-					resolve(token)
-				} else {
-					reject(err)
+				function formatDate(date: any) {
+					var dd: any = date.getDate();
+					if (dd < 10) dd = '0' + dd;
+
+					var mm: any = date.getMonth() + 1;
+					if (mm < 10) mm = '0' + mm;
+
+					var yy: any = date.getFullYear();
+					if (yy < 10) yy = '0' + yy;
+
+					return yy + '-' + mm + '-' + dd;
 				}
-			});
-		})
-
-
-		const tokeninRedis = await redisCounter
-
-
-
-
-		if (tokeninRedis) {
-			return Number(tokeninRedis)
-		}
-
-
-
-		const iikoolap = async (adress: string) => {
-			try {
-				const { data } = await axios.get(`https://${adress}:443/resto/api/auth?login=Cabus&pass=c5f87eaa2c51c9bd9546472ff36106a8bff8406f`)
-				const { data: hi } = await axios.get(`https://${adress}:443/resto/api/v2/reports/olap/byPresetId/6ba2e871-8d2b-413b-97cf-d7373dbb0a02?key=${data}&dateFrom=${String("2015-01-01")}&dateTo=${String(dtime_nums(1))}`)
-
-				const dash = hi && hi.data[0]
-
-				return Math.trunc(dash.DishAmountInt)
-			} catch (error) {
-
+				return formatDate(n); //n.toLocaleDateString();
 			}
-		}
 
-		if (pointUlr && pointUlr.url) {
-			const scet = await iikoolap(pointUlr.url)
 
-			if (scet) {
-				this.redis.set(
-					pointUlr.url,
-					String(scet),
-					"EX",
-					2 * 60
-				);
+
+
+
+			const pointUlr = await this.adminAxiosRequest.getUrlCounter(body.point)
+
+
+			const redisCounter = new Promise((resolve, reject) => {
+				this.redis.get(pointUlr.url, (err, token) => {
+					if (!err) {
+						resolve(token)
+					} else {
+						reject(err)
+					}
+				});
+			})
+
+
+			const tokeninRedis = await redisCounter
+
+
+
+
+			if (tokeninRedis) {
+				return Number(tokeninRedis)
 			}
-			return scet || null
-		} else {
-			return null
-		}
 
+
+
+			const iikoolap = async (adress: string) => {
+				try {
+
+					const { data } = await axios.get(`https://${adress}:443/resto/api/auth?login=olap_v2&pass=d5cfba00422fccc08b744bc419f7e450a8e67f6a`)
+					const { data: hi } = await axios.get(`https://${adress}:443/resto/api/v2/reports/olap/byPresetId/6ba2e871-8d2b-413b-97cf-d7373dbb0a02?key=${data}&dateFrom=${String("2015-01-01")}&dateTo=${String(dtime_nums(1))}`)
+
+					const dash = hi && hi.data[0]
+
+
+					return Math.trunc(dash.DishAmountInt)
+				} catch (error) {
+
+				}
+			}
+
+			if (pointUlr && pointUlr.url) {
+				const scet = await iikoolap(pointUlr.url)
+
+
+				if (scet) {
+					this.redis.set(
+						pointUlr.url,
+						String(scet),
+						"EX",
+						2 * 60
+					);
+				}
+				return scet || null
+			} else {
+				return null
+			}
+
+		} catch (error) {
+			console.log(error);
+		}
 
 		/*
 		const resultData = await this.organizationRepository.getOneByGUID(body.point)
