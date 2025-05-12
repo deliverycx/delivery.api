@@ -326,7 +326,7 @@ export class WebhookController {
 			const pointUlr = await this.adminAxiosRequest.getUrlCounter(body.point)
 
 			if (!pointUlr?.url || typeof pointUlr.url !== 'string') {
-				console.error('Invalid Redis key:', pointUlr?.url);
+				console.error('сылки нету:', body.point, pointUlr?.url);
 				return 0; // или другое значение по умолчанию
 			}
 
