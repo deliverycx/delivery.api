@@ -325,6 +325,10 @@ export class WebhookController {
 
 			const pointUlr = await this.adminAxiosRequest.getUrlCounter(body.point)
 
+			if (!pointUlr?.url || typeof pointUlr.url !== 'string') {
+				console.error('Invalid Redis key:', pointUlr?.url);
+				return 0; // или другое значение по умолчанию
+			}
 
 			const redisCounter = new Promise((resolve, reject) => {
 				this.redis.get(pointUlr.url, (err, token) => {
