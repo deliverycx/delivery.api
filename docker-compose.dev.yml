@@ -27,6 +27,10 @@ services:
       - "--save 60 10000"
     volumes:
       - ./redis/data:/data
+    sysctls:
+      - net.core.somaxconn=511
+      - vm.overcommit_memory=1
+    restart: unless-stopped
     networks:
       - mynetwork
   mongodb:
