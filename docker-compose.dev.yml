@@ -27,17 +27,16 @@ services:
       - "--save 60 10000"
     volumes:
       - ./redis/data:/data
-    sysctls:
-      - net.core.somaxconn=511
-      - vm.overcommit_memory=1
     restart: unless-stopped
     networks:
       - mynetwork
   mongodb:
     container_name: development_mongodb
     image: mongo:6.0-focal
+    mem_limit: 2g
     volumes:
       - ./mongo/data:/data/db
+    command: ["mongod", "--bind_ip_all", "--wiredTigerCacheSizeGB", "0.5"]
     networks:
       - mynetwork
 networks:
