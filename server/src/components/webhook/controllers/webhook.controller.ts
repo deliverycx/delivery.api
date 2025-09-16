@@ -255,7 +255,7 @@ export class WebhookController {
 
 	@Post("webhooks")
 	async webhooks(@Body() body: any) {
-		//console.log('test push',body);
+		console.log('test push', body);
 
 		if (Array.isArray(body)) {
 			body.forEach((value: any) => {
