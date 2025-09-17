@@ -37,8 +37,6 @@ services:
     volumes:
       - ./mongo/data:/data/db
     command: ["mongod", "--bind_ip_all", "--wiredTigerCacheSizeGB", "0.5"]
-    ports:
-      - "27017:27017"
     networks:
       - mynetwork
 networks:
