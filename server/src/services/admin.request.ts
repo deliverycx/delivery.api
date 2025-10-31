@@ -20,7 +20,7 @@ export class AdminAxiosRequest {
 	public async getLocalhost() {
 		const adminurl = process.env.NODE_ENV === 'development' ? `${process.env.ADMIN_URL}`
 			: `${process.env.ADMIN_URL}`
-		return "https://%D1%81.%D1%85%D0%B8%D0%BD%D0%BA%D0%B0%D0%BB%D1%8B%D1%87.%D1%80%D1%84/admin"
+		return "https://xn--q1a.xn--80apgfh0ct5a.xn--p1ai/admin"
 	}
 
 	public async getOrganizationList(organization: string) {
