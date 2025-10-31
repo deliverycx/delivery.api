@@ -10,14 +10,14 @@ export class NomenclatureServises {
 		private readonly productRepository: IProductRepository,
 		@Inject("IIKO_AXIOS")
 		private readonly axios: IIkoAxios,
-		private readonly adminAxios:AdminAxiosRequest
+		private readonly adminAxios: AdminAxiosRequest
 	) { }
 
 	async getNomenClature(organization: string) {
-	
-		//console.log(organization);
-		const nomenclature =  await this.adminAxios.getOrganizationList(organization)//await this.axios.getNomenClature(organization)
 
+		//console.log(organization);
+		const nomenclature = await this.adminAxios.getOrganizationList(organization)//await this.axios.getNomenClature(organization)
+		console.log(nomenclature);
 		const categoryes = this.NomenClatureCategory(nomenclature.groups, organization)
 		const products = this.NomenClatureProducts(nomenclature.products)
 
@@ -79,7 +79,7 @@ export class NomenclatureServises {
 				imageLinks,
 				measureUnit,
 				weight,
-				
+
 			} = prod;
 
 
@@ -114,9 +114,9 @@ export class NomenclatureServises {
 
 	async getSouses(organization: string) {
 		const nomenclature = await this.getNomenClature(organization)
-		
+
 		if (nomenclature) {
-			
+
 			const randomSous = []
 
 			// ищем категорию соусы
@@ -151,7 +151,7 @@ export class NomenclatureServises {
 			//console.log(nomenclature.categoryes);
 			// ищем категорию соусы
 			const catsosus = nomenclature.categoryes.find((val) => {
-				if(val.name === 'Соусы'){
+				if (val.name === 'Соусы') {
 					return val
 				}
 				/*
