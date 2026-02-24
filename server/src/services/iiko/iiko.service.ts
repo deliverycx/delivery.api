@@ -260,7 +260,7 @@ export class IikoService implements IIiko {
 
 			switch (orderType) {
 				case OrderTypesEnum.PICKUP:
-					return orderTypeEl.id === '5b1508f9-fe5b-d6af-cb8d-043af587d5c2' && orderTypeEl
+					return orderTypeEl.id === '9389cd92-2442-4de7-a305-3e21d22e4932' && orderTypeEl
 				case OrderTypesEnum.COURIER:
 					return orderTypeEl.id === '9ee06fcc-8233-46fa-b74d-ff6f50128afb' && orderTypeEl
 				case OrderTypesEnum.ONSPOT:
