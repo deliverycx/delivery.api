@@ -90,6 +90,7 @@ export class OrderController {
 
 	) {
 
+
 		const hash = await this.OrderUsecase.checkOrder(body.userid, body);
 
 		return hash
@@ -130,6 +131,11 @@ export class OrderController {
 		@Res() response: Response,
 	) {
 		try {
+			if (body.phone === '+79207480000') {
+				return {
+					error: 'Этот номер телефона не доступен для заказа',
+				};
+			}
 			await this.orderService.createOrderToRabbit(body.userid, body)
 			response.status(200).json(true);
 		} catch (error) {
