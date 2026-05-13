@@ -69,7 +69,7 @@ export class OrderController {
 			session.user
 		);
 
-		//response.status(200).json(paymentResult);
+		response.status(200).json(paymentResult);
 	}
 
 	@ApiResponse({
@@ -93,10 +93,8 @@ export class OrderController {
 
 		const hash = await this.OrderUsecase.checkOrder(body.userid, body);
 
-		//return hash
-		return {
-					error: 'Сегодня нельзя сделать заказ с сайта',
-				}
+		return hash
+	
 	}
 
 
@@ -124,7 +122,7 @@ export class OrderController {
 	) {
 		const result = await this.OrderUsecase.getOrderNumber(hash);
 		
-		//response.status(200).json(result);
+		response.status(200).json(result);
 	}
 
 	@Post("createOrderMicro")
@@ -139,11 +137,9 @@ export class OrderController {
 					error: 'Этот номер телефона не доступен для заказа',
 				};
 			}
-			return {
-					error: 'Сегодня нельзя сделать заказ с сайта',
-				}
-			//await this.orderService.createOrderToRabbit(body.userid, body)
-			//response.status(200).json(true);
+
+			await this.orderService.createOrderToRabbit(body.userid, body)
+			response.status(200).json(true);
 		} catch (error) {
 			response.status(408).json(false);
 		}
